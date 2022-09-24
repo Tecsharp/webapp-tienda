@@ -8,6 +8,7 @@ import java.util.Date;
 public class Carrito {
 
     private Integer idCart;
+    private Integer precioTotal;
     private Integer userCreate;
     private Integer userUpdate;
     private Date dateCreate;

@@ -1,5 +1,6 @@
 package org.tecsharp.apiservlet.webapp.headers.services;
 
+import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 
@@ -18,5 +19,7 @@ public interface ProductoService {
     List<Producto> getCarrito(Integer userId);
     void actualizarCarritoPorProductoDuplicado(Integer productoID, Integer idUser, Integer numItems);
     boolean validaProductoEnCarrito (boolean enCarrito);
+
+    Carrito obtenerCarrito(Integer idUser); //AGREGAR EN CARRITOSERVICE
 
 }

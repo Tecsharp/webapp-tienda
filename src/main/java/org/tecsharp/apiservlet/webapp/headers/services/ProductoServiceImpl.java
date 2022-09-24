@@ -1,5 +1,6 @@
 package org.tecsharp.apiservlet.webapp.headers.services;
 
+import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 
@@ -64,5 +65,10 @@ public class ProductoServiceImpl implements ProductoService{
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Carrito obtenerCarrito(Integer idUser) {
+        return null;
     }
 }

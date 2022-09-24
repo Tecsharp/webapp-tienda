@@ -17,28 +17,33 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet({"/productos/motocicletas"})
-public class MotosProductoServlet extends HttpServlet {
+@WebServlet("/productos/todos")
+public class PestanaProductoServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Connection conn = (Connection) req.getAttribute("conn" );
 
-        //Productos de motocicleta
+
+        Connection conn = (Connection) req.getAttribute("conn");
         ProductoService service = new ProductoServiceJdbcImpl(conn);
-        Integer productoTipo = 1; //AGREGAR UN LINK QUE MANDE ESTE ITEM
-        List<Producto> tipoProductos = service.listarByTipo(productoTipo);
 
-        //Lista de categoria
+        //OBTIENE LISTA DE TODOS LOS PRODUCTOS
+
+        List<Producto> todosLosProductos = service.listar();
+        req.setAttribute("todosLosProductos", todosLosProductos); //SE ENVIA A LA VISTA
+
+
+        //LISTA DE CATEGORIAS
         List<TipoProducto> categorias = service.listarTipoProducto();
+        req.setAttribute("categorias", categorias); //SE ENVIA A LA VISTA
 
-
-
+        //USUARIO DISPONIBLE
         LoginService auth = new LoginServiceSessionImpl();
-        Optional<String> usernameOptional = auth.getUsername(req); //SE PREPARA
+        Optional<String> usernameOptional = auth.getUsername(req);
+        req.setAttribute("username", usernameOptional);
 
-        req.setAttribute("categorias", categorias); //se envia a la vista
-        req.setAttribute("productos", tipoProductos); //se envia a la vista
-        req.setAttribute("username", usernameOptional); //SE ENVIA A LA VISTA
-        getServletContext().getRequestDispatcher("/motocicletas.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/productos.jsp").forward(req, resp);
+
+
     }
 }

@@ -1,5 +1,6 @@
 package org.tecsharp.apiservlet.webapp.headers.repositories;
 
+import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
@@ -234,13 +235,38 @@ public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
     }
 
     @Override
+    public Carrito obtenerCarrito(Integer idUser) {
+
+        Carrito carritoDatos = new Carrito();
+
+        String query = "SELECT products.price, COALESCE(SUM(price)) as preciototal FROM products INNER JOIN cart ON cart.id_product = products.id_product WHERE id_user = ?";
+
+        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, idUser);
+
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                carritoDatos.setPrecioTotal(result.getInt("preciototal"));
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return carritoDatos;
+    }
+
+
+
+    @Override
     public List<Producto> obtenerTodosLosProductos() {
         List<Producto> todosProductos = new ArrayList<>();
         String query = "SELECT * FROM products";
 
         try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
              PreparedStatement statement = connection.prepareStatement(query)) {
-            ;
 
             ResultSet result = statement.executeQuery();
 
@@ -347,6 +373,7 @@ public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
     public void eliminar(Integer id) throws SQLException {
 
     }
+
 
     private static Producto getProducto(ResultSet rs) throws SQLException {
         Producto p = new Producto();

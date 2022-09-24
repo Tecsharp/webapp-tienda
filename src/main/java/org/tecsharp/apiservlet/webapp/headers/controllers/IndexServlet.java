@@ -5,8 +5,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
+import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
 import org.tecsharp.apiservlet.webapp.headers.services.LoginService;
 import org.tecsharp.apiservlet.webapp.headers.services.LoginServiceSessionImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.ProductoService;
@@ -14,6 +17,7 @@ import org.tecsharp.apiservlet.webapp.headers.services.ProductoServiceJdbcImpl;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +32,33 @@ public class IndexServlet extends HttpServlet {
 
         Connection conn = (Connection) req.getAttribute("conn");
         ProductoService serviceTipoProducto = new ProductoServiceJdbcImpl(conn);
+
+        /////
+        try {
+            HttpSession session = req.getSession();
+            Usuario usuario = (Usuario)session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
+            Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
+
+            //MANDA EL PRECIO TOTAL DEL CARRITO
+            //Carrito carritoDatos = serviceTipoProducto.obtenerCarrito(userId);
+            //req.setAttribute("carritoDatos", carritoDatos); //SE ENVIA A LA VISTA
+            //RESPALDO INDEX.JSP
+            //Carrito carritoDatos = (Carrito) request.getAttribute("carritoDatos");
+
+            DecimalFormat formatea = new DecimalFormat("###,###,###");
+            Carrito datos = serviceTipoProducto.obtenerCarrito(userId);
+            Integer nums = datos.getPrecioTotal();
+            String precioTotal = formatea.format(nums);
+
+            req.setAttribute("precioTotal", precioTotal);
+
+
+            ////
+        } catch (Exception e){
+
+        }
+
+
 
         //SERVICIO LISTA TIPO PRODUCTOS
         List<TipoProducto> categorias = serviceTipoProducto.listarTipoProducto();

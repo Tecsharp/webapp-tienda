@@ -1,5 +1,6 @@
 package org.tecsharp.apiservlet.webapp.headers.repositories;
 
+import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 
@@ -17,7 +18,9 @@ public interface Repository<T> {
 
     void actualizarCarritoPorProductoDuplicado(Integer productoID, Integer idUser, Integer numItems);
 
-    public List<Producto> getCarrito(Integer userId);
+    public List<Producto> getCarrito(Integer userId); //CAMBIAR A getProductosCarrito
+
+    Carrito obtenerCarrito (Integer idUser); //CAMBIAR A getCarrito
 
     List<Producto> listarCarrusel(Integer productoTipo) throws SQLException;
     T porID(Integer id) throws SQLException;

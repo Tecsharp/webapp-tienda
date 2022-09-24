@@ -1,5 +1,6 @@
 package org.tecsharp.apiservlet.webapp.headers.services;
 
+import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 import org.tecsharp.apiservlet.webapp.headers.repositories.ProductoRepositoryJdbcImpl;
@@ -101,5 +102,10 @@ public class ProductoServiceJdbcImpl implements ProductoService {
         } else {
             return true;
         }
+    }
+
+    @Override
+    public Carrito obtenerCarrito(Integer idUser) {
+        return repositoryJdbc.obtenerCarrito(idUser);
     }
 }

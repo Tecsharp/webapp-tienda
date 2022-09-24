@@ -5,6 +5,9 @@ List<TipoProducto> categorias = (List<TipoProducto>) request.getAttribute("categ
 List<Producto> carruselUno = (List<Producto>) request.getAttribute("carruselUno");
 List<Producto> carruselDos = (List<Producto>) request.getAttribute("carruselDos");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
+String precioTotal = (String) request.getAttribute("precioTotal");
+
+
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -128,7 +131,9 @@ Body Section
         <li><a href="<%=c.getLinkPath()%>"><span class="icon-chevron-right"></span><%=c.getNombre()%></a></li>
        <%}%>
 		<li style="border:0"> &nbsp;</li>
-		<li> <a class="totalInCart" href="cart.html"><strong>Monto total  <span class="badge badge-warning pull-right" style="line-height:18px;">$448.42</span></strong></a></li>
+		<%if(username.isPresent()){%>
+	    <li> <a class="totalInCart" href="cart.html"><strong>Monto total  <span class="badge badge-warning pull-right" style="line-height:18px;">$<%=precioTotal%></span></strong></a></li>
+	    <%}%>
 	</ul>
 </div>
 <div class="well well-small" ><a href="#"><img src="assets/img/paypal.jpg" alt="payment method paypal"></a></div>
@@ -221,7 +226,7 @@ New Products
                 <%for (Producto c : carruselUno){%>
 				<li class="span3">
 				  <div class="thumbnail">
-					<a class="zoomTool" href="<%=request.getContextPath()%>/ver/producto?id=<%=c.getId()%>" title="add to cart"><span class="icon-search"></span> VER DETALLES</a>
+					<a class="zoomTool" href="<%=request.getContextPath()%>/ver/producto?id=<%=c.getId()%>" title="Ver detalles"><span class="icon-search"></span> VER DETALLES</a>
 					<a  href="<%=request.getContextPath()%>/ver/producto?id=<%=c.getId()%>"><img src="<%=c.getImgLink()%>" alt=""></a>
 				  </div>
 				</li>
@@ -239,8 +244,8 @@ New Products
 		  <%for (Producto d : carruselDos){%>
 			<li class="span3">
 			  <div class="thumbnail">
-				<a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> VER DETALLES</a>
-				<a  href="product_details.html"><img src="assets/img/i.jpg" alt=""></a>
+				<a class="zoomTool" href="<%=request.getContextPath()%>/ver/producto?id=<%=d.getId()%>" title="Ver detalles"><span class="icon-search"></span> VER DETALLES</a>
+				<a  href="<%=request.getContextPath()%>/ver/producto?id=<%=d.getId()%>"><img src="<%=d.getImgLink()%>" alt=""></a>
 			  </div>
 			</li>
             <%}%>
