@@ -44,10 +44,10 @@ Integer productosEnCarrito = (Integer) request.getAttribute("productosEnCarrito"
 			<div class="alignR">
 			    <a href="<%=request.getContextPath()%>/index.html"> <span class="icon-home"></span> Inicio</a>
                 <%if(username.isPresent()){%>
-				<a href="#"><span class="icon-user"></span> My Account</a>
-				<a href="cart.html"><span class="icon-shopping-cart"></span> 2 Item(s) - <span class="badge badge-warning"> $448.42</span></a>
+				<a href="<%=request.getContextPath()%>/mi-perfil"><span class="icon-user"></span> My Account</a>
+				<a href="<%=request.getContextPath()%>/ver/carrito"><span class="icon-shopping-cart"></span> <%=productosEnCarrito%> Articulo(s) - <span class="badge badge-warning"> $<%=precioTotal%></span></a>
 				<%}else {%>
-				<a href="register.html"><span class="icon-edit"></span> Registrate </a>
+				<a href="<%=request.getContextPath()%>/registrarse"><span class="icon-edit"></span> Registrate </a>
 				 <%}%>
 
 			</div>

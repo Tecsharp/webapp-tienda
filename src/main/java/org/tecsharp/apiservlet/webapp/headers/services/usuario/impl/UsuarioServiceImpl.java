@@ -1,7 +1,8 @@
-package org.tecsharp.apiservlet.webapp.headers.services;
+package org.tecsharp.apiservlet.webapp.headers.services.usuario.impl;
 
 import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
-import org.tecsharp.apiservlet.webapp.headers.repositories.UsuarioRepositoryImpl;
+import org.tecsharp.apiservlet.webapp.headers.repositories.usuario.UsuarioRepositoryImpl;
+import org.tecsharp.apiservlet.webapp.headers.services.usuario.UsuarioService;
 
 public class UsuarioServiceImpl implements UsuarioService {
     @Override

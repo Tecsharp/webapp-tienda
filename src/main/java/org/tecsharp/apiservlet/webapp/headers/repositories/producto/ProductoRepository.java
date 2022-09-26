@@ -1,4 +1,4 @@
-package org.tecsharp.apiservlet.webapp.headers.repositories;
+package org.tecsharp.apiservlet.webapp.headers.repositories.producto;
 
 import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
@@ -7,7 +7,7 @@ import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface Repository<T> {
+public interface ProductoRepository<T> {
 
     List<TipoProducto> listarTipoProducto() throws SQLException;
     List<Producto> listar() throws SQLException;

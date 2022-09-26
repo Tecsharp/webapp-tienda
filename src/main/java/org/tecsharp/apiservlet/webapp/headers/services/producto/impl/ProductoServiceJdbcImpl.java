@@ -1,9 +1,11 @@
-package org.tecsharp.apiservlet.webapp.headers.services;
+package org.tecsharp.apiservlet.webapp.headers.services.producto.impl;
 
 import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
-import org.tecsharp.apiservlet.webapp.headers.repositories.ProductoRepositoryJdbcImpl;
+import org.tecsharp.apiservlet.webapp.headers.repositories.producto.impl.ProductoRepositoryJdbcImpl;
+import org.tecsharp.apiservlet.webapp.headers.services.ServiceJdbcException;
+import org.tecsharp.apiservlet.webapp.headers.services.producto.ProductoService;
 
 import java.sql.Connection;
 import java.sql.SQLException;

@@ -1,13 +1,14 @@
-package org.tecsharp.apiservlet.webapp.headers.services;
+package org.tecsharp.apiservlet.webapp.headers.services.producto.impl;
 
 import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
+import org.tecsharp.apiservlet.webapp.headers.services.producto.ProductoService;
 
 import java.util.List;
 import java.util.Optional;
 
-public class ProductoServiceImpl implements ProductoService{
+public class ProductoServiceImpl implements ProductoService {
     @Override
     public List<TipoProducto> listarTipoProducto() {
         return null;

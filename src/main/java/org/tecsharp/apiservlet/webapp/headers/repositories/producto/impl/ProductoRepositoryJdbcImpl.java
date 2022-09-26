@@ -1,21 +1,21 @@
-package org.tecsharp.apiservlet.webapp.headers.repositories;
+package org.tecsharp.apiservlet.webapp.headers.repositories.producto.impl;
 
 import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
-import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
-import org.tecsharp.apiservlet.webapp.headers.services.ProductoService;
-import org.tecsharp.apiservlet.webapp.headers.services.ProductoServiceImpl;
-import org.tecsharp.apiservlet.webapp.headers.services.ProductoServiceJdbcImpl;
+import org.tecsharp.apiservlet.webapp.headers.repositories.producto.ProductoRepository;
+import org.tecsharp.apiservlet.webapp.headers.services.producto.ProductoService;
+import org.tecsharp.apiservlet.webapp.headers.services.producto.impl.ProductoServiceImpl;
 import org.tecsharp.apiservlet.webapp.headers.utils.Constantes;
 
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
+public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> {
 
     private Connection conn;
 
@@ -67,7 +67,7 @@ public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
                 producto.setDescripcion(result.getString("description"));
                 producto.setDescripcionCorta(result.getString("short_description"));
                 //producto.setStock(result.getInt("stock"));
-                producto.setPrecio(result.getDouble("price"));
+                producto.setPrecio(result.getInt("price"));
                 //producto.setProductType(tipoProducto);
                 //producto.setDescription(result.getString("description"));
                 //producto.setDateCreate(result.getDate("date_Create"));
@@ -185,7 +185,7 @@ public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
                 producto.setDescripcion(result.getString("description"));
                 producto.setDescripcionCorta(result.getString("short_description"));
                 //producto.setStock(result.getInt("stock"));
-                producto.setPrecio(result.getDouble("price"));
+                producto.setPrecio(result.getInt("price"));
                 //producto.setProductType(tipoProducto);
                 //producto.setDescription(result.getString("description"));
                 //producto.setDateCreate(result.getDate("date_Create"));
@@ -216,7 +216,7 @@ public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
                 producto.setId(result.getInt("id_product"));
                 producto.setNombre(result.getString("name"));
                 producto.setStock(result.getInt("stock"));
-                producto.setPrecio(result.getDouble("price"));
+                producto.setPrecio(result.getInt("price"));
                 producto.setDescripcion(result.getString("description"));
                 producto.setDescripcionCorta(result.getString("short_description"));
 //                producto.setDateCreate(result.getDate("date_Create"));
@@ -276,7 +276,7 @@ public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
                 producto.setId(result.getInt("id_product"));
                 producto.setNombre(result.getString("name"));
                 producto.setStock(result.getInt("stock"));
-                producto.setPrecio(result.getDouble("price"));
+                producto.setPrecio(result.getInt("price"));
                 producto.setDescripcion(result.getString("description"));
                 producto.setDescripcionCorta(result.getString("short_description"));
 //                producto.setDateCreate(result.getDate("date_Create"));
@@ -380,7 +380,14 @@ public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
         Producto p = new Producto();
         p.setId(rs.getInt("id_product"));
         p.setNombre(rs.getString("name"));
-        p.setPrecio(rs.getDouble("price"));
+        p.setPrecio(rs.getInt("price"));
+
+        //FORMATEA EL PRECIO Y LO GUARDA EN UN STRING
+        DecimalFormat formatea = new DecimalFormat("###,###,###");
+        Integer nums = rs.getInt("price");
+        String precioEnCadena = formatea.format(nums);
+
+        p.setPrecioFormateado(precioEnCadena);
         p.setTipo(rs.getInt("product_type"));
         p.setDescripcion(rs.getString("description"));
         p.setDescripcionCorta(rs.getString("short_description"));

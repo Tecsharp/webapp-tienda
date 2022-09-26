@@ -12,10 +12,10 @@ import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
 import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.CarritoRepository;
 import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.impl.CarritoRepositoryImpl;
-import org.tecsharp.apiservlet.webapp.headers.services.LoginService;
-import org.tecsharp.apiservlet.webapp.headers.services.LoginServiceSessionImpl;
-import org.tecsharp.apiservlet.webapp.headers.services.ProductoService;
-import org.tecsharp.apiservlet.webapp.headers.services.ProductoServiceJdbcImpl;
+import org.tecsharp.apiservlet.webapp.headers.services.login.LoginService;
+import org.tecsharp.apiservlet.webapp.headers.services.login.impl.LoginServiceSessionImpl;
+import org.tecsharp.apiservlet.webapp.headers.services.producto.ProductoService;
+import org.tecsharp.apiservlet.webapp.headers.services.producto.impl.ProductoServiceJdbcImpl;
 
 import java.io.IOException;
 import java.sql.Connection;

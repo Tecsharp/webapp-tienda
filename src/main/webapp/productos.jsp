@@ -190,7 +190,7 @@ Body Section
 		</div>
 		<div class="span4 alignR">
 		<form class="form-horizontal qtyFrm">
-		<h3> $<%=tp.getPrecio()%></h3>
+		<h3> $<%=tp.getPrecioFormateado()%></h3>
 		<br>
 		<div class="btn-group">
 		  <%if(username.isPresent()){%>

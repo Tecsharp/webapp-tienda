@@ -9,8 +9,8 @@ import jakarta.servlet.http.HttpSession;
 import org.tecsharp.apiservlet.webapp.headers.models.Carro;
 import org.tecsharp.apiservlet.webapp.headers.models.ItemCarro;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
-import org.tecsharp.apiservlet.webapp.headers.services.ProductoService;
-import org.tecsharp.apiservlet.webapp.headers.services.ProductoServiceJdbcImpl;
+import org.tecsharp.apiservlet.webapp.headers.services.producto.ProductoService;
+import org.tecsharp.apiservlet.webapp.headers.services.producto.impl.ProductoServiceJdbcImpl;
 
 import java.io.IOException;
 import java.sql.Connection;

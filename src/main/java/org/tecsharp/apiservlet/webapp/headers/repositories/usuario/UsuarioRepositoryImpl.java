@@ -1,4 +1,4 @@
-package org.tecsharp.apiservlet.webapp.headers.repositories;
+package org.tecsharp.apiservlet.webapp.headers.repositories.usuario;
 
 import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
 import org.tecsharp.apiservlet.webapp.headers.utils.Constantes;

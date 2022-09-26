@@ -3,8 +3,8 @@ package org.tecsharp.apiservlet.webapp.headers.controllers;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import org.tecsharp.apiservlet.webapp.headers.services.LoginService;
-import org.tecsharp.apiservlet.webapp.headers.services.LoginServiceSessionImpl;
+import org.tecsharp.apiservlet.webapp.headers.services.login.LoginService;
+import org.tecsharp.apiservlet.webapp.headers.services.login.impl.LoginServiceSessionImpl;
 
 import java.io.IOException;
 import java.util.Optional;

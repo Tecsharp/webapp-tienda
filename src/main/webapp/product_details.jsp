@@ -196,13 +196,13 @@ Body Section
 			</div>
 			<div class="span7">
 
-				<h3><%=producto.getNombre()%> [<b style="color:#E69537";>$ <%=producto.getPrecio()%></b>]</h3>
+				<h3><%=producto.getNombre()%> [<b style="color:#E69537";>$ <%=producto.getPrecioFormateado()%></b>]</h3>
 				<hr class="soft"/>
 				
 			<form class="form-horizontal qtyFrm">
 				  <div class="control-group">
 
-					<label class="control-label"><span style="color:#E69537">Precio: $  <%=producto.getPrecio()%></span></label>
+					<label class="control-label"><span style="color:#E69537">Precio: $  <%=producto.getPrecioFormateado()%></span></label>
 					<div class="controls">
 					</div>
 				  </div>

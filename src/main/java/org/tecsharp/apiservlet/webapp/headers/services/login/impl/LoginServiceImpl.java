@@ -1,13 +1,14 @@
-package org.tecsharp.apiservlet.webapp.headers.services;
+package org.tecsharp.apiservlet.webapp.headers.services.login.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.tecsharp.apiservlet.webapp.headers.repositories.UsuarioRepository;
-import org.tecsharp.apiservlet.webapp.headers.repositories.UsuarioRepositoryImpl;
+import org.tecsharp.apiservlet.webapp.headers.repositories.usuario.UsuarioRepository;
+import org.tecsharp.apiservlet.webapp.headers.repositories.usuario.UsuarioRepositoryImpl;
+import org.tecsharp.apiservlet.webapp.headers.services.login.LoginService;
 
 import java.util.Optional;
 
-public class LoginServiceImpl implements LoginService{
+public class LoginServiceImpl implements LoginService {
     @Override
     public Optional<String> getUsername(HttpServletRequest req) {
         return Optional.empty();

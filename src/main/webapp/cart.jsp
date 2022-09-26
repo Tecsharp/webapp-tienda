@@ -131,11 +131,11 @@ Body Section
 	<div class="row">
 	<div class="span12">
     <ul class="breadcrumb">
-		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
-		<li class="active">Check Out</li>
+		<li><a href="<%=request.getContextPath()%>/">Inicio</a> <span class="divider">/</span></li>
+		<li class="active">Carrito</li>
     </ul>
 	<div class="well well-small">
-		<h1>Check Out <small class="pull-right"> <%=productosEnCarrito%> Articulos en el carrito </small></h1>
+		<h1>Carrito <small class="pull-right"> <%=productosEnCarrito%> articulos en el carrito </small></h1>
 	<hr class="soften"/>	
 
 	<table class="table table-bordered table-condensed">
@@ -144,7 +144,7 @@ Body Section
                   <th>Producto</th>
                   <th>Descripcion</th>
 				  <th>	Ref. </th>
-                  <th>Disponivle</th>
+                  <th>Disponible</th>
                   <th>Precio</th>
                   <th>Cantidad</th>
                   <th>Total</th>
@@ -165,7 +165,7 @@ Body Section
 					<button class="btn btn-mini" type="button">-</button><button class="btn btn-mini" type="button"> + </button><button class="btn btn-mini btn-danger" type="button"><span class="icon-remove"></span></button>
 				</div>
 				</td>
-                  <td>$100.00</td>
+                  <td><%=pr.getPrecio()%></td>
                 </tr>
 
                 <%}%>
@@ -194,35 +194,10 @@ Body Section
 			</tbody>
 				</table>
 			<table class="table table-bordered">
-			<tbody>
-                <tr><td>ESTIMATE YOUR SHIPPING & TAXES</td></tr>
-                 <tr> 
-				 <td>
-					<form class="form-horizontal">
-					  <div class="control-group">
-						<label class="span2 control-label" for="inputEmail">Country</label>
-						<div class="controls">
-						  <input type="text" placeholder="Country">
-						</div>
-					  </div>
-					  <div class="control-group">
-						<label class="span2 control-label" for="inputPassword">Post Code/ Zipcode</label>
-						<div class="controls">
-						  <input type="password" placeholder="Password">
-						</div>
-					  </div>
-					  <div class="control-group">
-						<div class="controls">
-						  <button type="submit" class="shopBtn">Click to check the price</button>
-						</div>
-					  </div>
-					</form> 
-				  </td>
-				  </tr>
-              </tbody>
+
             </table>		
-	<a href="products.html" class="shopBtn btn-large"><span class="icon-arrow-left"></span> Continue Shopping </a>
-	<a href="login.html" class="shopBtn btn-large pull-right">Next <span class="icon-arrow-right"></span></a>
+	<a href="<%=request.getContextPath()%>/inicio" class="shopBtn btn-large"><span class="icon-arrow-left"></span> Continuar comprando </a>
+	<a href="#" class="shopBtn btn-large pull-right">Comprar carrito <span class="icon-arrow-right"></span></a>
 
 </div>
 </div>
@@ -232,7 +207,7 @@ Clients
 -->
 <section class="our_client">
 	<hr class="soften"/>
-	<h4 class="title cntr"><span class="text">Manufactures</span></h4>
+	<h4 class="title cntr"><span class="text">Mejores marcas</span></h4>
 	<hr class="soften"/>
 	<div class="row">
 		<div class="span2">

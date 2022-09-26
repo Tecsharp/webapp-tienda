@@ -11,7 +11,8 @@ public class Producto {
     private Integer tipo;
     private Integer stock;
     private String descripcion;
-    private Double precio;
+    private Integer precio;
+    private String precioFormateado;
     private String sky;
     private LocalDate fechaRegistro;
     private String imgLink;
