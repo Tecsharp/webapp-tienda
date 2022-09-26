@@ -10,6 +10,8 @@ import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
+import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.CarritoRepository;
+import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.impl.CarritoRepositoryImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.LoginService;
 import org.tecsharp.apiservlet.webapp.headers.services.LoginServiceSessionImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.ProductoService;
@@ -33,17 +35,14 @@ public class IndexServlet extends HttpServlet {
         Connection conn = (Connection) req.getAttribute("conn");
         ProductoService serviceTipoProducto = new ProductoServiceJdbcImpl(conn);
 
+
+
+
         /////
         try {
             HttpSession session = req.getSession();
             Usuario usuario = (Usuario)session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
             Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
-
-            //MANDA EL PRECIO TOTAL DEL CARRITO
-            //Carrito carritoDatos = serviceTipoProducto.obtenerCarrito(userId);
-            //req.setAttribute("carritoDatos", carritoDatos); //SE ENVIA A LA VISTA
-            //RESPALDO INDEX.JSP
-            //Carrito carritoDatos = (Carrito) request.getAttribute("carritoDatos");
 
             DecimalFormat formatea = new DecimalFormat("###,###,###");
             Carrito datos = serviceTipoProducto.obtenerCarrito(userId);
@@ -52,6 +51,10 @@ public class IndexServlet extends HttpServlet {
 
             req.setAttribute("precioTotal", precioTotal);
 
+            //SE ENVIA CANTIDAD DE ITEMS EN CARRITO
+            CarritoRepository serviceCarrito = new CarritoRepositoryImpl();
+            Integer productosEnCarrito = serviceCarrito.obtenerCantidadItemsCarrito(usuario.getIdUser());
+            req.setAttribute("productosEnCarrito", productosEnCarrito);
 
             ////
         } catch (Exception e){

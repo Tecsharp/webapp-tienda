@@ -6,7 +6,7 @@ List<Producto> carruselUno = (List<Producto>) request.getAttribute("carruselUno"
 List<Producto> carruselDos = (List<Producto>) request.getAttribute("carruselDos");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
 String precioTotal = (String) request.getAttribute("precioTotal");
-
+Integer productosEnCarrito = (Integer) request.getAttribute("productosEnCarrito");
 
 %>
 <!DOCTYPE html>
@@ -72,7 +72,7 @@ Lower Header Section
 <div class="span8 alignR">
 	<p><br> <strong> Soporte (24/7) :  0800 1234 678 </strong><br><br></p>
 	<%if(username.isPresent()){%>
-	<span class="btn btn-mini">[ 2 ] <span class="icon-shopping-cart"></span></span>
+	<a href="<%=request.getContextPath()%>/ver/carrito"><span class="btn btn-mini"><%=productosEnCarrito%> <span class="icon-shopping-cart"></span></span></a>
     <%}%>
 	</div>
 </div>
@@ -93,7 +93,7 @@ Navigation Bar Section
 			<ul class="nav">
 			  <li class="active"><a href="<%=request.getContextPath()%>/index.html">Inicio</a></li>
 			  <li class=""></li>
-			  <li class=""><a href="grid-view.html">Productos</a></li>
+			  <li class=""><a href="<%=request.getContextPath()%>/productos/todos">Productos</a></li>
 			  <li class=""></li>
 			  <li class=""></li>
 			  <li class=""><a href="general.html">General Content</a></li>
@@ -132,7 +132,7 @@ Body Section
        <%}%>
 		<li style="border:0"> &nbsp;</li>
 		<%if(username.isPresent()){%>
-	    <li> <a class="totalInCart" href="cart.html"><strong>Monto total  <span class="badge badge-warning pull-right" style="line-height:18px;">$<%=precioTotal%></span></strong></a></li>
+	    <li> <a class="totalInCart" href="<%=request.getContextPath()%>/ver/carrito"><strong>Monto total  <span class="badge badge-warning pull-right" style="line-height:18px;">$<%=precioTotal%></span></strong></a></li>
 	    <%}%>
 	</ul>
 </div>

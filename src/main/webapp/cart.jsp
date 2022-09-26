@@ -3,6 +3,8 @@
 Optional<String> username = (Optional<String>) request.getAttribute("username");
 List<Producto> proca = (List<Producto>) request.getAttribute("proca");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
+Integer productosEnCarrito = (Integer) request.getAttribute("productosEnCarrito");
+String precioTotal = (String) request.getAttribute("precioTotal");
 %>
 
 <!DOCTYPE html>
@@ -133,18 +135,18 @@ Body Section
 		<li class="active">Check Out</li>
     </ul>
 	<div class="well well-small">
-		<h1>Check Out <small class="pull-right"> 2 Items are in the cart </small></h1>
+		<h1>Check Out <small class="pull-right"> <%=productosEnCarrito%> Articulos en el carrito </small></h1>
 	<hr class="soften"/>	
 
 	<table class="table table-bordered table-condensed">
               <thead>
                 <tr>
-                  <th>Product</th>
-                  <th>Description</th>
+                  <th>Producto</th>
+                  <th>Descripcion</th>
 				  <th>	Ref. </th>
-                  <th>Avail.</th>
-                  <th>Unit price</th>
-                  <th>Qty </th>
+                  <th>Disponivle</th>
+                  <th>Precio</th>
+                  <th>Cantidad</th>
                   <th>Total</th>
 				</tr>
               </thead>
@@ -152,11 +154,11 @@ Body Section
 
                 <%for (Producto pr : proca){%>
                 <tr>
-                  <td><img width="100" src="<%=request.getContextPath()%>/assets/img/e.jpg" alt=""></td>
-                  <td>$<%=pr.getNombre()%><br>Carate : 22<br>Model : n/a</td>
+                  <td><img width="100" src="<%=pr.getImgLink()%>" alt=""></td>
+                  <td><%=pr.getNombre()%><br>Carate : 22<br>Model : n/a</td>
                   <td> - </td>
                   <td><span class="shopBtn"><span class="icon-ok"></span></span> </td>
-                  <td>$50.00</td>
+                  <td><%=pr.getPrecio()%></td>
                   <td>
 					<input class="span1" style="max-width:34px" placeholder="1" id="appendedInputButtons" size="16" type="text" value="2">
 				  <div class="input-append">
@@ -168,21 +170,10 @@ Body Section
 
                 <%}%>
 
-                <tr>
-                  <td colspan="6" class="alignR">Total products:	</td>
-                  <td> $448.42</td>
-                </tr>
-                 <tr>
-                  <td colspan="6" class="alignR">Total products:	</td>
-                  <td> $448.42</td>
-                </tr>
+
 				 <tr>
-                  <td colspan="6" class="alignR">Total products:	</td>
-                  <td> $448.42</td>
-                </tr>
-				 <tr>
-                  <td colspan="6" class="alignR">Total products:	</td>
-                  <td class="label label-primary"> $448.42</td>
+                  <td colspan="6" class="alignR">Total a pagar</td>
+                  <td class="label label-primary"> $<%=precioTotal%></td>
                 </tr>
 				</tbody>
             </table><br/>

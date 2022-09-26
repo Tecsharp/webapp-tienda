@@ -15,4 +15,5 @@ public class Carrito {
     private Date dateUpdate;
     private Usuario idUser;
     private Producto idProduct;
+
 }

@@ -27,4 +27,6 @@ public interface Repository<T> {
     void guardar (T t) throws SQLException;
     void eliminar (Integer id) throws SQLException;
 
+
+
 }

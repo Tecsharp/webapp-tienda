@@ -222,6 +222,7 @@ public class ProductoRepositoryJdbcImpl implements Repository<Producto> {
 //                producto.setDateCreate(result.getDate("date_Create"));
 //                producto.setDateUpdate(result.getDate("date_update"));
                 producto.setNumItems(result.getInt("num_items"));
+                producto.setImgLink(result.getString("link"));
 //                producto.setStatus(result.getInt("id_status"));
                 carrito.add(producto);
 
