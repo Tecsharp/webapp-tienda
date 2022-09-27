@@ -18,9 +18,9 @@ public interface ProductoRepository<T> {
 
     void actualizarCarritoPorProductoDuplicado(Integer productoID, Integer idUser, Integer numItems);
 
-    public List<Producto> getCarrito(Integer userId); //CAMBIAR A getProductosCarrito
 
-    Carrito obtenerCarrito (Integer idUser); //CAMBIAR A getCarrito
+
+
 
     List<Producto> listarCarrusel(Integer productoTipo) throws SQLException;
     T porID(Integer id) throws SQLException;

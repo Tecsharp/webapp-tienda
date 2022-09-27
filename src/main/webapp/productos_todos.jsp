@@ -3,6 +3,8 @@
 List<Producto> todosLosProductos = (List<Producto>) request.getAttribute("todosLosProductos");
 List<TipoProducto> categorias = (List<TipoProducto>) request.getAttribute("categorias");
 Optional<String> username = (Optional<String>) request.getAttribute("username");
+String precioTotal = (String) request.getAttribute("precioTotal");
+Integer productosEnCarrito = (Integer) request.getAttribute("productosEnCarrito");
 %>
 
 <!DOCTYPE html>
@@ -40,10 +42,10 @@ Optional<String> username = (Optional<String>) request.getAttribute("username");
 			<div class="alignR">
 			    <a href="<%=request.getContextPath()%>/index.html"> <span class="icon-home"></span> Inicio</a>
                 <%if(username.isPresent()){%>
-				<a href="#"><span class="icon-user"></span> My Account</a>
-				<a href="cart.html"><span class="icon-shopping-cart"></span> 2 Item(s) - <span class="badge badge-warning"> $448.42</span></a>
+				<a href="<%=request.getContextPath()%>/mi-perfil"><span class="icon-user"></span> My Account</a>
+				<a href="<%=request.getContextPath()%>/ver/carrito"><span class="icon-shopping-cart"></span> <%=productosEnCarrito%> Articulo(s) - <span class="badge badge-warning"> $<%=precioTotal%></span></a>
 				<%}else {%>
-				<a href="register.html"><span class="icon-edit"></span> Registrate </a>
+				<a href="<%=request.getContextPath()%>/registrarse"><span class="icon-edit"></span> Registrate </a>
 				 <%}%>
 
 			</div>
@@ -69,7 +71,7 @@ Lower Header Section
     <div class="span8 alignR">
 	<p><br> <strong> Soporte (24/7) :  0800 1234 678 </strong><br><br></p>
 	<%if(username.isPresent()){%>
-	<span class="btn btn-mini">[ 2 ] <span class="icon-shopping-cart"></span></span>
+	<a href="<%=request.getContextPath()%>/ver/carrito"><span class="btn btn-mini"><%=productosEnCarrito%> <span class="icon-shopping-cart"></span></span></a>
     <%}%>
 	</div>
 </div>
@@ -97,13 +99,16 @@ Navigation Bar Section
 			</form>
 			<ul class="nav pull-right">
 			<li class="dropdown">
-				<%if(username.isPresent()){%>
-                <a href="#"><span class="icon-unlock"></span> ${usuario.nameUser}<b class="caret"></b></a>
-                <%}else{%>
-
-                <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar<b class="caret"></b></a>
-
-                <%}%>
+			<%if(username.isPresent()){%>
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-unlock"></span> ${usuario.nameUser} <b class="caret"></b></a>
+			    <div class="dropdown-menu">
+            	    <form class="form-horizontal loginFrm">
+            		<a href="<%=request.getContextPath()%>/logout"> <button type="button" class="shopBtn btn-block">Cerrar sesión</button></a>
+            		</form>
+            		</div>
+			<%}else{%>
+                <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar</b></a>
+			<%}%>
 			</li>
 			</ul>
 		  </div>
@@ -117,15 +122,13 @@ Body Section
 <div id="sidebar" class="span3">
 <div class="well well-small">
 	<ul class="nav nav-list">
-
-
-	    <%for (TipoProducto c : categorias){%>
-		<li><a href="<%=c.getLinkPath()%>"><span class="icon-chevron-right"></span><%=c.getNombre()%></a></li>
-        <%}%>
-
-
+       <%for (TipoProducto c : categorias){%>
+        <li><a href="<%=request.getContextPath()%>/productos?idCat=<%=c.getId()%>"><span class="icon-chevron-right"></span><%=c.getNombre()%></a></li>
+       <%}%>
 		<li style="border:0"> &nbsp;</li>
-		<li> <a class="totalInCart" href="cart.html"><strong>Monto total  <span class="badge badge-warning pull-right" style="line-height:18px;">$448.42</span></strong></a></li>
+		<%if(username.isPresent()){%>
+	    <li> <a class="totalInCart" href="<%=request.getContextPath()%>/ver/carrito"><strong>Monto total  <span class="badge badge-warning pull-right" style="line-height:18px;">$<%=precioTotal%></span></strong></a></li>
+	    <%}%>
 	</ul>
 </div>
 
@@ -180,11 +183,14 @@ Body Section
 	<hr class="soften">
 	<div class="row-fluid">	  
 		<div class="span2">
-			<img src="<%=tp.getImgLink()%>" alt="">
+			<a href="<%=request.getContextPath()%>/ver/producto?id=<%=tp.getId()%>"><img src="<%=tp.getImgLink()%>" alt="<%=tp.getNombre()%>"></a>
 		</div>
 		<div class="span6">
-			<h5><%=tp.getNombre()%></h5>
+			<h5><a href="<%=request.getContextPath()%>/ver/producto?id=<%=tp.getId()%>"><%=tp.getNombre()%></a></h5>
 			<p>
+			<b>Disponibles: <%=tp.getStock()%></b>
+			<br>
+			<br>
 			<%=tp.getDescripcionCorta()%>
 			</p>
 		</div>

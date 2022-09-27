@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+
 @WebServlet("/404")
 public class NotFoundServlet extends HttpServlet {
 

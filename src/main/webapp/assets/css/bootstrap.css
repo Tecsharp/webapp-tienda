@@ -72,7 +72,7 @@ html {
 }
 
 a:focus {
-  outline: thin dotted #333;
+  outline: thin dotted #000;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -178,7 +178,8 @@ textarea {
   }
   a,
   a:visited {
-    text-decoration: underline;
+    color: #000000
+    text-decoration: none;
   }
   a[href]:after {
     content: " (" attr(href) ")";
@@ -231,14 +232,14 @@ body {
 }
 
 a {
-  color: #0088cc;
+  color: #ff960a;
   text-decoration: none;
 }
 
 a:hover,
 a:focus {
-  color: #005580;
-  text-decoration: underline;
+  color: #ef5400;
+  text-decoration: none;
 }
 
 .img-rounded {
@@ -5573,7 +5574,7 @@ input[type="submit"].btn.btn-mini {
 
 a.thumbnail:hover,
 a.thumbnail:focus {
-  border-color: #0088cc;
+  border-color: #000000;
   -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
      -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
           box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);

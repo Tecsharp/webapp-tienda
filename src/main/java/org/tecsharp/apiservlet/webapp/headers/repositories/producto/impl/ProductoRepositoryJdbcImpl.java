@@ -4,9 +4,8 @@ import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 import org.tecsharp.apiservlet.webapp.headers.repositories.producto.ProductoRepository;
-import org.tecsharp.apiservlet.webapp.headers.services.producto.ProductoService;
-import org.tecsharp.apiservlet.webapp.headers.services.producto.impl.ProductoServiceImpl;
 import org.tecsharp.apiservlet.webapp.headers.utils.Constantes;
+import org.tecsharp.apiservlet.webapp.headers.utils.Utilidades;
 
 import java.sql.*;
 import java.text.DecimalFormat;
@@ -14,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> {
 
@@ -68,6 +68,9 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
                 producto.setDescripcionCorta(result.getString("short_description"));
                 //producto.setStock(result.getInt("stock"));
                 producto.setPrecio(result.getInt("price"));
+                String precioFormateado = Utilidades.formatearPrecio(result.getInt("price"));
+                producto.setPrecioFormateado(precioFormateado);
+
                 //producto.setProductType(tipoProducto);
                 //producto.setDescription(result.getString("description"));
                 //producto.setDateCreate(result.getDate("date_Create"));
@@ -84,7 +87,7 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
 
     @Override
     public boolean agregarProductoAlCarrito(Integer productoID, Integer idUser) {
-        ProductoService service = new ProductoServiceImpl();
+
 
         LocalDateTime fecha = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -200,64 +203,9 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
         return carrusel;
     }
 
-    @Override
-    public List<Producto> getCarrito(Integer userId) {
-        List<Producto> carrito = new ArrayList<>();
-        String query = "SELECT * FROM products INNER JOIN cart ON  cart.id_product = products.id_product WHERE id_user = ?";
 
-        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, userId);
 
-            ResultSet result = statement.executeQuery();
 
-            while (result.next()) {
-                Producto producto = new Producto();
-                producto.setId(result.getInt("id_product"));
-                producto.setNombre(result.getString("name"));
-                producto.setStock(result.getInt("stock"));
-                producto.setPrecio(result.getInt("price"));
-                producto.setDescripcion(result.getString("description"));
-                producto.setDescripcionCorta(result.getString("short_description"));
-//                producto.setDateCreate(result.getDate("date_Create"));
-//                producto.setDateUpdate(result.getDate("date_update"));
-                producto.setNumItems(result.getInt("num_items"));
-                producto.setImgLink(result.getString("link"));
-//                producto.setStatus(result.getInt("id_status"));
-                carrito.add(producto);
-
-                // System.out.println(producto);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return carrito;
-    }
-
-    @Override
-    public Carrito obtenerCarrito(Integer idUser) {
-
-        Carrito carritoDatos = new Carrito();
-
-        String query = "SELECT products.price, COALESCE(SUM(price)) as preciototal FROM products INNER JOIN cart ON cart.id_product = products.id_product WHERE id_user = ?";
-
-        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, idUser);
-
-            ResultSet result = statement.executeQuery();
-
-            while (result.next()) {
-                carritoDatos.setPrecioTotal(result.getInt("preciototal"));
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return carritoDatos;
-    }
 
 
 
@@ -376,23 +324,19 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
     }
 
 
-    private static Producto getProducto(ResultSet rs) throws SQLException {
+    public Producto getProducto(ResultSet rs) throws SQLException {
+
         Producto p = new Producto();
         p.setId(rs.getInt("id_product"));
         p.setNombre(rs.getString("name"));
         p.setPrecio(rs.getInt("price"));
-
-        //FORMATEA EL PRECIO Y LO GUARDA EN UN STRING
-        DecimalFormat formatea = new DecimalFormat("###,###,###");
-        Integer nums = rs.getInt("price");
-        String precioEnCadena = formatea.format(nums);
-
-        p.setPrecioFormateado(precioEnCadena);
         p.setTipo(rs.getInt("product_type"));
         p.setDescripcion(rs.getString("description"));
         p.setDescripcionCorta(rs.getString("short_description"));
         p.setImgLink(rs.getString("link"));
         p.setStock(rs.getInt("stock"));
+        String precioEnCadena = Utilidades.formatearPrecio((rs.getInt("price")));
+        p.setPrecioFormateado(precioEnCadena);
         return p;
     }
 }

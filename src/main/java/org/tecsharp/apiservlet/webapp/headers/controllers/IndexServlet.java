@@ -12,6 +12,8 @@ import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
 import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.CarritoRepository;
 import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.impl.CarritoRepositoryImpl;
+import org.tecsharp.apiservlet.webapp.headers.services.carrito.CarritoService;
+import org.tecsharp.apiservlet.webapp.headers.services.carrito.impl.CarritoServiceImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.login.LoginService;
 import org.tecsharp.apiservlet.webapp.headers.services.login.impl.LoginServiceSessionImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.producto.ProductoService;
@@ -30,13 +32,9 @@ public class IndexServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         LoginService auth = new LoginServiceSessionImpl();
         Optional<String> usernameOptional = auth.getUsername(req);
-
-
         Connection conn = (Connection) req.getAttribute("conn");
-        ProductoService serviceTipoProducto = new ProductoServiceJdbcImpl(conn);
-
-
-
+        ProductoService serviceProducto = new ProductoServiceJdbcImpl(conn);
+        CarritoService carritoService = new CarritoServiceImpl();
 
         /////
         try {
@@ -44,11 +42,11 @@ public class IndexServlet extends HttpServlet {
             Usuario usuario = (Usuario)session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
             Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
 
+
             DecimalFormat formatea = new DecimalFormat("###,###,###");
-            Carrito datos = serviceTipoProducto.obtenerCarrito(userId);
+            Carrito datos = carritoService.obtenerCarrito(userId);
             Integer nums = datos.getPrecioTotal();
             String precioTotal = formatea.format(nums);
-
             req.setAttribute("precioTotal", precioTotal);
 
             //SE ENVIA CANTIDAD DE ITEMS EN CARRITO
@@ -62,40 +60,22 @@ public class IndexServlet extends HttpServlet {
         }
 
 
-
         //SERVICIO LISTA TIPO PRODUCTOS
-        List<TipoProducto> categorias = serviceTipoProducto.listarTipoProducto();
+        List<TipoProducto> categorias = serviceProducto.listarTipoProducto();
         req.setAttribute("categorias", categorias); //SE ENVIA A LA VISTA
 
         //SERVICIO LISTA 4 PRODUCTO NUEVOS PRODUCTOS
 
-        List<Producto> carruselUno = serviceTipoProducto.listarCarrusel(1);
+        List<Producto> carruselUno = serviceProducto.listarCarrusel(1);
         req.setAttribute("carruselUno", carruselUno); //SE ENVIA A LA VISTA
 
         //SERVICIO LISTA 4 PRODUCTO NUEVOS PRODUCTOS
-        List<Producto> carruselDos = serviceTipoProducto.listarCarrusel(2);
+        List<Producto> carruselDos = serviceProducto.listarCarrusel(2);
         req.setAttribute("carruselDos", carruselDos); //SE ENVIA A LA VISTA
 
         req.setAttribute("username", usernameOptional);
         getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
 
     }
-
-//    @Override
-//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        LoginService auth = new LoginServiceSessionImpl();
-//        Optional<String> usernameOptional = auth.getUsername(req);
-//
-//
-//        Connection conn = (Connection) req.getAttribute("conn");
-//        ProductoService serviceTipoProducto = new ProductoServiceJdbcImpl(conn);
-//
-//        //SERVICIO LISTA TIPO PRODUCTOS
-//        List<TipoProducto> categorias = serviceTipoProducto.listarTipoProducto();
-//        req.setAttribute("categorias", categorias); //SE ENVIA A LA VISTA
-//
-//        getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
-//
-//    }
 
 }

@@ -69,7 +69,7 @@ Lower Header Section
 	</a>
 	</h1>
 	</div>
-<div class="span8 alignR">
+    <div class="span8 alignR">
 	<p><br> <strong> Soporte (24/7) :  0800 1234 678 </strong><br><br></p>
 	<%if(username.isPresent()){%>
 	<a href="<%=request.getContextPath()%>/ver/carrito"><span class="btn btn-mini"><%=productosEnCarrito%> <span class="icon-shopping-cart"></span></span></a>
@@ -101,21 +101,22 @@ Navigation Bar Section
 			<form action="#" class="navbar-search pull-left">
 			  <input type="text" placeholder="Search" class="search-query span2">
 			</form>
+
 			<ul class="nav pull-right">
 			<li class="dropdown">
-
-            <%if(username.isPresent()){%>
-				<a href="#"><span class="icon-unlock"></span> ${usuario.nameUser}<b class="caret"></b></a>
-            <%}else{%>
-
-            <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar<b class="caret"></b></a>
-
-                <%}%>
-
-
-
+			<%if(username.isPresent()){%>
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-unlock"></span> ${usuario.nameUser} <b class="caret"></b></a>
+			    <div class="dropdown-menu">
+            	    <form class="form-horizontal loginFrm">
+            		<a href="<%=request.getContextPath()%>/logout"> <button type="button" class="shopBtn btn-block">Cerrar sesión</button></a>
+            		</form>
+            		</div>
+			<%}else{%>
+                <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar</b></a>
+			<%}%>
 			</li>
 			</ul>
+
 		  </div>
 		</div>
 	  </div>
@@ -128,7 +129,7 @@ Body Section
 <div class="well well-small">
 	<ul class="nav nav-list">
        <%for (TipoProducto c : categorias){%>
-        <li><a href="<%=c.getLinkPath()%>"><span class="icon-chevron-right"></span><%=c.getNombre()%></a></li>
+        <li><a href="<%=request.getContextPath()%>/productos?idCat=<%=c.getId()%>"><span class="icon-chevron-right"></span><%=c.getNombre()%></a></li>
        <%}%>
 		<li style="border:0"> &nbsp;</li>
 		<%if(username.isPresent()){%>

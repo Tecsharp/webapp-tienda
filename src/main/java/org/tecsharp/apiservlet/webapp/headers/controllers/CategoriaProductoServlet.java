@@ -25,29 +25,29 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet("/productos/todos")
-public class PestanaProductoServlet extends HttpServlet {
-
+@WebServlet({"/productos"})
+public class CategoriaProductoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //CONEXION BDD
-        Connection conn = (Connection) req.getAttribute("conn");
+        Connection conn = (Connection) req.getAttribute("conn" );
 
-        //IMPLEMENT SERVICE
-        ProductoService service = new ProductoServiceJdbcImpl(conn);
+        //SE OBTIENE EL ID DE LA CATEGORIA
+        Integer idCat = Integer.valueOf(req.getParameter("idCat"));
 
-        //OBTIENE LISTA DE TODOS LOS PRODUCTOS
-        List<Producto> todosLosProductos = service.listar();
-        req.setAttribute("todosLosProductos", todosLosProductos); //SE ENVIA A LA VISTA
+        //PRODUCTOS DE MOTOCICLETA
+        ProductoService serviceProducto = new ProductoServiceJdbcImpl(conn);
+        //Integer productoTipo = 1; //AGREGAR UN LINK QUE MANDE ESTE ITEM
+        List<Producto> tipoProductos = serviceProducto.listarByTipo(idCat);
+        req.setAttribute("productos", tipoProductos); //SE ENVIA A LA VISTA
 
         //LISTA DE CATEGORIAS
-        List<TipoProducto> categorias = service.listarTipoProducto();
+        List<TipoProducto> categorias = serviceProducto.listarTipoProducto();
         req.setAttribute("categorias", categorias); //SE ENVIA A LA VISTA
 
-        //USUARIO DISPONIBLE
+        //SE OBTIENE EL USUARIO
         LoginService auth = new LoginServiceSessionImpl();
-        Optional<String> usernameOptional = auth.getUsername(req);
-        req.setAttribute("username", usernameOptional);
+        Optional<String> usernameOptional = auth.getUsername(req); //SE PREPARA
+        req.setAttribute("username", usernameOptional); //SE ENVIA A LA VISTA
 
         try {
             CarritoService carritoService = new CarritoServiceImpl();
@@ -72,6 +72,6 @@ public class PestanaProductoServlet extends HttpServlet {
 
         }
 
-        getServletContext().getRequestDispatcher("/productos_todos.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/productos_categoria.jsp").forward(req, resp);
     }
 }

@@ -16,21 +16,18 @@ public class ProductoAgregarCarroServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        //SE OBTIENE EL PRODUCTO A AGREGAR Y EL ID DE USUARIO
         Integer productoID = Integer.valueOf(req.getParameter("productoID"));
         Integer idUser = Integer.valueOf(req.getParameter("idUser"));
 
+        //CONEXION BDD
         Connection conn = (Connection) req.getAttribute("conn");
+
+        //IMPLEMENT SERVICE
         ProductoService service = new ProductoServiceJdbcImpl(conn);
         service.agregarProductoAlCarrito(productoID, idUser);
 
-//        List<Producto> proca = service.getCarrito(2);
-//        req.getSession().setAttribute("proca", proca);
-//        req.setAttribute("proca", proca);
-
         resp.sendRedirect(req.getContextPath() + "/ver/carrito");
-        //getServletContext().getRequestDispatcher("/ver/carrito").forward(req, resp);
-
     }
 
 }

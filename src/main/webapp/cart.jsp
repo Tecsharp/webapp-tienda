@@ -5,6 +5,7 @@ List<Producto> proca = (List<Producto>) request.getAttribute("proca");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
 Integer productosEnCarrito = (Integer) request.getAttribute("productosEnCarrito");
 String precioTotal = (String) request.getAttribute("precioTotal");
+
 %>
 
 <!DOCTYPE html>
@@ -40,17 +41,14 @@ String precioTotal = (String) request.getAttribute("precioTotal");
 	<div class="topNav">
 		<div class="container">
 			<div class="alignR">
-				<div class="pull-left socialNw">
-					<a href="#"><span class="icon-twitter"></span></a>
-					<a href="#"><span class="icon-facebook"></span></a>
-					<a href="#"><span class="icon-youtube"></span></a>
-					<a href="#"><span class="icon-tumblr"></span></a>
-				</div>
-				<a href="index.html"> <span class="icon-home"></span> Home</a> 
-				<a href="#"><span class="icon-user"></span> My Account</a> 
-				<a href="register.html"><span class="icon-edit"></span> Free Register </a> 
-				<a href="contact.html"><span class="icon-envelope"></span> Contact us</a>
-				<a class="active" href="cart.html"><span class="icon-shopping-cart"></span> 2 Item(s) - <span class="badge badge-warning"> $448.42</span></a>
+			    <a href="<%=request.getContextPath()%>/index.html"> <span class="icon-home"></span> Inicio</a>
+                <%if(username.isPresent()){%>
+				<a href="<%=request.getContextPath()%>/mi-perfil"><span class="icon-user"></span> My Account</a>
+				<a href="<%=request.getContextPath()%>/ver/carrito"><span class="icon-shopping-cart"></span> <%=productosEnCarrito%> Articulo(s) - <span class="badge badge-warning"> $<%=precioTotal%></span></a>
+				<%}else {%>
+				<a href="<%=request.getContextPath()%>/registrarse"><span class="icon-edit"></span> Registrate </a>
+				 <%}%>
+
 			</div>
 		</div>
 	</div>
@@ -65,25 +63,17 @@ Lower Header Section
 <div class="row">
 	<div class="span4">
 	<h1>
-	<a class="logo" href="index.html"><span>Twitter Bootstrap ecommerce template</span> 
+	<a class="logo" href="index.html"><span>Twitter Bootstrap ecommerce template</span>
 		<img src="<%=request.getContextPath()%>/assets/img/logo-bootstrap-shoping-cart.png" alt="bootstrap sexy shop">
 	</a>
 	</h1>
 	</div>
-	<div class="span4">
-	<div class="offerNoteWrapper">
-	<h1 class="dotmark">
-	<i class="icon-cut"></i>
-	Twitter Bootstrap shopping cart HTML template is available @ $14
-	</h1>
-	</div>
-	</div>
-	<div class="span4 alignR">
-	<p><br> <strong> Support (24/7) :  0800 1234 678 </strong><br><br></p>
-	<span class="btn btn-mini">[ 2 ] <span class="icon-shopping-cart"></span></span>
-	<span class="btn btn-warning btn-mini">$</span>
-	<span class="btn btn-mini">&pound;</span>
-	<span class="btn btn-mini">&euro;</span>
+
+    <div class="span8 alignR">
+	<p><br> <strong> Soporte (24/7) :  0800 1234 678 </strong><br><br></p>
+	<%if(username.isPresent()){%>
+	<a href="<%=request.getContextPath()%>/ver/carrito"><span class="btn btn-mini"><%=productosEnCarrito%> <span class="icon-shopping-cart"></span></span></a>
+    <%}%>
 	</div>
 </div>
 </header>
@@ -101,12 +91,8 @@ Navigation Bar Section
 		  </a>
 		  <div class="nav-collapse">
 			<ul class="nav">
-			  <li class=""><a href="index.html">Home	</a></li>
-			  <li class=""><a href="list-view.html">List View</a></li>
-			  <li class=""><a href="grid-view.html">Grid View</a></li>
-			  <li class=""><a href="three-col.html">Three Column</a></li>
-			  <li class=""><a href="four-col.html">Four Column</a></li>
-			  <li class=""><a href="general.html">General Content</a></li>
+			  <li class=""><a href="<%=request.getContextPath()%>/inicio">Inicio</a></li>
+			  <li class=""><a href="<%=request.getContextPath()%>/productos/todos">Productos</a></li>
 			</ul>
 			<form action="#" class="navbar-search pull-left">
 			  <input type="text" placeholder="Search" class="search-query span2">
@@ -114,11 +100,15 @@ Navigation Bar Section
 			<ul class="nav pull-right">
 			<li class="dropdown">
 			<%if(username.isPresent()){%>
-            	<a href="#"><span class="icon-unlock"></span> ${usuario.nameUser}<b class="caret"></b></a>
-                <%}else{%>
-                <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar<b class="caret"></b></a>
-
-				<%}%>
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-unlock"></span> ${usuario.nameUser} <b class="caret"></b></a>
+			    <div class="dropdown-menu">
+            	    <form class="form-horizontal loginFrm">
+            		<a href="<%=request.getContextPath()%>/logout"> <button type="button" class="shopBtn btn-block">Cerrar sesión</button></a>
+            		</form>
+            		</div>
+			<%}else{%>
+                <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar</b></a>
+			<%}%>
 			</li>
 			</ul>
 		  </div>
@@ -135,7 +125,7 @@ Body Section
 		<li class="active">Carrito</li>
     </ul>
 	<div class="well well-small">
-		<h1>Carrito <small class="pull-right"> <%=productosEnCarrito%> articulos en el carrito </small></h1>
+		<h1>Carrito <small class="pull-right"> <%=productosEnCarrito%> artículo(s) en el carrito </small></h1>
 	<hr class="soften"/>	
 
 	<table class="table table-bordered table-condensed">
@@ -155,17 +145,17 @@ Body Section
                 <%for (Producto pr : proca){%>
                 <tr>
                   <td><img width="100" src="<%=pr.getImgLink()%>" alt=""></td>
-                  <td><%=pr.getNombre()%><br>Carate : 22<br>Model : n/a</td>
+                  <td><a href="<%=request.getContextPath()%>/ver/producto?id=<%=pr.getId()%>"><%=pr.getNombre()%></a><br>Disponibles: <%=pr.getStock()%><br><br><%=pr.getDescripcionCorta()%></td>
                   <td> - </td>
                   <td><span class="shopBtn"><span class="icon-ok"></span></span> </td>
-                  <td><%=pr.getPrecio()%></td>
+                  <td>$ <%=pr.getPrecioFormateado()%></td>
                   <td>
 					<input class="span1" style="max-width:34px" placeholder="1" id="appendedInputButtons" size="16" type="text" value="2">
 				  <div class="input-append">
 					<button class="btn btn-mini" type="button">-</button><button class="btn btn-mini" type="button"> + </button><button class="btn btn-mini btn-danger" type="button"><span class="icon-remove"></span></button>
 				</div>
 				</td>
-                  <td><%=pr.getPrecio()%></td>
+                  <td>$ <%=pr.getPrecioFormateado()%></td>
                 </tr>
 
                 <%}%>
@@ -173,7 +163,7 @@ Body Section
 
 				 <tr>
                   <td colspan="6" class="alignR">Total a pagar</td>
-                  <td class="label label-primary"> $<%=precioTotal%></td>
+                  <td class="label label-primary"> $ <%=precioTotal%></td>
                 </tr>
 				</tbody>
             </table><br/>

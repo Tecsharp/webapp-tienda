@@ -4,6 +4,8 @@ Producto producto = (Producto) request.getAttribute("producto");
 List<TipoProducto> categorias = (List<TipoProducto>) request.getAttribute("categorias");
 Optional<String> username = (Optional<String>) request.getAttribute("username");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
+String precioTotal = (String) request.getAttribute("precioTotal");
+Integer productosEnCarrito = (Integer) request.getAttribute("productosEnCarrito");
 %>
 
 <!DOCTYPE html>
@@ -41,10 +43,10 @@ String mensajeApp = (String) getServletContext().getAttribute("mensaje");
 			<div class="alignR">
 			    <a href="<%=request.getContextPath()%>/index.html"> <span class="icon-home"></span> Inicio</a>
                 <%if(username.isPresent()){%>
-				<a href="#"><span class="icon-user"></span> My Account</a>
-				<a href="cart.html"><span class="icon-shopping-cart"></span> 2 Item(s) - <span class="badge badge-warning"> $448.42</span></a>
+				<a href="<%=request.getContextPath()%>/mi-perfil"><span class="icon-user"></span> My Account</a>
+				<a href="<%=request.getContextPath()%>/ver/carrito"><span class="icon-shopping-cart"></span> <%=productosEnCarrito%> Articulo(s) - <span class="badge badge-warning"> $<%=precioTotal%></span></a>
 				<%}else {%>
-				<a href="register.html"><span class="icon-edit"></span> Registrate </a>
+				<a href="<%=request.getContextPath()%>/registrarse"><span class="icon-edit"></span> Registrate </a>
 				 <%}%>
 
 			</div>
@@ -67,10 +69,10 @@ Lower Header Section
 	</h1>
 	</div>
 
-	<div class="span8 alignR">
+    <div class="span8 alignR">
 	<p><br> <strong> Soporte (24/7) :  0800 1234 678 </strong><br><br></p>
 	<%if(username.isPresent()){%>
-	<span class="btn btn-mini">[ 2 ] <span class="icon-shopping-cart"></span></span>
+	<a href="<%=request.getContextPath()%>/ver/carrito"><span class="btn btn-mini"><%=productosEnCarrito%> <span class="icon-shopping-cart"></span></span></a>
     <%}%>
 	</div>
 </div>
@@ -98,11 +100,15 @@ Navigation Bar Section
 			<ul class="nav pull-right">
 			<li class="dropdown">
 			<%if(username.isPresent()){%>
-            	<a href="#"><span class="icon-unlock"></span> ${usuario.nameUser}<b class="caret"></b></a>
-                <%}else{%>
-                <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar<b class="caret"></b></a>
-
-				<%}%>
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-unlock"></span> ${usuario.nameUser} <b class="caret"></b></a>
+			    <div class="dropdown-menu">
+            	    <form class="form-horizontal loginFrm">
+            		<a href="<%=request.getContextPath()%>/logout"> <button type="button" class="shopBtn btn-block">Cerrar sesión</button></a>
+            		</form>
+            		</div>
+			<%}else{%>
+                <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar</b></a>
+			<%}%>
 			</li>
 			</ul>
 		  </div>
@@ -116,11 +122,13 @@ Body Section
 <div id="sidebar" class="span3">
 <div class="well well-small">
 	<ul class="nav nav-list">
-		<%for (TipoProducto c : categorias){%>
-        <li><a href="<%=c.getLinkPath()%>"><span class="icon-chevron-right"></span><%=c.getNombre()%></a></li>
-        <%}%>
+       <%for (TipoProducto c : categorias){%>
+        <li><a href="<%=request.getContextPath()%>/productos?idCat=<%=c.getId()%>"><span class="icon-chevron-right"></span><%=c.getNombre()%></a></li>
+       <%}%>
 		<li style="border:0"> &nbsp;</li>
-		<li> <a class="totalInCart" href="cart.html"><strong>Total Amount  <span class="badge badge-warning pull-right" style="line-height:18px;">$448.42</span></strong></a></li>
+		<%if(username.isPresent()){%>
+	    <li> <a class="totalInCart" href="<%=request.getContextPath()%>/ver/carrito"><strong>Monto total  <span class="badge badge-warning pull-right" style="line-height:18px;">$<%=precioTotal%></span></strong></a></li>
+	    <%}%>
 	</ul>
 </div>
 
@@ -209,11 +217,11 @@ Body Section
 				
 
 				  <h4><%=producto.getStock()%> articulos disponibles</h4>
-				  <p>Nowadays the lingerie industry is one of the most successful business spheres.
-				  Nowadays the lingerie industry is one of ...
+				  <p><%=producto.getDescripcionCorta()%></p>
 
 				  <%if(username.isPresent()){%>
-				  <a href="<%=request.getContextPath()%>/agregar/carro?productoID=<%=producto.getId()%>&idUser=${usuario.idUser}"><button type="button"> <span class=" icon-shopping-cart"></span> AGREGAR AL CARRITO</button></a>
+				  <br>
+				  <a href="<%=request.getContextPath()%>/agregar/carro?productoID=<%=producto.getId()%>&idUser=${usuario.idUser}"><button type="button" class="shopBtn btn-block"><span class="icon-shopping-cart"></span> AGREGAR AL CARRITO</button></a>
 				  <%}else{%>
 				  <br>
 				  <p style="color:#E69537";> Debes iniciar sesión para agregar productos al carrito.</p>

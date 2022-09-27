@@ -6,19 +6,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
-import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.CarritoRepository;
-import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.impl.CarritoRepositoryImpl;
+import org.tecsharp.apiservlet.webapp.headers.services.carrito.CarritoService;
+import org.tecsharp.apiservlet.webapp.headers.services.carrito.impl.CarritoServiceImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.login.LoginService;
 import org.tecsharp.apiservlet.webapp.headers.services.login.impl.LoginServiceSessionImpl;
-import org.tecsharp.apiservlet.webapp.headers.services.producto.ProductoService;
-import org.tecsharp.apiservlet.webapp.headers.services.producto.impl.ProductoServiceJdbcImpl;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.text.DecimalFormat;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -26,50 +23,35 @@ import java.util.Optional;
 public class VerCarritoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ///
+        //Se establece conexion con bd
         Connection conn = (Connection) req.getAttribute("conn");
-        ProductoService service = new ProductoServiceJdbcImpl(conn);
-        //Integer idUser = Integer.valueOf(req.getParameter("idUser"));
+        //IMPLEMENTS
+        CarritoService carritoService = new CarritoServiceImpl();
+
         try {
             HttpSession session = req.getSession();
             Usuario usuario = (Usuario)session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
             Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
 
             //SE ENVIA CANTIDAD DE ITEMS EN CARRITO
-            CarritoRepository serviceCarrito = new CarritoRepositoryImpl();
-            Integer productosEnCarrito = serviceCarrito.obtenerCantidadItemsCarrito(usuario.getIdUser());
+            Integer productosEnCarrito = carritoService.obtenerCantidadItemsCarrito(usuario.getIdUser());
             req.setAttribute("productosEnCarrito", productosEnCarrito);
 
+            //SE ENVIA LA LISTA DE PRODUCTOS EN CARRITO
+            List<Producto> proca = carritoService.getCarrito(userId);
+            req.setAttribute("proca", proca);
 
-
-            DecimalFormat formatea = new DecimalFormat("###,###,###");
-            Carrito datos = service.obtenerCarrito(userId);
-            Integer nums = datos.getPrecioTotal();
-            String precioTotal = formatea.format(nums);
-
+            //SE ENVIA EL PRECIO TOTAL A PAGAR CON FORMATO
+            String precioTotal = carritoService.obtenerPrecioTotalFormateado(userId);
             req.setAttribute("precioTotal", precioTotal);
 
-            ////
         } catch (Exception e){
 
         }
 
-
-
-
-        //SE RECUPERA LA SESION
-        HttpSession session = req.getSession();
-        Usuario usuario = (Usuario)session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
-        Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
-
-
-        List<Producto> proca = service.getCarrito(userId);
-        req.setAttribute("proca", proca);
-
+        //SE OBTIENE EL USUARIO DE LA SESION
         LoginService auth = new LoginServiceSessionImpl();
         Optional<String> usernameOptional = auth.getUsername(req);
-
-
         req.setAttribute("username", usernameOptional);
 
         getServletContext().getRequestDispatcher("/cart.jsp").forward(req, resp);

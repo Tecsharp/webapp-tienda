@@ -3,6 +3,8 @@
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
 List<TipoProducto> categorias = (List<TipoProducto>) request.getAttribute("categorias");
 Optional<String> username = (Optional<String>) request.getAttribute("username");
+Integer productosEnCarrito = (Integer) request.getAttribute("productosEnCarrito");
+String precioTotal = (String) request.getAttribute("precioTotal");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,8 +69,8 @@ Lower Header Section
 
     <div class="span8 alignR">
 	<p><br> <strong> Soporte (24/7) :  0800 1234 678 </strong><br><br></p>
-	<%if(username.isPresent()){%>
-	<span class="btn btn-mini">[ 2 ] <span class="icon-shopping-cart"></span></span>
+    <%if(username.isPresent()){%>
+	<a href="<%=request.getContextPath()%>/ver/carrito"><span class="btn btn-mini"><%=productosEnCarrito%> <span class="icon-shopping-cart"></span></span></a>
     <%}%>
 	</div>
 </div>
@@ -89,7 +91,7 @@ Navigation Bar Section
 			<ul class="nav">
               <li class=""><a href="<%=request.getContextPath()%>/index.html">Inicio&nbsp; </a></li>
 			  <li class=""></li>
-			  <li class=""><a href="<%=request.getContextPath()%>/productos">Productos</a></li>
+			  <li class=""><a href="<%=request.getContextPath()%>/productos/todos">Productos</a></li>
 			  <li class=""></li>
 			  <li class=""></li>
 			</ul>
@@ -98,11 +100,16 @@ Navigation Bar Section
 			</form>
 			<ul class="nav pull-right">
 			<li class="dropdown">
-				<%if(username.isPresent()){%>
-                <a href="#"><span class="icon-unlock"></span> ${usuario.nameUser}<b class="caret"></b></a>
-                <%}else{%>
-                <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar<b class="caret"></b></a>
-                <%}%>
+			<%if(username.isPresent()){%>
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-unlock"></span> ${usuario.nameUser} <b class="caret"></b></a>
+			    <div class="dropdown-menu">
+            	    <form class="form-horizontal loginFrm">
+            		<a href="<%=request.getContextPath()%>/logout"> <button type="button" class="shopBtn btn-block">Cerrar sesión</button></a>
+            		</form>
+            		</div>
+			<%}else{%>
+                <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar</b></a>
+			<%}%>
 			</li>
 			</ul>
 		  </div>
@@ -116,11 +123,13 @@ Body Section
 <div id="sidebar" class="span3">
 <div class="well well-small">
 	<ul class="nav nav-list">
-		<%for (TipoProducto c : categorias){%>
-        <li><a href="<%=c.getLinkPath()%>"><span class="icon-chevron-right"></span><%=c.getNombre()%></a></li>
-        <%}%>
+       <%for (TipoProducto c : categorias){%>
+        <li><a href="<%=request.getContextPath()%>/productos?idCat=<%=c.getId()%>"><span class="icon-chevron-right"></span><%=c.getNombre()%></a></li>
+       <%}%>
 		<li style="border:0"> &nbsp;</li>
-		<li> <a class="totalInCart" href="cart.html"><strong>Total Amount  <span class="badge badge-warning pull-right" style="line-height:18px;">$448.42</span></strong></a></li>
+		<%if(username.isPresent()){%>
+	    <li> <a class="totalInCart" href="<%=request.getContextPath()%>/ver/carrito"><strong>Monto total  <span class="badge badge-warning pull-right" style="line-height:18px;">$<%=precioTotal%></span></strong></a></li>
+	    <%}%>
 	</ul>
 </div>
 
@@ -140,7 +149,7 @@ Body Section
 	</div>
 	<div class="span9">
     <ul class="breadcrumb">
-		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
+		<li><a href="index.html">Inicio</a> <span class="divider">/</span></li>
 		<li class="active">Iniciar</li>
     </ul>
 	<h3> Iniciar sesion</h3>

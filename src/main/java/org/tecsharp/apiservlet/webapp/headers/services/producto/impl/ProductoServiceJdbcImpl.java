@@ -86,11 +86,6 @@ public class ProductoServiceJdbcImpl implements ProductoService {
         return repositoryJdbc.agregarProductoAlCarrito(productoID, idUser);
     }
 
-    @Override
-    public List<Producto> getCarrito(Integer userId) {
-
-            return repositoryJdbc.getCarrito(userId);
-    }
 
     @Override
     public void actualizarCarritoPorProductoDuplicado(Integer productoID, Integer idUser, Integer numItems) {
@@ -106,8 +101,5 @@ public class ProductoServiceJdbcImpl implements ProductoService {
         }
     }
 
-    @Override
-    public Carrito obtenerCarrito(Integer idUser) {
-        return repositoryJdbc.obtenerCarrito(idUser);
-    }
+
 }

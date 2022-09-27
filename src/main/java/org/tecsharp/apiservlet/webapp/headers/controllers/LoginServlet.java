@@ -3,9 +3,14 @@ package org.tecsharp.apiservlet.webapp.headers.controllers;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
+import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.CarritoRepository;
+import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.impl.CarritoRepositoryImpl;
+import org.tecsharp.apiservlet.webapp.headers.services.carrito.CarritoService;
+import org.tecsharp.apiservlet.webapp.headers.services.carrito.impl.CarritoServiceImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.login.LoginService;
 import org.tecsharp.apiservlet.webapp.headers.services.login.impl.LoginServiceSessionImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.producto.ProductoService;
@@ -15,6 +20,7 @@ import org.tecsharp.apiservlet.webapp.headers.services.usuario.impl.UsuarioServi
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,10 +29,11 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //SE OBTIENE EL USUARIO
         LoginService auth = new LoginServiceSessionImpl();
         Optional<String> usernameOptional = auth.getUsername(req);
 
-
+        //CONEXION BDD
         Connection conn = (Connection) req.getAttribute("conn" );
         ProductoService serviceTipoProducto = new ProductoServiceJdbcImpl(conn);
 
@@ -35,7 +42,6 @@ public class LoginServlet extends HttpServlet {
         req.setAttribute("categorias", categorias); //SE ENVIA A LA VISTA
 
         //SERVICIO LISTA 4 PRODUCTO NUEVOS PRODUCTOS
-
         List<Producto> carruselUno = serviceTipoProducto.listarCarrusel(1);
         req.setAttribute("carruselUno", carruselUno); //SE ENVIA A LA VISTA
 
@@ -44,11 +50,30 @@ public class LoginServlet extends HttpServlet {
         req.setAttribute("carruselDos", carruselDos); //SE ENVIA A LA VISTA
         req.setAttribute("username", usernameOptional);
 
+        try {
+            HttpSession session = req.getSession();
+            Usuario usuario = (Usuario)session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
+            Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
+
+            CarritoService carritoService = new CarritoServiceImpl();
+            DecimalFormat formatea = new DecimalFormat("###,###,###");
+            Carrito datos = carritoService.obtenerCarrito(userId);
+            Integer nums = datos.getPrecioTotal();
+            String precioTotal = formatea.format(nums);
+            req.setAttribute("precioTotal", precioTotal);
+
+            //SE ENVIA CANTIDAD DE ITEMS EN CARRITO
+            CarritoRepository serviceCarrito = new CarritoRepositoryImpl();
+            Integer productosEnCarrito = serviceCarrito.obtenerCantidadItemsCarrito(usuario.getIdUser());
+            req.setAttribute("productosEnCarrito", productosEnCarrito);
+
+            ////
+        } catch (Exception e){
+
+        }
 
         if (usernameOptional.isPresent()) {
-
             getServletContext().getRequestDispatcher("/index.html").forward(req, resp);
-
         } else {
             getServletContext().getRequestDispatcher("/inicio.jsp").forward(req, resp);
         }
@@ -60,10 +85,8 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         //SERVICIO USUARIO
-        UsuarioService service = new UsuarioServiceImpl();
-        Usuario usuario = service.login(username, password);
-
-
+        UsuarioService usuarioService = new UsuarioServiceImpl();
+        Usuario usuario = usuarioService.login(username, password);
 
         if (usuario != null) {
             HttpSession session = req.getSession();
