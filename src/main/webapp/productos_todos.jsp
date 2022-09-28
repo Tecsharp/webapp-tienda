@@ -180,6 +180,7 @@ Body Section
 <div class="span9">
 <div class="well well-small">
 	<%for (Producto tp : todosLosProductos){%>
+	<%if(tp.getStatus() == 1){%>
 	<hr class="soften">
 	<div class="row-fluid">	  
 		<div class="span2">
@@ -209,6 +210,7 @@ Body Section
 			</form>
 		</div>
 	</div>
+	<%}%>
 	<%}%>
 </div>
 </div>

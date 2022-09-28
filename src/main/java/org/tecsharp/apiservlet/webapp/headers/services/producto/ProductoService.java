@@ -15,9 +15,7 @@ public interface ProductoService {
     List<Producto> obtenerTodosLosProductos ();
     Producto obtenerProductoPorId (Integer id);
     Optional<Producto> porId(Integer id);
-    boolean agregarProductoAlCarrito(Integer productoID, Integer idUser);
 
-    void actualizarCarritoPorProductoDuplicado(Integer productoID, Integer idUser, Integer numItems);
     boolean validaProductoEnCarrito (boolean enCarrito);
 
 

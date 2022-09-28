@@ -18,6 +18,7 @@ public class Producto {
     private String imgLink;
     private String descripcionCorta;
     private Integer numItems;
+    private Integer status;
 
 
     public Producto() {

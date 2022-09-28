@@ -150,10 +150,10 @@ Body Section
                   <td><span class="shopBtn"><span class="icon-ok"></span></span> </td>
                   <td>$ <%=pr.getPrecioFormateado()%></td>
                   <td>
-					<input class="span1" style="max-width:34px" placeholder="1" id="appendedInputButtons" size="16" type="text" value="2">
+                  <%=pr.getNumItems()%>
 				  <div class="input-append">
-					<button class="btn btn-mini" type="button">-</button><button class="btn btn-mini" type="button"> + </button><button class="btn btn-mini btn-danger" type="button"><span class="icon-remove"></span></button>
-				</div>
+				  <a href="<%=request.getContextPath()%>/eliminar/producto?idProducto=<%=pr.getId()%>&userId=${usuario.idUser}"><button class="btn btn-mini btn-danger" type="button"><span class="icon-remove"></span></button></a>
+				  </div>
 				</td>
                   <td>$ <%=pr.getPrecioFormateado()%></td>
                 </tr>

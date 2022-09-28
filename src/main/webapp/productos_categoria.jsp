@@ -186,13 +186,14 @@ Body Section
 			<a href="<%=request.getContextPath()%>/ver/producto?id=<%=p.getId()%>"><img src="<%=p.getImgLink()%>" alt=""></a>
 		</div>
 		<div class="span6">
-			<h5><a href="<%=request.getContextPath()%>/ver/producto?id=<%=p.getId()%>"><%=p.getNombre()%></a></h5>
-            <b>Disponibles: <%=p.getStock()%></b>
-			<br>
-			<br>
-			<%=p.getDescripcionCorta()%>
-			</p>
-		</div>
+        			<h5><a href="<%=request.getContextPath()%>/ver/producto?id=<%=p.getId()%>"><%=p.getNombre()%></a></h5>
+        			<p>
+        			<b>Disponibles: <%=p.getStock()%></b>
+        			<br>
+        			<br>
+        			<%=p.getDescripcionCorta()%>
+        			</p>
+        		</div>
 		<div class="span4 alignR">
 		<form class="form-horizontal qtyFrm">
 		<h3> $<%=p.getPrecioFormateado()%></h3>

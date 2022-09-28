@@ -81,16 +81,7 @@ public class ProductoServiceJdbcImpl implements ProductoService {
         }
     }
 
-    @Override
-    public boolean agregarProductoAlCarrito(Integer productoID, Integer idUser) {
-        return repositoryJdbc.agregarProductoAlCarrito(productoID, idUser);
-    }
 
-
-    @Override
-    public void actualizarCarritoPorProductoDuplicado(Integer productoID, Integer idUser, Integer numItems) {
-
-    }
 
     @Override
     public boolean validaProductoEnCarrito(boolean enCarrito) {

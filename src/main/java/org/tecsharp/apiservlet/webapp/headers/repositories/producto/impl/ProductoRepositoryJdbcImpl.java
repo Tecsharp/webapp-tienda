@@ -66,7 +66,7 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
                 producto.setImgLink(result.getString("link"));
                 producto.setDescripcion(result.getString("description"));
                 producto.setDescripcionCorta(result.getString("short_description"));
-                //producto.setStock(result.getInt("stock"));
+                producto.setStock(result.getInt("stock"));
                 producto.setPrecio(result.getInt("price"));
                 String precioFormateado = Utilidades.formatearPrecio(result.getInt("price"));
                 producto.setPrecioFormateado(precioFormateado);
@@ -85,86 +85,7 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
         return tipoProductos;
     }
 
-    @Override
-    public boolean agregarProductoAlCarrito(Integer productoID, Integer idUser) {
 
-
-        LocalDateTime fecha = LocalDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String fechaFormateada = fecha.format(myFormatObj);
-
-        String query = "INSERT INTO cart VALUES (0,1,1,?,?,1,?,?,?)";
-
-        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setString(1, fechaFormateada);
-            statement.setString(2, fechaFormateada);
-            statement.setInt(3, 1);
-            statement.setInt(4, idUser);
-            statement.setInt(5, productoID);
-            statement.executeUpdate();
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
-    }
-
-
-    @Override
-    public void actualizarCarritoPorProductoDuplicado(Integer productoID, Integer idUser, Integer numItems) {
-
-        Integer nuevoNumItems = null;
-        Integer itemsEnCarrito = null;
-        String query = "SELECT num_items FROM cart WHERE id_product = ? AND id_user = ?";
-
-        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setInt(1, productoID);
-            statement.setInt(2, idUser);
-
-            ResultSet result = statement.executeQuery();
-
-            while (result.next()) {
-
-                itemsEnCarrito = result.getInt("num_items");
-
-                // System.out.println(producto);
-            }
-
-            //statement.executeUpdate();
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-
-        nuevoNumItems = itemsEnCarrito + numItems;
-
-        String query2 = "UPDATE cart SET num_items = ? WHERE id_product = ? AND id_user = ?";
-
-        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
-             PreparedStatement statement = connection.prepareStatement(query2)) {
-
-            // ResultSet result = statement.executeQuery();
-
-            statement.setInt(1, nuevoNumItems);
-            statement.setInt(2, productoID);
-            statement.setInt(3, idUser);
-            statement.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-
-    }
 
     @Override
     public List<Producto> listarCarrusel(Integer productoTipo) throws SQLException {
@@ -333,6 +254,7 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
         p.setTipo(rs.getInt("product_type"));
         p.setDescripcion(rs.getString("description"));
         p.setDescripcionCorta(rs.getString("short_description"));
+        p.setStatus(rs.getInt("id_status"));
         p.setImgLink(rs.getString("link"));
         p.setStock(rs.getInt("stock"));
         String precioEnCadena = Utilidades.formatearPrecio((rs.getInt("price")));

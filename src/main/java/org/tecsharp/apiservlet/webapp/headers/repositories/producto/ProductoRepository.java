@@ -14,9 +14,7 @@ public interface ProductoRepository<T> {
     List<Producto> listarByTipo(Integer productoTipo) throws SQLException;
     Producto obtenerProductoPorId(Integer productoTipo) throws SQLException;
     List<Producto> obtenerTodosLosProductos ();
-    boolean agregarProductoAlCarrito(Integer productoID, Integer idUser);
 
-    void actualizarCarritoPorProductoDuplicado(Integer productoID, Integer idUser, Integer numItems);
 
 
 
