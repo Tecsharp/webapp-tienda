@@ -1,4 +1,4 @@
-package org.tecsharp.apiservlet.webapp.headers.controllers;
+package org.tecsharp.apiservlet.webapp.headers.controllers.carrito;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -34,8 +34,8 @@ public class VerCarritoServlet extends HttpServlet {
             Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
 
             //SE ENVIA CANTIDAD DE ITEMS EN CARRITO
-            Integer productosEnCarrito = carritoService.obtenerCantidadItemsCarrito(usuario.getIdUser());
-            req.setAttribute("productosEnCarrito", productosEnCarrito);
+            Integer numeroProductosEnCarrito = carritoService.obtenerCantidadItemsCarrito(usuario.getIdUser());
+            req.setAttribute("numeroProductosEnCarrito", numeroProductosEnCarrito);
 
             //SE ENVIA LA LISTA DE PRODUCTOS EN CARRITO
             List<Producto> proca = carritoService.getCarrito(userId);

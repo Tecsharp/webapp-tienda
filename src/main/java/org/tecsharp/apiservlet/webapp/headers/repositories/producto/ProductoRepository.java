@@ -14,12 +14,6 @@ public interface ProductoRepository<T> {
     List<Producto> listarByTipo(Integer productoTipo) throws SQLException;
     Producto obtenerProductoPorId(Integer productoTipo) throws SQLException;
     List<Producto> obtenerTodosLosProductos ();
-
-
-
-
-
-
     List<Producto> listarCarrusel(Integer productoTipo) throws SQLException;
     T porID(Integer id) throws SQLException;
     void guardar (T t) throws SQLException;

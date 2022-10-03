@@ -96,7 +96,7 @@ Navigation Bar Section
 			  <li class=""><a href="<%=request.getContextPath()%>/productos/todos">Productos</a></li>
 			  <li class=""></li>
 			  <li class=""></li>
-			  <li class=""><a href="general.html">General Content</a></li>
+			  <li class=""><a href="<%=request.getContextPath()%>/crud">CRUD</a></li>
 			</ul>
 			<form action="#" class="navbar-search pull-left">
 			  <input type="text" placeholder="Search" class="search-query span2">

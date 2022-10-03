@@ -1,12 +1,13 @@
-<%@page contentType="text/html; charset=UTF-8" import="java.util.*, org.tecsharp.apiservlet.webapp.headers.models.*"%>
+<%@page contentType="text/html; charset=UTF-8" import="java.util.*, org.tecsharp.apiservlet.webapp.headers.models.*, java.text.DecimalFormat"%>
 <%
 Optional<String> username = (Optional<String>) request.getAttribute("username");
 List<Producto> proca = (List<Producto>) request.getAttribute("proca");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
-Integer productosEnCarrito = (Integer) request.getAttribute("productosEnCarrito");
+Integer numeroProductosEnCarrito = (Integer) request.getAttribute("numeroProductosEnCarrito");
 String precioTotal = (String) request.getAttribute("precioTotal");
-
 %>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +45,7 @@ String precioTotal = (String) request.getAttribute("precioTotal");
 			    <a href="<%=request.getContextPath()%>/index.html"> <span class="icon-home"></span> Inicio</a>
                 <%if(username.isPresent()){%>
 				<a href="<%=request.getContextPath()%>/mi-perfil"><span class="icon-user"></span> My Account</a>
-				<a href="<%=request.getContextPath()%>/ver/carrito"><span class="icon-shopping-cart"></span> <%=productosEnCarrito%> Articulo(s) - <span class="badge badge-warning"> $<%=precioTotal%></span></a>
+				<a href="<%=request.getContextPath()%>/ver/carrito"><span class="icon-shopping-cart"></span> <%=numeroProductosEnCarrito%> Articulo(s) - <span class="badge badge-warning"> $<%=precioTotal%></span></a>
 				<%}else {%>
 				<a href="<%=request.getContextPath()%>/registrarse"><span class="icon-edit"></span> Registrate </a>
 				 <%}%>
@@ -72,7 +73,7 @@ Lower Header Section
     <div class="span8 alignR">
 	<p><br> <strong> Soporte (24/7) :  0800 1234 678 </strong><br><br></p>
 	<%if(username.isPresent()){%>
-	<a href="<%=request.getContextPath()%>/ver/carrito"><span class="btn btn-mini"><%=productosEnCarrito%> <span class="icon-shopping-cart"></span></span></a>
+	<a href="<%=request.getContextPath()%>/ver/carrito"><span class="btn btn-mini"><%=numeroProductosEnCarrito%> <span class="icon-shopping-cart"></span></span></a>
     <%}%>
 	</div>
 </div>
@@ -125,7 +126,7 @@ Body Section
 		<li class="active">Carrito</li>
     </ul>
 	<div class="well well-small">
-		<h1>Carrito <small class="pull-right"> <%=productosEnCarrito%> artículo(s) en el carrito </small></h1>
+		<h1>Carrito <small class="pull-right"> <%=numeroProductosEnCarrito%> artículo(s) en el carrito </small></h1>
 	<hr class="soften"/>	
 
 	<table class="table table-bordered table-condensed">
@@ -143,6 +144,15 @@ Body Section
               <tbody>
 
                 <%for (Producto pr : proca){%>
+                <%
+                Integer precio = pr.getPrecio();
+                Integer items = pr.getNumItems();
+                Integer precioF = precio * items;
+                DecimalFormat formatea = new DecimalFormat("###,###,###");
+                String precioFinal = formatea.format(precioF);
+                %>
+
+
                 <tr>
                   <td><img width="100" src="<%=pr.getImgLink()%>" alt=""></td>
                   <td><a href="<%=request.getContextPath()%>/ver/producto?id=<%=pr.getId()%>"><%=pr.getNombre()%></a><br>Disponibles: <%=pr.getStock()%><br><br><%=pr.getDescripcionCorta()%></td>
@@ -155,7 +165,7 @@ Body Section
 				  <a href="<%=request.getContextPath()%>/eliminar/producto?idProducto=<%=pr.getId()%>&userId=${usuario.idUser}"><button class="btn btn-mini btn-danger" type="button"><span class="icon-remove"></span></button></a>
 				  </div>
 				</td>
-                  <td>$ <%=pr.getPrecioFormateado()%></td>
+                  <td>$ <%=precioFinal%></td>
                 </tr>
 
                 <%}%>

@@ -13,7 +13,6 @@ public class Producto {
     private String descripcion;
     private Integer precio;
     private String precioFormateado;
-    private String sky;
     private LocalDate fechaRegistro;
     private String imgLink;
     private String descripcionCorta;

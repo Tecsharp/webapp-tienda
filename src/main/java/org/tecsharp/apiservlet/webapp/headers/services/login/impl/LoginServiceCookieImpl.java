@@ -26,4 +26,9 @@ public class LoginServiceCookieImpl implements LoginService {
     public Optional<String> getUser(HttpServletRequest req) {
         return Optional.empty();
     }
+
+    @Override
+    public Optional<Integer> getUserType(HttpServletRequest request) {
+        return Optional.empty();
+    }
 }

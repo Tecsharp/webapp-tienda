@@ -12,9 +12,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CarritoRepositoryImpl implements CarritoRepository {
@@ -23,7 +25,7 @@ public class CarritoRepositoryImpl implements CarritoRepository {
 
         Integer cantidadItemsCarrito = null;
 
-        String query = "SELECT COUNT(num_items) from cart WHERE id_user = ?";
+        String query = "SELECT cart.num_items, COALESCE(SUM(num_items)) as itemscarrito from cart WHERE id_user = ?";
 
         try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -32,7 +34,7 @@ public class CarritoRepositoryImpl implements CarritoRepository {
             ResultSet result = statement.executeQuery();
 
             if (result.next()) {
-                cantidadItemsCarrito = result.getInt("COUNT(num_items)");
+                cantidadItemsCarrito = result.getInt("itemscarrito");
 
             }
         } catch (Exception e) {
@@ -47,7 +49,7 @@ public class CarritoRepositoryImpl implements CarritoRepository {
 
         Carrito carritoDatos = new Carrito();
 
-        String query = "SELECT products.price, COALESCE(SUM(price)) as preciototal FROM products INNER JOIN cart ON cart.id_product = products.id_product WHERE id_user = ?";
+        String query = "SELECT products.price, cart.num_items, COALESCE(SUM(price*num_items)) as preciototal FROM products INNER JOIN cart ON cart.id_product = products.id_product WHERE id_user = ?";
 
         try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -56,6 +58,7 @@ public class CarritoRepositoryImpl implements CarritoRepository {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
+
                 carritoDatos.setPrecioTotal(result.getInt("preciototal"));
 
 
@@ -105,41 +108,37 @@ public class CarritoRepositoryImpl implements CarritoRepository {
 
     @Override
     public boolean agregarProductoAlCarrito(Integer productoID, Integer idUser,Integer numItems, boolean productoDuplicado) {
-        //CarritoService serviceCarrito = new CarritoServiceImpl();
 
-        //boolean enCarrito = false;
         if (productoDuplicado) {
             actualizarCarritoPorProductoDuplicado(productoID, idUser, numItems);
             return true;
 
-            //AGREGAR VALIDACION
-            //return serviceCarrito.validaProductoCarritoAgregado(enCarrito);
         } else {
 
-            LocalDateTime fecha = LocalDateTime.now();
-            DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            String fechaFormateada = fecha.format(myFormatObj);
+            DateTimeFormatter FOMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+            LocalDateTime localDateTime = LocalDateTime.now();
+            String ldtString = FOMATTER.format(localDateTime);
 
             String query = "INSERT INTO cart VALUES (0,1,1,?,?,1,?,?,?)";
 
             try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
                  PreparedStatement statement = connection.prepareStatement(query)) {
-
-                // ResultSet result = statement.executeQuery();
-
-                statement.setString(1, fechaFormateada);
-                statement.setString(2, fechaFormateada);
+                statement.setString(1, ldtString);
+                statement.setString(2, ldtString);
                 statement.setInt(3, numItems);
                 statement.setInt(4, idUser);
                 statement.setInt(5, productoID);
                 statement.executeUpdate();
-
             }
 
             catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
+
+            //AGREGA LOS DATOS A productosoncarrito
+
+
 
             return true;
             //AGREGAR VALIDACION DE QUE SE AGREGO AL CARRITO

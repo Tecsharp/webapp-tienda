@@ -1,4 +1,4 @@
-package org.tecsharp.apiservlet.webapp.headers.controllers;
+package org.tecsharp.apiservlet.webapp.headers.controllers.producto;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,20 +25,18 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet("/productos/todos")
-public class PestanaProductoServlet extends HttpServlet {
+@WebServlet("/ver/producto")
+public class VerProductoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //CONEXION BDD
+        Integer id = Integer.valueOf(req.getParameter("id")); //RECIBE EL ID
         Connection conn = (Connection) req.getAttribute("conn");
-
-        //IMPLEMENT SERVICE
         ProductoService service = new ProductoServiceJdbcImpl(conn);
 
-        //OBTIENE LISTA DE TODOS LOS PRODUCTOS
-        List<Producto> todosLosProductos = service.listar();
-        req.setAttribute("todosLosProductos", todosLosProductos); //SE ENVIA A LA VISTA
+        //OBJETO PRODUCTO
+        Producto producto = service.obtenerProductoPorId(id);
+        req.setAttribute("producto", producto); //SE ENVIA A LA VISTA
 
         //LISTA DE CATEGORIAS
         List<TipoProducto> categorias = service.listarTipoProducto();
@@ -72,6 +70,13 @@ public class PestanaProductoServlet extends HttpServlet {
 
         }
 
-        getServletContext().getRequestDispatcher("/productos_todos.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/producto_detalles.jsp").forward(req, resp);
+
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer id = Integer.valueOf(req.getParameter("id"));
+        resp.sendRedirect(req.getContextPath() + "/ver/producto");
     }
 }

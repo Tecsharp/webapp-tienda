@@ -92,7 +92,7 @@ Navigation Bar Section
 		  <div class="nav-collapse">
 			<ul class="nav">
 			  <li class="active"><a href="<%=request.getContextPath()%>/index.html">Inicio</a></li>
-			  <li class=""><a href="<%=request.getContextPath()%>/productos">Productos</a></li>
+			  <li class=""><a href="<%=request.getContextPath()%>/productos/todos">Productos</a></li>
 			</ul>
 			<form action="#" class="navbar-search pull-left">
 			  <input type="text" placeholder="Search" class="search-query span2">
@@ -183,7 +183,7 @@ Body Section
 	<div class="span9">
     <ul class="breadcrumb">
     <li><a href="<%=request.getContextPath()%>/inicio">Inicio</a> <span class="divider">/</span></li>
-    <li><a href="<%=request.getContextPath()%>/productos">Productos</a> <span class="divider">/</span></li>
+    <li><a href="<%=request.getContextPath()%>/productos/todos">Productos</a> <span class="divider">/</span></li>
     <li class="active">Detalles</li>
     </ul>	
 	<div class="well well-small">

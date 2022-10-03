@@ -1,4 +1,4 @@
-package org.tecsharp.apiservlet.webapp.headers.controllers;
+package org.tecsharp.apiservlet.webapp.headers.controllers.producto;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
