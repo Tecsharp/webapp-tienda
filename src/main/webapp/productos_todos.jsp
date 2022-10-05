@@ -184,10 +184,10 @@ Body Section
 	<hr class="soften">
 	<div class="row-fluid">	  
 		<div class="span2">
-			<a href="<%=request.getContextPath()%>/ver/producto?id=<%=tp.getId()%>"><img src="<%=tp.getImgLink()%>" alt="<%=tp.getNombre()%>"></a>
+			<a href="<%=request.getContextPath()%>/ver/producto?id=<%=tp.getId()%>&idTipo=<%=tp.getTipo().getId()%>"><img src="<%=tp.getImgLink()%>" alt="<%=tp.getNombre()%>"></a>
 		</div>
 		<div class="span6">
-			<h5><a href="<%=request.getContextPath()%>/ver/producto?id=<%=tp.getId()%>"><%=tp.getNombre()%></a></h5>
+			<h5><a href="<%=request.getContextPath()%>/ver/producto?id=<%=tp.getId()%>&idTipo=<%=tp.getTipo().getId()%>"><%=tp.getNombre()%></a></h5>
 			<p>
 			<b>Disponibles: <%=tp.getStock()%></b>
 			<br>
@@ -205,7 +205,7 @@ Body Section
 		  <%}else{%>
 		  <h6 style="color:#E69537";> Inicia sesión para agregar al carrito.</h6>
 		  <%}%>
-		  <a href="<%=request.getContextPath()%>/ver/producto?id=<%=tp.getId()%>" class="shopBtn">VER</a>
+		  <a href="<%=request.getContextPath()%>/ver/producto?id=<%=tp.getId()%>&idTipo=<%=tp.getTipo().getId()%>" class="shopBtn">VER</a>
 		 </div>
 			</form>
 		</div>

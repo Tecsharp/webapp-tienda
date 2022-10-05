@@ -3,6 +3,7 @@
 Optional<String> username = (Optional<String>) request.getAttribute("username");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
 List<Producto> todosLosProductos = (List<Producto>) request.getAttribute("todosLosProductos");
+List<TipoProducto> categorias = (List<TipoProducto>) request.getAttribute("categorias");
 %>
 
 <!DOCTYPE html>
@@ -142,11 +143,16 @@ Body Section
                 <div>
                     <select name="categoria" id="categoria">
                         <option value="0"> Todos</option>
+                        <%for (TipoProducto cat : categorias){%>
+                        <option value="<%=cat.getId()%>"> <%=cat.getNombre()%> </option>
+                        <%}%>
+                        <!--
                         <option value="1"> Motocicletas</option>
                         <option value="2"> Telefonia</option>
                         <option value="3"> Refrigeracion</option>
                         <option value="4"> Videojuegos</option>
                         <option value="5"> Computo</option>
+                        -->
                     </select>
                     <div>
                         <input type="submit" class="shopBtn" value="Filtrar">
@@ -176,7 +182,7 @@ Body Section
 		<h3> $<%=tp.getPrecioFormateado()%></h3>
 		<br>
 		<div class="btn-group">
-		  <a href="<%=request.getContextPath()%>/crud/actualizar/producto?id=<%=tp.getId()%>" class="defaultBtn"><span class="btn btn-mini btn-danger"></span> Actualizar producto</a>
+		  <a href="<%=request.getContextPath()%>/crud/actualizar/producto?id=<%=tp.getId()%>&idTipo=<%=tp.getTipo().getId()%>" class="defaultBtn"><span class="btn btn-mini btn-danger"></span> Actualizar producto</a>
 		  <a href="<%=request.getContextPath()%>/ver/producto?id=<%=tp.getId()%>" class="shopBtn">VER</a>
 		 </div>
 			</form>

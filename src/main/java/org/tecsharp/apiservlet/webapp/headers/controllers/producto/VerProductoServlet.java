@@ -34,9 +34,21 @@ public class VerProductoServlet extends HttpServlet {
         Connection conn = (Connection) req.getAttribute("conn");
         ProductoService service = new ProductoServiceJdbcImpl(conn);
 
+        //SE RECUPERA LA ID DE LA CATEGORIA
+        Integer idTipo = Integer.valueOf(req.getParameter("idTipo"));
+        TipoProducto tipoProducto = new TipoProducto();
+        tipoProducto.setId(idTipo);
+
         //OBJETO PRODUCTO
-        Producto producto = service.obtenerProductoPorId(id);
-        req.setAttribute("producto", producto); //SE ENVIA A LA VISTA
+        try {
+            Producto producto = service.obtenerProductoPorId(id, tipoProducto);
+            req.setAttribute("producto", producto); //SE ENVIA A LA VISTA
+        }catch (Exception e){
+
+        }
+
+
+
 
         //LISTA DE CATEGORIAS
         List<TipoProducto> categorias = service.listarTipoProducto();

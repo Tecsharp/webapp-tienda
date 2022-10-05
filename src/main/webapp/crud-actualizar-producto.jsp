@@ -4,6 +4,7 @@ Optional<String> username = (Optional<String>) request.getAttribute("username");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
 Producto producto = (Producto) request.getAttribute("producto");
 List<TipoProducto> categorias = (List<TipoProducto>) request.getAttribute("categorias");
+Integer categoriaId = (Integer) request.getAttribute("categoriaId");
 %>
 
 <!DOCTYPE html>
@@ -155,7 +156,7 @@ Body Section
             <div>
                 <select name="categoria" id="categoria">
                     <!-- METER UNA LISTA CON LAS CATEGORIAS -->
-                    <option value="<%=producto.getTipo()%>"> Motocicletas</option>
+                    <option value="<%=producto.getTipo()%>"> <%=producto.getTipo().getNombre()%></option>
                     <%for (TipoProducto cat : categorias){%>
                     <option value="<%=cat.getId()%>"> <%=cat.getNombre()%> </option>
                     <%}%>

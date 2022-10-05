@@ -23,10 +23,15 @@ public class CrudActualizarProducto extends HttpServlet {
         Integer idProducto = Integer.valueOf(req.getParameter("id"));
         ProductoService serviceProducto = new ProductoServiceJdbcImpl(conn);
 
+        //SE RECUPERA LA ID DE LA CATEGORIA
+        Integer idTipo = Integer.valueOf(req.getParameter("idTipo"));
+        //Integer idTipo = null;
+        TipoProducto tipo = new TipoProducto();
+        tipo.setId(idTipo);
         //SE ENVIA EL PRODUCTO SELECCIONADO EN VISTA
-        Producto producto = serviceProducto.obtenerProductoPorId(idProducto);
+        Producto producto = serviceProducto.obtenerProductoPorId(idProducto, tipo);
         req.setAttribute("producto", producto);
-        producto.getTipo() ;
+
 
         //SE ENVIA LISTA DE CATEGORIAS
         List<TipoProducto> categorias = serviceProducto.listarTipoProducto();

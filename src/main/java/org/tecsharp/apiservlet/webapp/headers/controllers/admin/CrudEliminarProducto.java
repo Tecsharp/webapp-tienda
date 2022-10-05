@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
+import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 import org.tecsharp.apiservlet.webapp.headers.services.producto.ProductoService;
 import org.tecsharp.apiservlet.webapp.headers.services.producto.impl.ProductoServiceJdbcImpl;
 
@@ -21,7 +22,13 @@ public class CrudEliminarProducto extends HttpServlet {
         Integer idProducto = Integer.valueOf(req.getParameter("id"));
         ProductoService service = new ProductoServiceJdbcImpl(conn);
 
-        Producto producto = service.obtenerProductoPorId(idProducto);
+        //SE RECUPERA LA ID DE LA CATEGORIA
+        Integer idTipo = null;
+        //Integer idTipo = Integer.valueOf(req.getParameter("idTipo"));
+        TipoProducto tipoProducto = new TipoProducto();
+        tipoProducto.setId(idTipo);
+
+        Producto producto = service.obtenerProductoPorId(idProducto, tipoProducto);
         req.setAttribute("producto", producto);
 
 

@@ -65,13 +65,21 @@ public class IndexServlet extends HttpServlet {
         req.setAttribute("categorias", categorias); //SE ENVIA A LA VISTA
 
         //SERVICIO LISTA 4 PRODUCTO NUEVOS PRODUCTOS
+        //SE RECUPERA LA ID DE LA CATEGORIA
 
-        List<Producto> carruselUno = serviceProducto.listarCarrusel(1);
+        TipoProducto tipo1 = new TipoProducto();
+        tipo1.setId(1);
+
+        TipoProducto tipo2 = new TipoProducto();
+        tipo2.setId(2);
+
+        List<Producto> carruselUno = serviceProducto.listarCarrusel(1, tipo1);
         req.setAttribute("carruselUno", carruselUno); //SE ENVIA A LA VISTA
 
         //SERVICIO LISTA 4 PRODUCTO NUEVOS PRODUCTOS
-        List<Producto> carruselDos = serviceProducto.listarCarrusel(2);
+        List<Producto> carruselDos = serviceProducto.listarCarrusel(2, tipo2);
         req.setAttribute("carruselDos", carruselDos); //SE ENVIA A LA VISTA
+       //carruselDos.get(2).getTipo().getId();
 
         req.setAttribute("username", usernameOptional);
         getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);

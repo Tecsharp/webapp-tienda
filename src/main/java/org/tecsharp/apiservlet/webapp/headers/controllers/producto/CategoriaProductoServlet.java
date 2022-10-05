@@ -34,10 +34,15 @@ public class CategoriaProductoServlet extends HttpServlet {
         //SE OBTIENE EL ID DE LA CATEGORIA
         Integer idCat = Integer.valueOf(req.getParameter("idCat"));
 
+        //SE RECUPERA LA ID DE LA CATEGORIA
+        //Integer idTipo = Integer.valueOf(req.getParameter("idTipo"));
+        TipoProducto tipo = new TipoProducto();
+        tipo.setId(idCat);
+
         //PRODUCTOS DE MOTOCICLETA
         ProductoService serviceProducto = new ProductoServiceJdbcImpl(conn);
         //Integer productoTipo = 1; //AGREGAR UN LINK QUE MANDE ESTE ITEM
-        List<Producto> tipoProductos = serviceProducto.listarByTipo(idCat);
+        List<Producto> tipoProductos = serviceProducto.listarByTipo(idCat, tipo);
         req.setAttribute("productos", tipoProductos); //SE ENVIA A LA VISTA
 
         //LISTA DE CATEGORIAS

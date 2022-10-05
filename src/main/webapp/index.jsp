@@ -227,7 +227,7 @@ New Products
                 <%for (Producto c : carruselUno){%>
 				<li class="span3">
 				  <div class="thumbnail">
-					<a class="zoomTool" href="<%=request.getContextPath()%>/ver/producto?id=<%=c.getId()%>" title="Ver detalles"><span class="icon-search"></span> VER DETALLES</a>
+					<a class="zoomTool" href="<%=request.getContextPath()%>/ver/producto?id=<%=c.getId()%>&idTipo=<%=c.getTipo().getId()%>" title="Ver detalles"><span class="icon-search"></span> VER DETALLES</a>
 					<a  href="<%=request.getContextPath()%>/ver/producto?id=<%=c.getId()%>"><img src="<%=c.getImgLink()%>" alt=""></a>
 				  </div>
 				</li>
@@ -245,7 +245,7 @@ New Products
 		  <%for (Producto d : carruselDos){%>
 			<li class="span3">
 			  <div class="thumbnail">
-				<a class="zoomTool" href="<%=request.getContextPath()%>/ver/producto?id=<%=d.getId()%>" title="Ver detalles"><span class="icon-search"></span> VER DETALLES</a>
+				<a class="zoomTool" href="<%=request.getContextPath()%>/ver/producto?id=<%=d.getId()%>&idTipo=<%=d.getTipo().getId()%>" title="Ver detalles"><span class="icon-search"></span>VER DETALLES</a>
 				<a  href="<%=request.getContextPath()%>/ver/producto?id=<%=d.getId()%>"><img src="<%=d.getImgLink()%>" alt=""></a>
 			  </div>
 			</li>

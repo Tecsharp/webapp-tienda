@@ -10,14 +10,18 @@ import java.util.List;
 public interface ProductoRepository<T> {
 
     List<TipoProducto> listarTipoProducto() throws SQLException;
-    List<Producto> listar() throws SQLException;
-    List<Producto> listarByTipo(Integer productoTipo) throws SQLException;
-    Producto obtenerProductoPorId(Integer productoTipo) throws SQLException;
+    List<Producto> listar(TipoProducto tipo) throws SQLException;
+    List<Producto> listarByTipo(Integer productoTipo, TipoProducto tipo) throws SQLException;
+    Producto obtenerProductoPorId(Integer id, TipoProducto tipo) throws SQLException;
     List<Producto> obtenerTodosLosProductos ();
-    List<Producto> listarCarrusel(Integer productoTipo) throws SQLException;
-    T porID(Integer id) throws SQLException;
+    List<Producto> listarCarrusel(Integer productoTipo, TipoProducto tipo) throws SQLException;
+    T porID(Integer id, TipoProducto tipo) throws SQLException;
+
+    //Producto porID(Integer id, TipoProducto tipo) throws SQLException;
+
     void guardar (T t) throws SQLException;
     void eliminar (Integer id) throws SQLException;
+
     List<Producto> obtenerTodosLosProductosPorCategoria(Integer categoria);
     boolean eliminarProductoPorId(Integer idProducto);
 

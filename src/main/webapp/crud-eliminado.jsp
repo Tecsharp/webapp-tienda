@@ -151,7 +151,7 @@ Body Section
     <table class="table table-striped">
 	<tbody>
 	<tr class="techSpecRow"><td class="techSpecTD1">Nombre:</td><td class="techSpecTD2"><%=producto.getNombre()%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Categoria:</td><td class="techSpecTD2"><%=producto.getTipo()%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Categoria:</td><td class="techSpecTD2"><%=producto.getTipo().getNombre()%></td></tr>
 	<tr class="techSpecRow"><td class="techSpecTD1">Precio:</td><td class="techSpecTD2"><%=producto.getPrecioFormateado()%></td></tr>
 	<tr class="techSpecRow"><td class="techSpecTD1">Stock:</td><td class="techSpecTD2"><%=producto.getStock()%></td></tr>
 	<tr class="techSpecRow"><td class="techSpecTD1">Status:</td><td class="techSpecTD2"><%=producto.getStatus()%></td></tr>

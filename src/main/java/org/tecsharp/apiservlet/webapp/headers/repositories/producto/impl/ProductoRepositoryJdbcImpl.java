@@ -1,6 +1,5 @@
 package org.tecsharp.apiservlet.webapp.headers.repositories.producto.impl;
 
-import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 import org.tecsharp.apiservlet.webapp.headers.repositories.producto.ProductoRepository;
@@ -8,9 +7,6 @@ import org.tecsharp.apiservlet.webapp.headers.utils.Constantes;
 import org.tecsharp.apiservlet.webapp.headers.utils.Utilidades;
 
 import java.sql.*;
-import java.text.DecimalFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +21,7 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
     }
 
     @Override
-    public List<Producto> listar() throws SQLException {
+    public List<Producto> listar(TipoProducto tipo) throws SQLException {
 
         List<Producto> productos = new ArrayList<>();
 
@@ -35,7 +31,7 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
                      " ON (p.product_type = t.id_product_type)")) {
 
             while (rs.next()) {
-                Producto p = getProducto(rs);
+                Producto p = getProducto(rs, tipo);
 
                 productos.add(p);
             }
@@ -46,39 +42,41 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
     }
 
     @Override
-    public List<Producto> listarByTipo(Integer productoTipo) throws SQLException {
+    public List<Producto> listarByTipo(Integer productoTipo, TipoProducto tipo) throws SQLException {
 
         List<Producto> tipoProductos = new ArrayList<>();
 
-        String query = "SELECT * FROM products WHERE product_type = ?";
+        String query = "SELECT *, pt.name as categoria FROM products as p INNER JOIN product_type as pt on p.product_type = pt.id_product_type WHERE p.product_type = ?";
 
         try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, productoTipo);
 
-            ResultSet result = statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
 
-            while (result.next()) {
-                Producto producto = new Producto();
-                producto.setId(result.getInt("id_product"));
-                producto.setNombre(result.getString("name"));
-                producto.setTipo(result.getInt("product_type"));
-                producto.setImgLink(result.getString("link"));
-                producto.setDescripcion(result.getString("description"));
-                producto.setDescripcionCorta(result.getString("short_description"));
-                producto.setStock(result.getInt("stock"));
-                producto.setPrecio(result.getInt("price"));
-                producto.setStatus(result.getInt("id_status"));
-                String precioFormateado = Utilidades.formatearPrecio(result.getInt("price"));
-                producto.setPrecioFormateado(precioFormateado);
+            while (rs.next()) {
+                Producto p = getProducto(rs, tipo);
 
-                //producto.setProductType(tipoProducto);
-                //producto.setDescription(result.getString("description"));
-                //producto.setDateCreate(result.getDate("date_Create"));
-                //producto.setDateUpdate(result.getDate("date_update"));
-                //producto.setStatus(result.getInt("id_status"));
-                tipoProductos.add(producto);
+                tipoProductos.add(p);
             }
+
+//            while (result.next()) {
+//                Producto producto = new Producto();
+//                producto.setId(result.getInt("id_product"));
+//                producto.setNombre(result.getString("name"));
+//                producto.setTipo(result.getInt("product_type"));
+//                producto.setImgLink(result.getString("link"));
+//                producto.setDescripcion(result.getString("description"));
+//                producto.setDescripcionCorta(result.getString("short_description"));
+//                producto.setStock(result.getInt("stock"));
+//                producto.setPrecio(result.getInt("price"));
+//                producto.setStatus(result.getInt("id_status"));
+//                String precioFormateado = Utilidades.formatearPrecio(result.getInt("price"));
+//                producto.setPrecioFormateado(precioFormateado);
+//
+//
+//                tipoProductos.add(producto);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,35 +87,41 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
 
 
     @Override
-    public List<Producto> listarCarrusel(Integer productoTipo) throws SQLException {
+    public List<Producto> listarCarrusel(Integer productoTipo, TipoProducto tipo) throws SQLException {
 
         List<Producto> carrusel = new ArrayList<>();
-
-        String query = "SELECT * FROM products WHERE product_type= ? LIMIT 4";
+        String query = "SELECT *, (pt.name) as categoria FROM products as p INNER JOIN product_type as pt on p.product_type = pt.id_product_type WHERE p.product_type = ? LIMIT 4";
+        //String query = "SELECT * FROM products WHERE product_type= ? LIMIT 4";
 
         try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, productoTipo);
+            statement.setInt(1, tipo.getId());
 
-            ResultSet result = statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
 
-            while (result.next()) {
-                Producto producto = new Producto();
-                producto.setId(result.getInt("id_product"));
-                producto.setNombre(result.getString("name"));
-                producto.setTipo(result.getInt("product_type"));
-                producto.setImgLink(result.getString("link"));
-                producto.setDescripcion(result.getString("description"));
-                producto.setDescripcionCorta(result.getString("short_description"));
-                //producto.setStock(result.getInt("stock"));
-                producto.setPrecio(result.getInt("price"));
-                //producto.setProductType(tipoProducto);
-                //producto.setDescription(result.getString("description"));
-                //producto.setDateCreate(result.getDate("date_Create"));
-                //producto.setDateUpdate(result.getDate("date_update"));
-                //producto.setStatus(result.getInt("id_status"));
-                carrusel.add(producto);
+            while (rs.next()) {
+                Producto p = getProducto(rs, tipo);
+
+                carrusel.add(p);
             }
+
+//            while (result.next()) {
+//                Producto producto = new Producto();
+//                producto.setId(result.getInt("id_product"));
+//                producto.setNombre(result.getString("name"));
+//                producto.setTipo(result.getInt("product_type"));
+//                producto.setImgLink(result.getString("link"));
+//                producto.setDescripcion(result.getString("description"));
+//                producto.setDescripcionCorta(result.getString("short_description"));
+//                //producto.setStock(result.getInt("stock"));
+//                producto.setPrecio(result.getInt("price"));
+//                //producto.setProductType(tipoProducto);
+//                //producto.setDescription(result.getString("description"));
+//                //producto.setDateCreate(result.getDate("date_Create"));
+//                //producto.setDateUpdate(result.getDate("date_update"));
+//                //producto.setStatus(result.getInt("id_status"));
+//                carrusel.add(producto);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -244,10 +248,11 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
     }
 
     @Override
-    public Producto obtenerProductoPorId(Integer id) throws SQLException {
+    public Producto obtenerProductoPorId(Integer id, TipoProducto tipo) throws SQLException {
         Producto producto = null;
 
-        String query = "SELECT * FROM products WHERE id_product = ?";
+        //String query = "SELECT * FROM products WHERE id_product = ?";
+        String query = "SELECT *, pt.name as categoria FROM products as p INNER JOIN product_type as pt on p.product_type = pt.id_product_type WHERE id_product = ?";
 
         try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -256,7 +261,7 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
 
             try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
-                    producto = getProducto(rs);
+                    producto = getProducto(rs, tipo);
                 }
             }
         } catch (Exception e) {
@@ -267,7 +272,7 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
     }
 
     @Override
-    public Producto porID(Integer id) throws SQLException {
+    public Producto porID(Integer id, TipoProducto tipo) throws SQLException {
 
         Producto producto = null;
         try (PreparedStatement stmt = conn.prepareStatement("SELECT p.*, t.name as categoria FROM products as p" +
@@ -278,7 +283,7 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    producto = getProducto(rs);
+                    producto = getProducto(rs, tipo);
                 }
             }
         }
@@ -297,13 +302,22 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
     }
 
 
-    public Producto getProducto(ResultSet rs) throws SQLException {
+    public Producto getProducto(ResultSet rs, TipoProducto tipo) throws SQLException {
 
         Producto p = new Producto();
+        TipoProducto tipo2 = new TipoProducto();
+
+
         p.setId(rs.getInt("id_product"));
         p.setNombre(rs.getString("name"));
         p.setPrecio(rs.getInt("price"));
-        p.setTipo(rs.getInt("product_type"));
+
+        Integer tipoId = rs.getInt("product_type");
+        tipo2.setId(tipoId);
+        tipo2.setNombre(rs.getString("categoria"));
+
+        p.setTipo(tipo2);
+        //p.setTipo(rs.getInt("product_type"));
         p.setDescripcion(rs.getString("description"));
         p.setDescripcionCorta(rs.getString("short_description"));
         p.setStatus(rs.getInt("id_status"));

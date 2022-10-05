@@ -41,12 +41,18 @@ public class LoginServlet extends HttpServlet {
         List<TipoProducto> categorias = serviceTipoProducto.listarTipoProducto();
         req.setAttribute("categorias", categorias); //SE ENVIA A LA VISTA
 
+        TipoProducto tipo1 = new TipoProducto();
+        tipo1.setId(1);
+
+        TipoProducto tipo2 = new TipoProducto();
+        tipo1.setId(2);
+
         //SERVICIO LISTA 4 PRODUCTO NUEVOS PRODUCTOS
-        List<Producto> carruselUno = serviceTipoProducto.listarCarrusel(1);
+        List<Producto> carruselUno = serviceTipoProducto.listarCarrusel(1, tipo1);
         req.setAttribute("carruselUno", carruselUno); //SE ENVIA A LA VISTA
 
         //SERVICIO LISTA 4 PRODUCTO NUEVOS PRODUCTOS
-        List<Producto> carruselDos = serviceTipoProducto.listarCarrusel(2);
+        List<Producto> carruselDos = serviceTipoProducto.listarCarrusel(2, tipo2);
         req.setAttribute("carruselDos", carruselDos); //SE ENVIA A LA VISTA
         req.setAttribute("username", usernameOptional);
 

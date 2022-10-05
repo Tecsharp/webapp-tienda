@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
+import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
 import org.tecsharp.apiservlet.webapp.headers.services.carrito.CarritoService;
 import org.tecsharp.apiservlet.webapp.headers.services.carrito.impl.CarritoServiceImpl;
@@ -35,14 +36,20 @@ public class CrudEliminar extends HttpServlet {
         //IMPLEMENT SERVICE
         ProductoService service = new ProductoServiceJdbcImpl(conn);
 
+        //SE RECUPERA LA ID DE LA CATEGORIA
+        //Integer idTipo = Integer.valueOf(req.getParameter("idTipo"));
+        Integer idTipo = null;
+        TipoProducto tipo = new TipoProducto();
+        tipo.setId(idTipo);
+
         //OBTIENE LISTA DE TODOS LOS PRODUCTOS
         if (categoria == null || categoria == 0) {
-            List<Producto> todosLosProductos = service.listar();
+            List<Producto> todosLosProductos = service.listar(tipo);
             req.setAttribute("todosLosProductos", todosLosProductos); //SE ENVIA A LA VISTA
         } else {
 
             //Integer productoTipo = 1; //AGREGAR UN LINK QUE MANDE ESTE ITEM
-            List<Producto> todosLosProductos = service.listarByTipo(categoria);
+            List<Producto> todosLosProductos = service.listarByTipo(categoria, tipo);
             req.setAttribute("todosLosProductos", todosLosProductos); //SE ENVIA A LA VISTA
 
         }

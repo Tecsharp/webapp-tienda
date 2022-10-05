@@ -1,6 +1,5 @@
 package org.tecsharp.apiservlet.webapp.headers.services.producto.impl;
 
-import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
 import org.tecsharp.apiservlet.webapp.headers.repositories.producto.impl.ProductoRepositoryJdbcImpl;
@@ -32,27 +31,27 @@ public class ProductoServiceJdbcImpl implements ProductoService {
 
 
     @Override
-    public List<Producto> listar() {
+    public List<Producto> listar(TipoProducto tipo) {
         try {
-            return repositoryJdbc.listar();
+            return repositoryJdbc.listar(tipo);
         } catch (SQLException throwables) {
             throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
         }
     }
 
     @Override
-    public List<Producto> listarByTipo(Integer productoTipo) {
+    public List<Producto> listarByTipo(Integer productoTipo, TipoProducto tipo) {
         try {
-            return repositoryJdbc.listarByTipo(productoTipo);
+            return repositoryJdbc.listarByTipo(productoTipo, tipo);
         } catch (SQLException throwables) {
             throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
         }
     }
 
     @Override
-    public List<Producto> listarCarrusel(Integer productoTipo) {
+    public List<Producto> listarCarrusel(Integer productoTipo, TipoProducto tipo) {
         try {
-            return repositoryJdbc.listarCarrusel(productoTipo);
+            return repositoryJdbc.listarCarrusel(productoTipo, tipo);
         } catch (SQLException throwables) {
             throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
         }
@@ -64,18 +63,18 @@ public class ProductoServiceJdbcImpl implements ProductoService {
     }
 
     @Override
-    public Producto obtenerProductoPorId(Integer id) {
+    public Producto obtenerProductoPorId(Integer id, TipoProducto tipo) {
         try {
-            return repositoryJdbc.obtenerProductoPorId(id);
+            return repositoryJdbc.obtenerProductoPorId(id, tipo);
         } catch (SQLException throwables) {
             throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
         }
     }
 
     @Override
-    public Optional<Producto> porId(Integer id) {
+    public Optional<Producto> porId(Integer id, TipoProducto tipo) {
         try {
-            return Optional.ofNullable(repositoryJdbc.porID(id));
+            return Optional.ofNullable(repositoryJdbc.porID(id, tipo));
         } catch (SQLException throwables) {
             throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
         }

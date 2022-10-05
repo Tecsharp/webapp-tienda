@@ -36,8 +36,13 @@ public class PestanaProductoServlet extends HttpServlet {
         //IMPLEMENT SERVICE
         ProductoService service = new ProductoServiceJdbcImpl(conn);
 
+        //SE RECUPERA LA ID DE LA CATEGORIA
+        Integer idTipo = null;
+        TipoProducto tipo = new TipoProducto();
+        tipo.setId(idTipo);
+
         //OBTIENE LISTA DE TODOS LOS PRODUCTOS
-        List<Producto> todosLosProductos = service.listar();
+        List<Producto> todosLosProductos = service.listar(tipo);
         req.setAttribute("todosLosProductos", todosLosProductos); //SE ENVIA A LA VISTA
 
         //LISTA DE CATEGORIAS
