@@ -1,17 +1,15 @@
 <%@page contentType="text/html; charset=UTF-8" import="java.util.*, org.tecsharp.apiservlet.webapp.headers.models.*"%>
 <%
-List<Producto> todosLosProductos = (List<Producto>) request.getAttribute("todosLosProductos");
-List<TipoProducto> categorias = (List<TipoProducto>) request.getAttribute("categorias");
 Optional<String> username = (Optional<String>) request.getAttribute("username");
-String precioTotal = (String) request.getAttribute("precioTotal");
-Integer productosEnCarrito = (Integer) request.getAttribute("productosEnCarrito");
+String mensajeApp = (String) getServletContext().getAttribute("mensaje");
+List<Producto> todosLosProductos = (List<Producto>) request.getAttribute("todosLosProductos");
 %>
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Twitter Bootstrap shopping cart</title>
+    <title>Tecstore | Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -43,7 +41,7 @@ Integer productosEnCarrito = (Integer) request.getAttribute("productosEnCarrito"
 			    <a href="<%=request.getContextPath()%>/index.html"> <span class="icon-home"></span> Inicio</a>
                 <%if(username.isPresent()){%>
 				<a href="<%=request.getContextPath()%>/mi-perfil"><span class="icon-user"></span> My Account</a>
-				<a href="<%=request.getContextPath()%>/ver/carrito"><span class="icon-shopping-cart"></span> <%=productosEnCarrito%> Articulo(s) - <span class="badge badge-warning"> $<%=precioTotal%></span></a>
+				<a href="<%=request.getContextPath()%>/ver/carrito"><span class="icon-shopping-cart"></span> Articulo(s) - <span class="badge badge-warning"> </span></a>
 				<%}else {%>
 				<a href="<%=request.getContextPath()%>/registrarse"><span class="icon-edit"></span> Registrate </a>
 				 <%}%>
@@ -71,7 +69,7 @@ Lower Header Section
     <div class="span8 alignR">
 	<p><br> <strong> Soporte (24/7) :  0800 1234 678 </strong><br><br></p>
 	<%if(username.isPresent()){%>
-	<a href="<%=request.getContextPath()%>/ver/carrito"><span class="btn btn-mini"><%=productosEnCarrito%> <span class="icon-shopping-cart"></span></span></a>
+	<a href="<%=request.getContextPath()%>/ver/carrito"><span class="btn btn-mini"> <span class="icon-shopping-cart"></span></span></a>
     <%}%>
 	</div>
 </div>
@@ -118,67 +116,45 @@ Navigation Bar Section
 <!-- 
 Body Section 
 -->
-<div class="row">
-<div id="sidebar" class="span3">
-<div class="well well-small">
-	<ul class="nav nav-list">
-       <%for (TipoProducto c : categorias){%>
-        <li><a href="<%=request.getContextPath()%>/productos?idCat=<%=c.getId()%>"><span class="icon-chevron-right"></span><%=c.getNombre()%></a></li>
-       <%}%>
-		<li style="border:0"> &nbsp;</li>
-		<%if(username.isPresent()){%>
-	    <li> <a class="totalInCart" href="<%=request.getContextPath()%>/ver/carrito"><strong>Monto total  <span class="badge badge-warning pull-right" style="line-height:18px;">$<%=precioTotal%></span></strong></a></li>
-	    <%}%>
-	</ul>
-</div>
+	<div class="row">
+		<div id="sidebar" class="span3">
+		<div class="well well-small">
+			<ul class="nav nav-list">
+				<li><span class=""></span><b>Herramientas admin</b></li>
+				<br>
+				<li><a href="<%=request.getContextPath()%>/crud/agregar"><span class="icon-chevron-right"></span>Agregar productos</a></li>
+				<li><a href="<%=request.getContextPath()%>/crud/actualizar"><span class="icon-chevron-right"></span>Actualizar productos</a></li>
+				<li><a href="<%=request.getContextPath()%>/crud/eliminar"><span class="icon-chevron-right"></span>Eliminar productos</a></li>
+				<li style="border:0"> &nbsp;</li>
+			</ul>
+		</div>
 
-			  <div class="well well-small alert alert-warning cntr">
-				  <h2>50% Discount</h2>
-				  <p> 
-					 only valid for online order. <br><br><a class="defaultBtn" href="#">Click here </a>
-				  </p>
-			  </div>
-			  <div class="well well-small" ><a href="#"><img src="<%=request.getContextPath()%>/assets/img/paypal.jpg" alt="payment method paypal"></a></div>
-			
-			<a class="shopBtn btn-block" href="#">Upcoming products <br><small>Click to view</small></a>
-			<br>
-			<br>
-			<ul class="nav nav-list promowrapper">
-			<li>
-			  <div class="thumbnail">
-				<a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
-				<img src="<%=request.getContextPath()%>/assets/img/bootstrap-ecommerce-templates.png" alt="bootstrap ecommerce templates">
-				<div class="caption">
-				  <h4><a class="defaultBtn" href="product_details.html">VIEW</a> <span class="pull-right">$22.00</span></h4>
-				</div>
-			  </div>
-			</li>
-			<li style="border:0"> &nbsp;</li>
-			<li>
-			  <div class="thumbnail">
-				<a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
-				<img src="<%=request.getContextPath()%>/assets/img/shopping-cart-template.png" alt="shopping cart template">
-				<div class="caption">
-				  <h4><a class="defaultBtn" href="product_details.html">VIEW</a> <span class="pull-right">$22.00</span></h4>
-				</div>
-			  </div>
-			</li>
-			<li style="border:0"> &nbsp;</li>
-			<li>
-			  <div class="thumbnail">
-				<a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
-				<img src="<%=request.getContextPath()%>/assets/img/bootstrap-template.png" alt="bootstrap template">
-				<div class="caption">
-				  <h4><a class="defaultBtn" href="product_details.html">VIEW</a> <span class="pull-right">$22.00</span></h4>
-				</div>
-			  </div>
-			</li>
-		  </ul>
+
 
 	</div>
 
 <div class="span9">
 <div class="well well-small">
+    <h2>Actualizar productos</h2>
+    <h4>Filtrar por categoria</h4>
+    <form action="<%=request.getContextPath()%>/crud/actualizar" method="post">
+        <div>
+                <div>
+                    <select name="categoria" id="categoria">
+                        <option value="0"> Todos</option>
+                        <option value="1"> Motocicletas</option>
+                        <option value="2"> Telefonia</option>
+                        <option value="3"> Refrigeracion</option>
+                        <option value="4"> Videojuegos</option>
+                        <option value="5"> Computo</option>
+                    </select>
+                    <div>
+                        <input type="submit" class="shopBtn" value="Filtrar">
+                    </div>
+                </div>
+        </div>
+    </form>
+
 	<%for (Producto tp : todosLosProductos){%>
 	<%if(tp.getStatus() == 1){%>
 	<hr class="soften">
@@ -200,11 +176,7 @@ Body Section
 		<h3> $<%=tp.getPrecioFormateado()%></h3>
 		<br>
 		<div class="btn-group">
-		  <%if(username.isPresent()){%>
-		  <a href="<%=request.getContextPath()%>/agregar/carro?productoID=<%=tp.getId()%>&idUser=${usuario.idUser}" class="defaultBtn"><span class=" icon-shopping-cart"></span> Agregar al carro</a>
-		  <%}else{%>
-		  <h6 style="color:#E69537";> Inicia sesión para agregar al carrito.</h6>
-		  <%}%>
+		  <a href="<%=request.getContextPath()%>/crud/actualizar/producto?id=<%=tp.getId()%>" class="defaultBtn"><span class="btn btn-mini btn-danger"></span> Actualizar producto</a>
 		  <a href="<%=request.getContextPath()%>/ver/producto?id=<%=tp.getId()%>" class="shopBtn">VER</a>
 		 </div>
 			</form>
@@ -218,31 +190,7 @@ Body Section
 <!-- 
 Clients 
 -->
-<section class="our_client">
-	<hr class="soften"/>
-	<h4 class="title cntr"><span class="text">Manufactures</span></h4>
-	<hr class="soften"/>
-	<div class="row">
-		<div class="span2">
-			<a href="#"><img alt="" src="<%=request.getContextPath()%>/assets/img/1.png"></a>
-		</div>
-		<div class="span2">
-			<a href="#"><img alt="" src="<%=request.getContextPath()%>/assets/img/2.png"></a>
-		</div>
-		<div class="span2">
-			<a href="#"><img alt="" src="<%=request.getContextPath()%>/assets/img/3.png"></a>
-		</div>
-		<div class="span2">
-			<a href="#"><img alt="" src="<%=request.getContextPath()%>/assets/img/4.png"></a>
-		</div>
-		<div class="span2">
-			<a href="#"><img alt="" src="<%=request.getContextPath()%>/assets/img/5.png"></a>
-		</div>
-		<div class="span2">
-			<a href="#"><img alt="" src="<%=request.getContextPath()%>/assets/img/6.png"></a>
-		</div>
-	</div>
-</section>
+
 
 <!--
 Footer
@@ -286,14 +234,7 @@ accompanied by English versions from the 1914 translation by H. Rackham.
 
 <div class="copyright">
 <div class="container">
-	<p class="pull-right">
-		<a href="#"><img src="<%=request.getContextPath()%>/assets/img/maestro.png" alt="payment"></a>
-		<a href="#"><img src="<%=request.getContextPath()%>/assets/img/mc.png" alt="payment"></a>
-		<a href="#"><img src="<%=request.getContextPath()%>/assets/img/pp.png" alt="payment"></a>
-		<a href="#"><img src="<%=request.getContextPath()%>/assets/img/visa.png" alt="payment"></a>
-		<a href="#"><img src="<%=request.getContextPath()%>/assets/img/disc.png" alt="payment"></a>
-	</p>
-	<span>Copyright &copy; 2013<br> bootstrap ecommerce shopping template</span>
+	<span><%=mensajeApp%></span>
 </div>
 </div>
 <a href="#" class="gotop"><i class="icon-double-angle-up"></i></a>

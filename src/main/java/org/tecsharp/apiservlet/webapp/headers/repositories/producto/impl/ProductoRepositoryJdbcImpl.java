@@ -68,6 +68,7 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
                 producto.setDescripcionCorta(result.getString("short_description"));
                 producto.setStock(result.getInt("stock"));
                 producto.setPrecio(result.getInt("price"));
+                producto.setStatus(result.getInt("id_status"));
                 String precioFormateado = Utilidades.formatearPrecio(result.getInt("price"));
                 producto.setPrecioFormateado(precioFormateado);
 
@@ -129,6 +130,57 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
 
 
 
+
+    @Override
+    public List<Producto> obtenerTodosLosProductosPorCategoria(Integer categoria) {
+        List<Producto> todosProductos = new ArrayList<>();
+        String query = "SELECT * FROM products WHERE product_type = ?";
+
+        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, categoria);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                Producto producto = new Producto();
+                producto.setId(result.getInt("id_product"));
+                producto.setNombre(result.getString("name"));
+                producto.setStock(result.getInt("stock"));
+                producto.setPrecio(result.getInt("price"));
+                producto.setDescripcion(result.getString("description"));
+                producto.setDescripcionCorta(result.getString("short_description"));
+//                producto.setDateCreate(result.getDate("date_Create"));
+//                producto.setDateUpdate(result.getDate("date_update"));
+                producto.setNumItems(result.getInt("num_items"));
+//                producto.setStatus(result.getInt("id_status"));
+                todosProductos.add(producto);
+
+                // System.out.println(producto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return todosProductos;
+    }
+
+    @Override
+    public boolean eliminarProductoPorId(Integer idProducto) {
+
+            String query = "DELETE FROM products WHERE id_product= ?";
+            try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+                 PreparedStatement statement = connection.prepareStatement(query)) {
+
+                statement.setInt(1, idProducto);
+                statement.executeUpdate();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+    }
 
     @Override
     public List<Producto> obtenerTodosLosProductos() {

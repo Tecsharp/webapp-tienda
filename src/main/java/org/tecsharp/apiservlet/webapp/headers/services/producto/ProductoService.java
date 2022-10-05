@@ -15,6 +15,7 @@ public interface ProductoService {
     List<Producto> obtenerTodosLosProductos ();
     Producto obtenerProductoPorId (Integer id);
     Optional<Producto> porId(Integer id);
+    boolean eliminarProductoPorId( Integer idProducto);
 
     boolean validaProductoEnCarrito (boolean enCarrito);
 

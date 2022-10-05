@@ -19,7 +19,7 @@ String mensajeApp = (String) getServletContext().getAttribute("mensaje");
     <!-- font awesome styles -->
 	<link href="<%=request.getContextPath()%>/assets/font-awesome/css/font-awesome.css" rel="stylesheet">
 		<!--[if IE 7]>
-			<link href="<%=request.getContextPath()%>/css/font-awesome-ie7.min.css" rel="stylesheet">
+			<link href="<%=request.getContextPath()%>/assets/font-awesome/css/font-awesome-ie7.min.css" rel="stylesheet">
 		<![endif]-->
 
 		<!--[if lt IE 9]>

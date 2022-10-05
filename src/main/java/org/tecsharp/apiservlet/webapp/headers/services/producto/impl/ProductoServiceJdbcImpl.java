@@ -81,6 +81,10 @@ public class ProductoServiceJdbcImpl implements ProductoService {
         }
     }
 
+    @Override
+    public boolean eliminarProductoPorId(Integer idProducto) {
+        return repositoryJdbc.eliminarProductoPorId(idProducto);
+    }
 
 
     @Override

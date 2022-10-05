@@ -2,13 +2,7 @@
 <%
 Optional<String> username = (Optional<String>) request.getAttribute("username");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
-String nombre = (String) request.getAttribute("nombre");
-Integer categoria = (Integer) request.getAttribute("categoria");
-Integer precio = (Integer) request.getAttribute("precio");
-Integer stock = (Integer) request.getAttribute("stock");
-String shortDescription = (String) request.getAttribute("shortDescription");
-String largeDescription = (String) request.getAttribute("largeDescription");
-Integer status = (Integer) request.getAttribute("status");
+Producto producto = (Producto) request.getAttribute("producto");
 
 %>
 
@@ -153,22 +147,24 @@ Body Section
 <div class="well well-small">
     <br>
 
-    <h2>Se agrego con éxito: <%=nombre%></h2>
+    <h2>Se eliminó con éxito: <%=producto.getNombre()%></h2>
     <table class="table table-striped">
 	<tbody>
-	<tr class="techSpecRow"><td class="techSpecTD1">Nombre:</td><td class="techSpecTD2"><%=nombre%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Categoria:</td><td class="techSpecTD2"><%=categoria%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Precio:</td><td class="techSpecTD2"><%=precio%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Stock:</td><td class="techSpecTD2"><%=stock%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Status:</td><td class="techSpecTD2"><%=status%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Descripcion corta:</td><td class="techSpecTD2"><%=shortDescription%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Descripcion larga:</td><td class="techSpecTD2"><%=largeDescription%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Nombre:</td><td class="techSpecTD2"><%=producto.getNombre()%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Categoria:</td><td class="techSpecTD2"><%=producto.getTipo()%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Precio:</td><td class="techSpecTD2"><%=producto.getPrecioFormateado()%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Stock:</td><td class="techSpecTD2"><%=producto.getStock()%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Status:</td><td class="techSpecTD2"><%=producto.getStatus()%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Descripcion corta:</td><td class="techSpecTD2"><%=producto.getDescripcionCorta()%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Descripcion larga:</td><td class="techSpecTD2"><%=producto.getDescripcion()%></td></tr>
 	</tbody>
 	</table>
 
     <div>
         <div>
-            <a href="<%=request.getContextPath()%>/crud/agregar"><input class="shopBtn" value="Regresar"></a>
+            <a href="<%=request.getContextPath()%>/crud/eliminar">
+            <input class="shopBtn" type="button" value="Regresar" />
+            </a>
         </div>
     </div>
 

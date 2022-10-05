@@ -18,6 +18,8 @@ public interface ProductoRepository<T> {
     T porID(Integer id) throws SQLException;
     void guardar (T t) throws SQLException;
     void eliminar (Integer id) throws SQLException;
+    List<Producto> obtenerTodosLosProductosPorCategoria(Integer categoria);
+    boolean eliminarProductoPorId(Integer idProducto);
 
 
 

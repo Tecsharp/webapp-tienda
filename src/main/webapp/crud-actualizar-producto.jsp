@@ -2,14 +2,8 @@
 <%
 Optional<String> username = (Optional<String>) request.getAttribute("username");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
-String nombre = (String) request.getAttribute("nombre");
-Integer categoria = (Integer) request.getAttribute("categoria");
-Integer precio = (Integer) request.getAttribute("precio");
-Integer stock = (Integer) request.getAttribute("stock");
-String shortDescription = (String) request.getAttribute("shortDescription");
-String largeDescription = (String) request.getAttribute("largeDescription");
-Integer status = (Integer) request.getAttribute("status");
-
+Producto producto = (Producto) request.getAttribute("producto");
+List<TipoProducto> categorias = (List<TipoProducto>) request.getAttribute("categorias");
 %>
 
 <!DOCTYPE html>
@@ -27,7 +21,7 @@ Integer status = (Integer) request.getAttribute("status");
     <!-- font awesome styles -->
 	<link href="<%=request.getContextPath()%>/assets/font-awesome/css/font-awesome.css" rel="stylesheet">
 		<!--[if IE 7]>
-			<link href="<%=request.getContextPath()%>/css/font-awesome-ie7.min.css" rel="stylesheet">
+			<link href="<%=request.getContextPath()%>/assets/font-awesome/css/font-awesome-ie7.min.css" rel="stylesheet">
 		<![endif]-->
 
 		<!--[if lt IE 9]>
@@ -151,27 +145,86 @@ Body Section
 	</div>
 	<div class="span9">
 <div class="well well-small">
-    <br>
 
-    <h2>Se agrego con éxito: <%=nombre%></h2>
-    <table class="table table-striped">
-	<tbody>
-	<tr class="techSpecRow"><td class="techSpecTD1">Nombre:</td><td class="techSpecTD2"><%=nombre%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Categoria:</td><td class="techSpecTD2"><%=categoria%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Precio:</td><td class="techSpecTD2"><%=precio%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Stock:</td><td class="techSpecTD2"><%=stock%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Status:</td><td class="techSpecTD2"><%=status%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Descripcion corta:</td><td class="techSpecTD2"><%=shortDescription%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Descripcion larga:</td><td class="techSpecTD2"><%=largeDescription%></td></tr>
-	</tbody>
-	</table>
+    <h2>Agregar productos</h2>
+    <h5>Selecciona o ingresa los datos</h5>
+
+    <form action="<%=request.getContextPath()%>/crud/actualizar/producto" method="post">
+    <div>
+        <label for="categoria">Categoria</label>
+            <div>
+                <select name="categoria" id="categoria">
+                    <!-- METER UNA LISTA CON LAS CATEGORIAS -->
+                    <option value="<%=producto.getTipo()%>"> Motocicletas</option>
+                    <%for (TipoProducto cat : categorias){%>
+                    <option value="<%=cat.getId()%>"> <%=cat.getNombre()%> </option>
+                    <%}%>
+                    <!--
+                    <option value="1"> Motocicletas</option>
+                    <option value="2"> Telefonia</option>
+                    <option value="3"> Refrigeracion</option>
+                    <option value="4"> Videojuegos</option>
+                    <option value="5"> Computo</option>
+                    -->
+                </select>
+            </div>
+        </div>
+
+    <label class="control-label" for="name">Nombre del producto</label>
+        <div class="controls">
+        <input type="text" id="nombre" name="nombre" value="<%=producto.getNombre()%>">
+    </div>
+
+    <label class="control-label" for="precio">Precio del producto</label>
+        <div class="controls">
+        <input type="text" id="precio" name="precio" value="<%=producto.getPrecio()%>">
+    </div>
+
+    <label class="control-label" for="stock">Stock del producto</label>
+        <div class="controls">
+        <input type="text" id="stock" name="stock" value="<%=producto.getStock()%>">
+    </div>
+
+    <label class="control-label" for="shortdescription">Descripción corta</label>
+        <div class="controls">
+        <input type="text" id="shortdescription" name="shortdescription" value="<%=producto.getDescripcionCorta()%>">
+    </div>
+
+    <div class="full-width">
+        <label for="largedescription">Descripcion larga/html</label>
+        <textarea id="largedescription" name="largedescription"><%=producto.getDescripcion()%></textarea>
+    </div>
 
     <div>
+        <label>Estado</label>
+
+        <%if(producto.getStatus() == 1){%>
         <div>
-            <a href="<%=request.getContextPath()%>/crud/agregar"><input class="shopBtn" value="Regresar"></a>
+            <input type="radio" name="status" id="status" value="1" checked="checked">
+            <label>Activo</label>
+        </div>
+        <div>
+            <input type="radio" name="status" id="status" value="0">
+            <label>Inactivo</label>
+        </div>
+        <%} else {%>
+        <div>
+            <input type="radio" name="status" id="status" value="1">
+            <label>Activo</label>
+        </div>
+        <div>
+            <input type="radio" name="status" id="status" value="0" checked="checked">
+            <label>Inactivo</label>
+        </div>
+        <%}%>
+    </div>
+    <div>
+        <div>
+            <input type="submit" class="shopBtn" value="Actualizar">
         </div>
     </div>
 
+    </form>
     <br>
 	<br>
 
