@@ -18,7 +18,7 @@ public class CrudRepositoryImpl implements CrudRepository {
         LocalDateTime localDateTime = LocalDateTime.now();
         String fecha = FOMATTER.format(localDateTime);
 
-        String query = "INSERT INTO products VALUES (0,?,?,?,?,?,?,?,?,?,?,?,?);";
+        String query = "INSERT INTO products VALUES (0,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
         try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -34,6 +34,7 @@ public class CrudRepositoryImpl implements CrudRepository {
             statement.setString(10, "/webapp-tienda/assets/img/products/test.jpg"); // IMG LINK
             statement.setString(11, shortDescription);
             statement.setString(12, largeDescription);
+            statement.setInt(13, 0);
             statement.executeUpdate();
         }
 

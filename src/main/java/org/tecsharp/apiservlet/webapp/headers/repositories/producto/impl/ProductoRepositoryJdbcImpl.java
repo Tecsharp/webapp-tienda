@@ -233,7 +233,7 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
     public Integer obtenerNumeroDeProductos() {
         Integer numProductos = null;
 
-        String query = "SELECT COUNT(id_product) AS numProducts FROM Products";
+        String query = "SELECT COUNT(id_product) AS numProducts FROM products";
         try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
              PreparedStatement statement = connection.prepareStatement(query)) {
 

@@ -198,8 +198,10 @@ Body Section
                      <a href="#"> <img src="<%=producto.getImgLink()%>" alt="" style="width:100%"></a>
                   </div>
                 </div>
-                <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
-                <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+                <!--
+                <a class="left carousel-control" href="#" data-slide="prev">‹</a>
+                <a class="right carousel-control" href="#" data-slide="next">›</a>
+                -->
             </div>
 			</div>
 			<div class="span7">

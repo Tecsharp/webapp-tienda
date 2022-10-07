@@ -346,7 +346,7 @@ New Products
 				<a class="zoomTool" href="<%=request.getContextPath()%>/ver/producto?id=<%=pp.getId()%>&idTipo=<%=pp.getTipo().getId()%>" title="add to cart"><span class="icon-search"></span> VER DETALLES</a>
 				<a  href="<%=request.getContextPath()%>/ver/producto?id=<%=pp.getId()%>&idTipo=<%=pp.getTipo().getId()%>"><img src="<%=pp.getImgLink()%>" alt=""></a>
 				<div class="caption">
-				  <h5><%=pp.getNombre()%>></h5>
+				  <h5><%=pp.getNombre()%></h5>
 				  <h4>
 					  <a class="defaultBtn" href="<%=request.getContextPath()%>/ver/producto?id=<%=pp.getId()%>&idTipo=<%=pp.getTipo().getId()%>" title="Ver detalles"><span class="icon-zoom-in"></span></a>
 					  <%if(username.isPresent()){%>
