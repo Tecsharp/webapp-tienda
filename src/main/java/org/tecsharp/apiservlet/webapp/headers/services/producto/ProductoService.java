@@ -11,12 +11,13 @@ public interface ProductoService {
     List<Producto> listar(TipoProducto tipo);
     List<Producto> listarByTipo(Integer productoTipo, TipoProducto tipo);
     List<Producto> listarCarrusel(Integer productoTipo,TipoProducto tipo);
+    List<Producto> listarProductoRandom(Integer limite);
     List<Producto> obtenerTodosLosProductos ();
     Producto obtenerProductoPorId (Integer id, TipoProducto tipo);
     Optional<Producto> porId(Integer id, TipoProducto tipo);
     boolean eliminarProductoPorId( Integer idProducto);
-
     boolean validaProductoEnCarrito (boolean enCarrito);
-
+    Integer obtenerNumeroDeProductos();
+    List<Producto> listarProductosPopulares(Integer limite);
 
 }

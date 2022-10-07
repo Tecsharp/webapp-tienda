@@ -1,4 +1,4 @@
-package org.tecsharp.apiservlet.webapp.headers.controllers.admin;
+package org.tecsharp.apiservlet.webapp.headers.controllers.admin.eliminar;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,8 +13,8 @@ import org.tecsharp.apiservlet.webapp.headers.services.login.impl.LoginServiceSe
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet("/crud/actualizar/valid.html")
-public class CrudActualizarValidacion extends HttpServlet {
+@WebServlet("/crud/eliminar/valid.html")
+public class CrudEliminarValidacion extends HttpServlet {
 
     String nombre;
     Integer categoria;
@@ -31,6 +31,7 @@ public class CrudActualizarValidacion extends HttpServlet {
         //SE OBTIENE EL USUARIO
         LoginService auth = new LoginServiceSessionImpl();
         Optional<String> usernameOptional = auth.getUsername(req);
+        req.setAttribute("username", usernameOptional);
 
         req.setAttribute("nombre", nombre);
         req.setAttribute("categoria", categoria);
@@ -41,18 +42,14 @@ public class CrudActualizarValidacion extends HttpServlet {
         req.setAttribute("status", status);
 
         //OBTENER USERTYPE (ADMIN)
-        try {
+
             HttpSession session = req.getSession();
             Usuario usuario = (Usuario) session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
-            Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
-            Integer userType = usuario.getUserType();
 
-        } catch (Exception e) {
 
-        }
 
-        if (usernameOptional.isPresent()) {
-            getServletContext().getRequestDispatcher("/crud-actualizado.jsp").forward(req, resp);
+        if (usernameOptional.isPresent() && usuario.getUserType() == 2) {
+            getServletContext().getRequestDispatcher("/crud-eliminado.jsp").forward(req, resp);
         }
     }
 }

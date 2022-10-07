@@ -32,9 +32,15 @@ public class IndexServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         LoginService auth = new LoginServiceSessionImpl();
         Optional<String> usernameOptional = auth.getUsername(req);
+        Optional<Integer> userAdminOptional = auth.getUserType(req);
+        req.setAttribute("username", usernameOptional);
+        req.setAttribute("userAdminOptional", userAdminOptional);
+
         Connection conn = (Connection) req.getAttribute("conn");
         ProductoService serviceProducto = new ProductoServiceJdbcImpl(conn);
         CarritoService carritoService = new CarritoServiceImpl();
+
+
 
         /////
         try {
@@ -42,6 +48,7 @@ public class IndexServlet extends HttpServlet {
             Usuario usuario = (Usuario)session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
             Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
 
+            req.setAttribute("usuario", usuario); //SE ENVIA AL REQUEST
 
             DecimalFormat formatea = new DecimalFormat("###,###,###");
             Carrito datos = carritoService.obtenerCarrito(userId);
@@ -64,6 +71,12 @@ public class IndexServlet extends HttpServlet {
         List<TipoProducto> categorias = serviceProducto.listarTipoProducto();
         req.setAttribute("categorias", categorias); //SE ENVIA A LA VISTA
 
+        List<Producto> productosRandom = serviceProducto.listarProductoRandom(3);
+        req.setAttribute("productosRandom", productosRandom);
+
+        List<Producto> productosPopulares = serviceProducto.listarProductosPopulares(3);
+        req.setAttribute("productosPopulares", productosPopulares);
+
         //SERVICIO LISTA 4 PRODUCTO NUEVOS PRODUCTOS
         //SE RECUPERA LA ID DE LA CATEGORIA
 
@@ -81,7 +94,7 @@ public class IndexServlet extends HttpServlet {
         req.setAttribute("carruselDos", carruselDos); //SE ENVIA A LA VISTA
        //carruselDos.get(2).getTipo().getId();
 
-        req.setAttribute("username", usernameOptional);
+
         getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
 
     }

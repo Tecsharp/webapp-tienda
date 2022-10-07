@@ -1,12 +1,16 @@
 <%@page contentType="text/html; charset=UTF-8" import="java.util.*, org.tecsharp.apiservlet.webapp.headers.models.*"%>
 <%
 Optional<String> username = (Optional<String>) request.getAttribute("username");
+Usuario usuario = (Usuario) request.getAttribute("usuario");
+Optional<Integer> userAdminOptional = (Optional<Integer>) request.getAttribute("userAdminOptional");
 List<TipoProducto> categorias = (List<TipoProducto>) request.getAttribute("categorias");
 List<Producto> carruselUno = (List<Producto>) request.getAttribute("carruselUno");
 List<Producto> carruselDos = (List<Producto>) request.getAttribute("carruselDos");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
 String precioTotal = (String) request.getAttribute("precioTotal");
 Integer productosEnCarrito = (Integer) request.getAttribute("productosEnCarrito");
+List<Producto> productosRandom = (List<Producto>) request.getAttribute("productosRandom");
+List<Producto> productosPopulares = (List<Producto>) request.getAttribute("productosPopulares");
 
 %>
 <!DOCTYPE html>
@@ -96,7 +100,11 @@ Navigation Bar Section
 			  <li class=""><a href="<%=request.getContextPath()%>/productos/todos">Productos</a></li>
 			  <li class=""></li>
 			  <li class=""></li>
-			  <li class=""><a href="<%=request.getContextPath()%>/crud">CRUD</a></li>
+			  <%if(usuario != null){%>
+              <%if(usuario.getUserType() == 2){%>
+			    <li class=""><a href="<%=request.getContextPath()%>/crud">CRUD</a></li>
+			  <%}%>
+			  <%}%>
 			</ul>
 			<form action="#" class="navbar-search pull-left">
 			  <input type="text" placeholder="Search" class="search-query span2">
@@ -140,6 +148,8 @@ Body Section
 <div class="well well-small" ><a href="#"><img src="assets/img/paypal.jpg" alt="payment method paypal"></a></div>
 <br>
 			<br>
+
+			<!--
 			<ul class="nav nav-list promowrapper">
 			<li>
 			  <div class="thumbnail">
@@ -171,7 +181,7 @@ Body Section
 			  </div>
 			</li>
 		  </ul>
-
+           -->
 	</div>
 	<div class="span9">
 	<div class="well np">
@@ -258,32 +268,37 @@ New Products
             <a class="right carousel-control" href="#newProductCar" data-slide="next">&rsaquo;</a>
 		  </div>
 		  </div>
+
 		<div class="row-fluid">
 		  <ul class="thumbnails">
+
+
+		  <%for(Producto pr : productosRandom){%>
 			<li class="span4">
 			  <div class="thumbnail">
-				 
-				<a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
-				<a href="product_details.html"><img src="assets/img/b.jpg" alt=""></a>
+				<a class="zoomTool" href="<%=request.getContextPath()%>/ver/producto?id=<%=pr.getId()%>&idTipo=<%=pr.getTipo().getId()%>" title="add to cart"><span class="icon-search"></span> VER DETALLES</a>
+				<a href="<%=request.getContextPath()%>/ver/producto?id=<%=pr.getId()%>&idTipo=<%=pr.getTipo().getId()%>"><img src="<%=pr.getImgLink()%>" alt=""></a>
 				<div class="caption cntr">
-					<p>Manicure & Pedicure</p>
-					<p><strong> $22.00</strong></p>
-					<h4><a class="shopBtn" href="#" title="add to cart"> Agregar </a></h4>
-					<div class="actionList">
-						<a class="pull-left" href="#">Add to Wish List </a> 
-						<a class="pull-left" href="#"> Add to Compare </a>
-					</div> 
+					<p><%=pr.getNombre()%></p>
+					<p><strong>$ <%=pr.getPrecioFormateado()%></strong></p>
+
+					<%if(username.isPresent()){%>
+					<h4><a class="shopBtn" href="<%=request.getContextPath()%>/agregar/carro?productoID=<%=pr.getId()%>&idUser=${usuario.idUser}" title="add to cart"> Agregar </a></h4>
+					<%}%>
 					<br class="clr">
 				</div>
 			  </div>
 			</li>
+			<%}%>
+
+			<!--
 			<li class="span4">
 			  <div class="thumbnail">
 				<a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
 				<a href="product_details.html"><img src="assets/img/c.jpg" alt=""></a>
 				<div class="caption cntr">
 					<p>Manicure & Pedicure</p>
-					<p><strong> $22.00</strong></p>
+					<p><strong></strong></p>
 					<h4><a class="shopBtn" href="#" title="add to cart"> Agregar&nbsp; </a></h4>
 					<div class="actionList">
 						<a class="pull-left" href="#">Add to Wish List </a> 
@@ -309,31 +324,42 @@ New Products
 				</div>
 			  </div>
 			</li>
+			-->
+
 		  </ul>
 		</div>
+
+
 	</div>
 	<!--
 	Featured Products
 	-->
 		<div class="well well-small">
-		  <h3><a class="btn btn-mini pull-right" href="products.html" title="View more">VIew More<span class="icon-plus"></span></a> Mas populares  </h3>
+		  <h3><a class="btn btn-mini pull-right" href="<%=request.getContextPath()%>/productos/todos" title="Ver mas">Ver más<span class="icon-plus"></span></a> Más poulares  </h3>
 		  <hr class="soften"/>
 		  <div class="row-fluid">
 		  <ul class="thumbnails">
+
+		    <%for(Producto pp : productosPopulares){%>
 			<li class="span4">
 			  <div class="thumbnail">
-				<a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
-				<a  href="product_details.html"><img src="assets/img/d.jpg" alt=""></a>
+				<a class="zoomTool" href="<%=request.getContextPath()%>/ver/producto?id=<%=pp.getId()%>&idTipo=<%=pp.getTipo().getId()%>" title="add to cart"><span class="icon-search"></span> VER DETALLES</a>
+				<a  href="<%=request.getContextPath()%>/ver/producto?id=<%=pp.getId()%>&idTipo=<%=pp.getTipo().getId()%>"><img src="<%=pp.getImgLink()%>" alt=""></a>
 				<div class="caption">
-				  <h5>Manicure & Pedicure</h5>
+				  <h5><%=pp.getNombre()%>></h5>
 				  <h4>
-					  <a class="defaultBtn" href="product_details.html" title="Click to view"><span class="icon-zoom-in"></span></a>
-					  <a class="shopBtn" href="#" title="add to cart"><span class="icon-plus"></span></a>
-					  <span class="pull-right">$22.00</span>
+					  <a class="defaultBtn" href="<%=request.getContextPath()%>/ver/producto?id=<%=pp.getId()%>&idTipo=<%=pp.getTipo().getId()%>" title="Ver detalles"><span class="icon-zoom-in"></span></a>
+					  <%if(username.isPresent()){%>
+					  <a class="shopBtn" href="<%=request.getContextPath()%>/agregar/carro?productoID=<%=pp.getId()%>&idUser=${usuario.idUser}" title="Agregar al carro"><span class="icon-plus"></span></a>
+					  <%}%>
+					  <span class="pull-right">$ <%=pp.getPrecioFormateado()%></span>
 				  </h4>
 				</div>
 			  </div>
 			</li>
+			<%}%>
+
+			<!--
 			<li class="span4">
 			  <div class="thumbnail">
 				<a class="zoomTool" href="product_details.html" title="add to cart"><span class="icon-search"></span> QUICK VIEW</a>
@@ -362,6 +388,8 @@ New Products
 				</div>
 			  </div>
 			</li>
+			-->
+
 		  </ul>	
 	</div>
 	</div>

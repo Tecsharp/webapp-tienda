@@ -2,6 +2,7 @@ package org.tecsharp.apiservlet.webapp.headers.services.login.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.tecsharp.apiservlet.webapp.headers.repositories.crud.CrudRepository;
 import org.tecsharp.apiservlet.webapp.headers.repositories.usuario.UsuarioRepository;
 import org.tecsharp.apiservlet.webapp.headers.repositories.usuario.UsuarioRepositoryImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.login.LoginService;
@@ -37,5 +38,11 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public Optional<Integer> getUserType(HttpServletRequest request) {
         return Optional.empty();
+    }
+
+    @Override
+    public boolean registrarUsuario(String name, String apellido, String email, String username, String password) {
+        UsuarioRepository usuarioRepository = new UsuarioRepositoryImpl();
+        return usuarioRepository.registrarUsuario(name, apellido, email, username, password);
     }
 }

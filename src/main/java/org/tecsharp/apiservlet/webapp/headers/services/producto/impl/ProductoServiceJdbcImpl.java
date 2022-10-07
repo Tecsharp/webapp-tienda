@@ -2,6 +2,7 @@ package org.tecsharp.apiservlet.webapp.headers.services.producto.impl;
 
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
+import org.tecsharp.apiservlet.webapp.headers.repositories.producto.ProductoRepository;
 import org.tecsharp.apiservlet.webapp.headers.repositories.producto.impl.ProductoRepositoryJdbcImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.ServiceJdbcException;
 import org.tecsharp.apiservlet.webapp.headers.services.producto.ProductoService;
@@ -58,6 +59,24 @@ public class ProductoServiceJdbcImpl implements ProductoService {
     }
 
     @Override
+    public List<Producto> listarProductoRandom(Integer limite) {
+        try {
+            return repositoryJdbc.listarProductoRandom(limite);
+        } catch (SQLException throwables) {
+            throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
+        }
+    }
+
+    @Override
+    public List<Producto> listarProductosPopulares(Integer limite) {
+        try {
+            return repositoryJdbc.listarProductosPopulares(limite);
+        } catch (SQLException throwables) {
+            throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
+        }
+    }
+
+    @Override
     public List<Producto> obtenerTodosLosProductos() {
         return repositoryJdbc.obtenerTodosLosProductos();
     }
@@ -86,13 +105,18 @@ public class ProductoServiceJdbcImpl implements ProductoService {
     }
 
 
-    @Override
+    @Override //NO SE USA XD
     public boolean validaProductoEnCarrito(boolean enCarrito) {
         if(!enCarrito){
             return false;
         } else {
             return true;
         }
+    }
+
+    @Override
+    public Integer obtenerNumeroDeProductos() {
+        return repositoryJdbc.obtenerNumeroDeProductos();
     }
 
 

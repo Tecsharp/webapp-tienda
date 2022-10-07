@@ -1,4 +1,4 @@
-package org.tecsharp.apiservlet.webapp.headers.controllers.admin;
+package org.tecsharp.apiservlet.webapp.headers.controllers.admin.eliminar;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -60,23 +60,21 @@ public class CrudEliminar extends HttpServlet {
         Optional<String> usernameOptional = auth.getUsername(req);
         req.setAttribute("username", usernameOptional);
 
-        try {
-            CarritoService carritoService = new CarritoServiceImpl();
-            HttpSession session = req.getSession();
-            Usuario usuario = (Usuario) session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
-            Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
+
+        CarritoService carritoService = new CarritoServiceImpl();
+        HttpSession session = req.getSession();
+        Usuario usuario = (Usuario) session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
+        Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
 
 
-            DecimalFormat formatea = new DecimalFormat("###,###,###");
-            Carrito datos = carritoService.obtenerCarrito(userId);
-            Integer nums = datos.getPrecioTotal();
-            String precioTotal = formatea.format(nums);
-            req.setAttribute("precioTotal", precioTotal);
-            ////
-        } catch (Exception e) {
+        DecimalFormat formatea = new DecimalFormat("###,###,###");
+        Carrito datos = carritoService.obtenerCarrito(userId);
+        Integer nums = datos.getPrecioTotal();
+        String precioTotal = formatea.format(nums);
+        req.setAttribute("precioTotal", precioTotal);
+        ////
 
-        }
-        if (usernameOptional.isPresent()) {
+        if (usernameOptional.isPresent() && usuario.getUserType() == 2) {
             getServletContext().getRequestDispatcher("/crud-eliminar.jsp").forward(req, resp);
         } else {
             resp.sendRedirect(req.getContextPath() + "/inicio");
@@ -86,8 +84,9 @@ public class CrudEliminar extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Connection conn = (Connection) req.getAttribute("conn");
+
         categoria = Integer.valueOf(req.getParameter("categoria"));
+
 
         resp.sendRedirect(req.getContextPath() + "/crud/eliminar");
 

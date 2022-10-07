@@ -1,4 +1,4 @@
-package org.tecsharp.apiservlet.webapp.headers.controllers.admin;
+package org.tecsharp.apiservlet.webapp.headers.controllers.admin.agregar;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
+import org.tecsharp.apiservlet.webapp.headers.services.crud.CrudService;
+import org.tecsharp.apiservlet.webapp.headers.services.crud.impl.CrudServiceImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.login.LoginService;
 import org.tecsharp.apiservlet.webapp.headers.services.login.impl.LoginServiceSessionImpl;
 
@@ -31,27 +33,25 @@ public class CrudAgregarValidacion extends HttpServlet {
         //SE OBTIENE EL USUARIO
         LoginService auth = new LoginServiceSessionImpl();
         Optional<String> usernameOptional = auth.getUsername(req);
+        req.setAttribute("username", usernameOptional);
 
         req.setAttribute("nombre", nombre);
-        req.setAttribute("categoria", categoria);
         req.setAttribute("precio", precio);
         req.setAttribute("stock", stock);
         req.setAttribute("shortDescription", shortDescription);
         req.setAttribute("largeDescription", largeDescription);
         req.setAttribute("status", status);
 
+        CrudService crudService = new CrudServiceImpl();
+        String nombreCategoria = crudService.obtenerNombreCategoria(categoria);
+        req.setAttribute("nombreCategoria", nombreCategoria);
+
         //OBTENER USERTYPE (ADMIN)
-        try {
-            HttpSession session = req.getSession();
-            Usuario usuario = (Usuario) session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
-            Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
-            Integer userType = usuario.getUserType();
 
-        } catch (Exception e) {
+        HttpSession session = req.getSession();
+        Usuario usuario = (Usuario) session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
 
-        }
-
-        if (usernameOptional.isPresent()) {
+        if (usernameOptional.isPresent() && usuario.getUserType() == 2) {
             getServletContext().getRequestDispatcher("/crud-agregado.jsp").forward(req, resp);
         }
     }
@@ -61,7 +61,6 @@ public class CrudAgregarValidacion extends HttpServlet {
 
         nombre = req.getParameter("nombre");
         categoria = Integer.valueOf(req.getParameter("categoria"));
-        nombre = req.getParameter("nombre");
         precio = Integer.valueOf(req.getParameter("precio"));
         stock = Integer.valueOf(req.getParameter("stock"));
         shortDescription = req.getParameter("shortdescription");

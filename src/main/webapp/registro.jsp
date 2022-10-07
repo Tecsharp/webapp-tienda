@@ -40,13 +40,6 @@ String precioTotal = (String) request.getAttribute("precioTotal");
 		<div class="container">
 			<div class="alignR">
 			    <a href="<%=request.getContextPath()%>/index.html"> <span class="icon-home"></span>Inicio</a>
-                <%if(username.isPresent()){%>
-				<a href="#"><span class="icon-user"></span> My Account</a>
-				<a href="cart.html"><span class="icon-shopping-cart"></span> 2 Item(s) - <span class="badge badge-warning"> $448.42</span></a>
-				<%}else {%>
-				<a href="register.html"><span class="icon-edit"></span> Registrate </a>
-				 <%}%>
-
 			</div>
 		</div>
 	</div>
@@ -69,9 +62,6 @@ Lower Header Section
 
     <div class="span8 alignR">
 	<p><br> <strong> Soporte (24/7) :  0800 1234 678 </strong><br><br></p>
-    <%if(username.isPresent()){%>
-	<a href="<%=request.getContextPath()%>/ver/carrito"><span class="btn btn-mini"><%=productosEnCarrito%> <span class="icon-shopping-cart"></span></span></a>
-    <%}%>
 	</div>
 </div>
 </header>
@@ -100,16 +90,7 @@ Navigation Bar Section
 			</form>
 			<ul class="nav pull-right">
 			<li class="dropdown">
-			<%if(username.isPresent()){%>
-                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-unlock"></span> ${usuario.nameUser} <b class="caret"></b></a>
-			    <div class="dropdown-menu">
-            	    <form class="form-horizontal loginFrm">
-            		<a href="<%=request.getContextPath()%>/logout"> <button type="button" class="shopBtn btn-block">Cerrar sesión</button></a>
-            		</form>
-            		</div>
-			<%}else{%>
                 <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar</b></a>
-			<%}%>
 			</li>
 			</ul>
 		  </div>
@@ -127,9 +108,6 @@ Body Section
         <li><a href="<%=request.getContextPath()%>/productos?idCat=<%=c.getId()%>"><span class="icon-chevron-right"></span><%=c.getNombre()%></a></li>
        <%}%>
 		<li style="border:0"> &nbsp;</li>
-		<%if(username.isPresent()){%>
-	    <li> <a class="totalInCart" href="<%=request.getContextPath()%>/ver/carrito"><strong>Monto total  <span class="badge badge-warning pull-right" style="line-height:18px;">$<%=precioTotal%></span></strong></a></li>
-	    <%}%>
 	</ul>
 </div>
 
@@ -143,52 +121,55 @@ Body Section
 
 	</div>
 	<div class="span9">
-    <ul class="breadcrumb">
-		<li><a href="index.html">Inicio</a> <span class="divider">/</span></li>
-		<li class="active">Iniciar</li>
-    </ul>
-	<h3> Iniciar sesion</h3>
-	<hr class="soft"/>
-	
-	<div class="row">
-		<div class="span4">
-			<div class="well">
-			<h5>CREA UNA CUENTA</h5>
-			<h3>Si no tienes cuenta, registrate.</h3>
-			  <div class="controls">
-			  <a href="<%=request.getContextPath()%>/registro">
-			  <button type="submit" class="defaultBtn">CREAR CUENTA</button>
-			  </a>
-			  </div>
+        <ul class="breadcrumb">
+    		<li><a href="<%=request.getContextPath()%>/index.html">Inicio</a> <span class="divider">/</span></li>
+    		<li class="active">Registro</li>
+        </ul>
+    	<h3> Registrate</h3>
+    	<hr class="soft"/>
+    	<div class="well">
+    	<form action="/webapp-tienda/registro" class="form-horizontal" method="post">
+    		<h3>Datos</h3>
+    		<div class="control-group">
+    			<label class="control-label" for="nombre">Nombre <sup>*</sup></label>
+    			<div class="controls">
+    			  <input type="text" id="nombre" name="nombre" placeholder="Nombre">
+    			</div>
+    		 </div>
+    		 <div class="control-group">
+    			<label class="control-label" for="apellido">Apellido <sup>*</sup></label>
+    			<div class="controls">
+    			  <input type="text" id="apellido" name="apellido" placeholder="Apellido">
+    			</div>
+    		 </div>
+    		<div class="control-group">
+    		<label class="control-label" for="email">Correo electronico <sup>*</sup></label>
+    		<div class="controls">
+    		  <input type="text" id="email" name="email" placeholder="Correo electronico">
+    		</div>
+    	  </div>
 
-		</div>
-		</div>
-		<div class="span1"> &nbsp;</div>
-		<div class="span4">
-			<div class="well">
-			<h5>YA ESTAS REGISTRADO?</h5>
-			<form action="/webapp-tienda/inicio" method="post">
-			  <div class="control-group">
-				<label class="control-label" for="inputEmail">Usuario</label>
-				<div class="controls">
-				  <input class="span3"  type="text" placeholder="Usuario" name="username" id="username">
-				</div>
-			  </div>
-			  <div class="control-group">
-				<label class="control-label" for="inputPassword">Contraseña</label>
-				<div class="controls">
-				  <input type="password" class="span3" placeholder="Contraseña" name="password" id="password">
-				</div>
-			  </div>
-			  <div class="control-group">
-				<div class="controls">
-				  <button type="submit" class="defaultBtn">INICIAR SESION</button> <a href="#"></a>
-				</div>
-			  </div>
-			</form>
-		</div>
-		</div>
-	</div>	
+    		<div class="control-group">
+    			<label class="control-label" for="username">Nombre de usuario <sup>*</sup></label>
+    			<div class="controls">
+    			  <input type="text" id="username" name="username" placeholder="Nombre de usuario">
+    			</div>
+    		 </div>
+
+    		<div class="control-group">
+    		<label class="control-label">Contraseña <sup>*</sup></label>
+    		<div class="controls">
+    		  <input type="password" id="password" name="password" placeholder="Contraseña">
+    		</div>
+    	  </div>
+
+    	<div class="control-group">
+    		<div class="controls">
+    		 <input type="submit" name="submitAccount" value="Registrarse" class="exclusive shopBtn">
+    		</div>
+    	</div>
+    	</form>
+    </div>
 	
 </div>
 </div>

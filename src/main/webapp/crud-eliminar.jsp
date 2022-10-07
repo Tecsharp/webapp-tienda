@@ -38,14 +38,8 @@ List<Producto> todosLosProductos = (List<Producto>) request.getAttribute("todosL
 	<div class="topNav">
 		<div class="container">
 			<div class="alignR">
-			    <a href="<%=request.getContextPath()%>/index.html"> <span class="icon-home"></span> Inicio</a>
-                <%if(username.isPresent()){%>
-				<a href="<%=request.getContextPath()%>/mi-perfil"><span class="icon-user"></span> My Account</a>
-				<a href="<%=request.getContextPath()%>/ver/carrito"><span class="icon-shopping-cart"></span> Articulo(s) - <span class="badge badge-warning"> </span></a>
-				<%}else {%>
-				<a href="<%=request.getContextPath()%>/registrarse"><span class="icon-edit"></span> Registrate </a>
-				 <%}%>
-
+				<a href="<%=request.getContextPath()%>/index.html"> <span class="icon-home"></span> Inicio</a>
+				<a href="#"><span class="icon-user"></span> Mi cuenta</a>
 			</div>
 		</div>
 	</div>
@@ -60,18 +54,24 @@ Lower Header Section
 <div class="row">
 	<div class="span4">
 	<h1>
-	<a class="logo" href="index.html"><span>Twitter Bootstrap ecommerce template</span> 
+	<a class="logo" href="<%=request.getContextPath()%>/index.html"><span>Tecstore</span>
 		<img src="<%=request.getContextPath()%>/assets/img/logo-bootstrap-shoping-cart.png" alt="bootstrap sexy shop">
 	</a>
 	</h1>
 	</div>
 
-    <div class="span8 alignR">
-	<p><br> <strong> Soporte (24/7) :  0800 1234 678 </strong><br><br></p>
-	<%if(username.isPresent()){%>
-	<a href="<%=request.getContextPath()%>/ver/carrito"><span class="btn btn-mini"> <span class="icon-shopping-cart"></span></span></a>
-    <%}%>
+	<div class="span4 alignR">
+
+	<!--
+	<p><br> <strong> Support (24/7) :  0800 1234 678 </strong><br><br></p>
+	<span class="btn btn-mini">[ 2 ] <span class="icon-shopping-cart"></span></span>
+	<span class="btn btn-warning btn-mini">$</span>
+	<span class="btn btn-mini">&pound;</span>
+	<span class="btn btn-mini">&euro;</span>
+	-->
+
 	</div>
+
 </div>
 </header>
 
@@ -88,8 +88,8 @@ Navigation Bar Section
 		  </a>
 		  <div class="nav-collapse">
 			<ul class="nav">
-			  <li class=""><a href="<%=request.getContextPath()%>/index.html">Inicio	</a></li>
-			  <li class=""><a href="list-view.html">Productos</a></li>
+			  <li class=""><a href="<%=request.getContextPath()%>/index.html">Inicio</a></li>
+
 
 			</ul>
 			<form action="#" class="navbar-search pull-left">

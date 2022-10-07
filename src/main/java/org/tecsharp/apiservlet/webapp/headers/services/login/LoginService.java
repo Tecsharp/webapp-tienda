@@ -9,6 +9,6 @@ public interface LoginService {
     Optional<Integer> getId(HttpServletRequest request);
     Optional<String> getUser(HttpServletRequest request);
     Optional<Integer> getUserType(HttpServletRequest request);
-
+    boolean registrarUsuario(String nombre, String apellido, String email, String username, String password);
 
 }

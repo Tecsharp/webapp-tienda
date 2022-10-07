@@ -38,6 +38,11 @@ public class LoginServiceSessionImpl implements LoginService {
     }
 
     @Override
+    public boolean registrarUsuario(String name, String apellido, String email, String username, String password) {
+        return false;
+    }
+
+    @Override
     public Optional<String> getUser(HttpServletRequest request) {
         return Optional.empty();
     }

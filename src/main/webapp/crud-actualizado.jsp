@@ -2,13 +2,7 @@
 <%
 Optional<String> username = (Optional<String>) request.getAttribute("username");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
-String nombre = (String) request.getAttribute("nombre");
-Integer categoria = (Integer) request.getAttribute("categoria");
-Integer precio = (Integer) request.getAttribute("precio");
-Integer stock = (Integer) request.getAttribute("stock");
-String shortDescription = (String) request.getAttribute("shortDescription");
-String largeDescription = (String) request.getAttribute("largeDescription");
-Integer status = (Integer) request.getAttribute("status");
+Producto producto = (Producto) request.getAttribute("producto");
 
 %>
 
@@ -61,7 +55,7 @@ Lower Header Section
 <div class="row">
 	<div class="span4">
 	<h1>
-	<a class="logo" href="<<%=request.getContextPath()%>/index.html>"><span>Tecstore</span>
+	<a class="logo" href="<%=request.getContextPath()%>/index.html"><span>Tecstore</span>
 		<img src="<%=request.getContextPath()%>/assets/img/logo-bootstrap-shoping-cart.png" alt="bootstrap sexy shop">
 	</a>
 	</h1>
@@ -94,7 +88,7 @@ Navigation Bar Section
 		  </a>
 		  <div class="nav-collapse">
 			<ul class="nav">
-			  <li class=""><a href="index.html">Inicio</a></li>
+			  <li class=""><a href="<%=request.getContextPath()%>/index.html">Inicio</a></li>
 
 			  <!--
 			  <li class=""><a href="list-view.html">List View</a></li>
@@ -108,27 +102,22 @@ Navigation Bar Section
 			<form action="#" class="navbar-search pull-left">
 			  <input type="text" placeholder="Search" class="search-query span2">
 			</form>
-			<ul class="nav pull-right">
-			<li class="dropdown">
-				<a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-lock"></span> Login <b class="caret"></b></a>
-				<div class="dropdown-menu">
-				<form class="form-horizontal loginFrm">
-				  <div class="control-group">
-					<input type="text" class="span2" id="inputEmail" placeholder="Email">
-				  </div>
-				  <div class="control-group">
-					<input type="password" class="span2" id="inputPassword" placeholder="Password">
-				  </div>
-				  <div class="control-group">
-					<label class="checkbox">
-					<input type="checkbox"> Remember me
-					</label>
-					<button type="submit" class="shopBtn btn-block">Sign in</button>
-				  </div>
-				</form>
-				</div>
-			</li>
-			</ul>
+
+            <ul class="nav pull-right">
+            <li class="dropdown">
+            <%if(username.isPresent()){%>
+                         <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-unlock"></span> ${usuario.nameUser} <b class="caret"></b></a>
+                <div class="dropdown-menu">
+                     	    <form class="form-horizontal loginFrm">
+                     		<a href="<%=request.getContextPath()%>/logout"> <button type="button" class="shopBtn btn-block">Cerrar sesión</button></a>
+                     		</form>
+                     		</div>
+            <%}else{%>
+                         <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar</b></a>
+            <%}%>
+            </li>
+            </ul>
+
 		  </div>
 		</div>
 	  </div>
@@ -153,22 +142,24 @@ Body Section
 <div class="well well-small">
     <br>
 
-    <h2>Se agrego con éxito: <%=nombre%></h2>
+    <h2>Se actualizo con éxito: <%=producto.getNombre()%></h2>
     <table class="table table-striped">
 	<tbody>
-	<tr class="techSpecRow"><td class="techSpecTD1">Nombre:</td><td class="techSpecTD2"><%=nombre%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Categoria:</td><td class="techSpecTD2"><%=categoria%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Precio:</td><td class="techSpecTD2"><%=precio%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Stock:</td><td class="techSpecTD2"><%=stock%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Status:</td><td class="techSpecTD2"><%=status%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Descripcion corta:</td><td class="techSpecTD2"><%=shortDescription%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Descripcion larga:</td><td class="techSpecTD2"><%=largeDescription%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Nombre:</td><td class="techSpecTD2"><%=producto.getNombre()%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Categoria:</td><td class="techSpecTD2"><%=producto.getTipo().getNombre()%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Precio:</td><td class="techSpecTD2"><%=producto.getPrecioFormateado()%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Stock:</td><td class="techSpecTD2"><%=producto.getStock()%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Status:</td><td class="techSpecTD2"><%=producto.getStatus()%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Descripcion corta:</td><td class="techSpecTD2"><%=producto.getDescripcionCorta()%></td></tr>
+	<tr class="techSpecRow"><td class="techSpecTD1">Descripcion larga:</td><td class="techSpecTD2"><%=producto.getDescripcion()%></td></tr>
 	</tbody>
 	</table>
 
     <div>
         <div>
-            <a href="<%=request.getContextPath()%>/crud/agregar"><input class="shopBtn" value="Regresar"></a>
+            <a href="<%=request.getContextPath()%>/crud/actualizar">
+            <input class="shopBtn" type="button" value="Regresar" />
+            </a>
         </div>
     </div>
 

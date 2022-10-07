@@ -31,4 +31,9 @@ public class LoginServiceCookieImpl implements LoginService {
     public Optional<Integer> getUserType(HttpServletRequest request) {
         return Optional.empty();
     }
+
+    @Override
+    public boolean registrarUsuario(String name, String apellido, String email, String username, String password) {
+        return false;
+    }
 }

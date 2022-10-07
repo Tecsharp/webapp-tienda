@@ -1,4 +1,4 @@
-package org.tecsharp.apiservlet.webapp.headers.controllers.admin;
+package org.tecsharp.apiservlet.webapp.headers.controllers.admin.agregar;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -30,19 +30,13 @@ public class CrudAgregarServlet extends HttpServlet {
         //SE OBTIENE EL USUARIO
         LoginService auth = new LoginServiceSessionImpl();
         Optional<String> usernameOptional = auth.getUsername(req);
+        req.setAttribute("username", usernameOptional);
 
-        //OBTENER USERTYPE (ADMIN)
-        try {
-            HttpSession session = req.getSession();
-            Usuario usuario = (Usuario) session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
-            Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
-            Integer userType = usuario.getUserType();
+        //SE OBTIENE EL OBJETO USUARIO
+        HttpSession session = req.getSession();
+        Usuario usuario = (Usuario) session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
 
-        } catch (Exception e) {
-
-        }
-
-        if (usernameOptional.isPresent()) {
+        if (usernameOptional.isPresent() && usuario.getUserType() == 2) {
             getServletContext().getRequestDispatcher("/crud-agregar.jsp").forward(req, resp);
         } else {
             resp.sendRedirect(req.getContextPath() + "/inicio");
@@ -71,11 +65,11 @@ public class CrudAgregarServlet extends HttpServlet {
         CrudService crudService = new CrudServiceImpl();
 
 
-        if(crudService.registrarNuevoProducto(userId, userType, categoria, nombre, precio, stock, shortDescription, largeDescription, status)){
+        if (usuario.getUserType() == 2 && crudService.registrarNuevoProducto(userId, userType, categoria, nombre, precio, stock, shortDescription, largeDescription, status)) {
             getServletContext().getRequestDispatcher("/crud/agregar/valid.html").forward(req, resp);
             //resp.sendRedirect(req.getContextPath() + "/crud/agregar/valid.html");
         } else {
-            resp.sendRedirect(req.getContextPath() + "/inicio");
+            resp.sendRedirect(req.getContextPath() + "/crud/agregar");
         }
     }
 }

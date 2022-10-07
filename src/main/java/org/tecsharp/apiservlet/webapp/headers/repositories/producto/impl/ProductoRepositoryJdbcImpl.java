@@ -129,10 +129,53 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
         return carrusel;
     }
 
+    @Override
+    public List<Producto> listarProductoRandom(Integer limite) throws SQLException {
+        List<Producto> productosRandom = new ArrayList<>();
+        String query = "SELECT *, t.name as categoria FROM products as p INNER JOIN product_type as t ON (p.product_type = t.id_product_type) WHERE id_product  ORDER BY RAND() LIMIT ?";
 
+        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, limite);
 
+            ResultSet rs = statement.executeQuery();
+            TipoProducto tipo = null;
+            while (rs.next()) {
+                Producto p = getProducto(rs, tipo);
 
+                productosRandom.add(p);
+            }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return productosRandom;
+    }
+
+    @Override
+    public List<Producto> listarProductosPopulares(Integer limite) throws SQLException {
+        List<Producto> productosPopulares = new ArrayList<>();
+        String query = "SELECT *, t.name as categoria FROM products as p INNER JOIN product_type as t ON (p.product_type = t.id_product_type) WHERE id_product  ORDER BY ventas DESC LIMIT ?";
+
+        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, limite);
+
+            ResultSet rs = statement.executeQuery();
+            TipoProducto tipo = null;
+            while (rs.next()) {
+                Producto p = getProducto(rs, tipo);
+
+                productosPopulares.add(p);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return productosPopulares;
+    }
 
 
     @Override
@@ -184,6 +227,26 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
                 return false;
             }
             return true;
+    }
+
+    @Override
+    public Integer obtenerNumeroDeProductos() {
+        Integer numProductos = null;
+
+        String query = "SELECT COUNT(id_product) AS numProducts FROM Products";
+        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                numProductos = result.getInt("numProducts");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return numProductos;
     }
 
     @Override

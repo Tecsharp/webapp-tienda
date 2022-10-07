@@ -1,7 +1,11 @@
 <%@page contentType="text/html; charset=UTF-8" import="java.util.*, org.tecsharp.apiservlet.webapp.headers.models.*, java.text.DecimalFormat"%>
 <%
+
 Optional<String> username = (Optional<String>) request.getAttribute("username");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
+Integer numUsuariosRegistrados = (Integer) request.getAttribute("numUsuariosRegistrados");
+Integer numCategorias = (Integer) request.getAttribute("numCategorias");
+Integer numProductos = (Integer) request.getAttribute("numProductos");
 %>
 
 <!DOCTYPE html>
@@ -53,7 +57,7 @@ Lower Header Section
 <div class="row">
 	<div class="span4">
 	<h1>
-	<a class="logo" href="<<%=request.getContextPath()%>/index.html>"><span>Tecstore</span>
+	<a class="logo" href="<%=request.getContextPath()%>/index.html"><span>Tecstore</span>
 		<img src="assets/img/logo-bootstrap-shoping-cart.png" alt="bootstrap sexy shop">
 	</a>
 	</h1>
@@ -86,7 +90,7 @@ Navigation Bar Section
 		  </a>
 		  <div class="nav-collapse">
 			<ul class="nav">
-			  <li class=""><a href="index.html">Inicio</a></li>
+			  <li class=""><a href="<%=request.getContextPath()%>/index.html">Inicio</a></li>
 
 			  <!--
 			  <li class=""><a href="list-view.html">List View</a></li>
@@ -102,25 +106,19 @@ Navigation Bar Section
 			</form>
 			<ul class="nav pull-right">
 			<li class="dropdown">
-				<a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-lock"></span> Login <b class="caret"></b></a>
-				<div class="dropdown-menu">
-				<form class="form-horizontal loginFrm">
-				  <div class="control-group">
-					<input type="text" class="span2" id="inputEmail" placeholder="Email">
-				  </div>
-				  <div class="control-group">
-					<input type="password" class="span2" id="inputPassword" placeholder="Password">
-				  </div>
-				  <div class="control-group">
-					<label class="checkbox">
-					<input type="checkbox"> Remember me
-					</label>
-					<button type="submit" class="shopBtn btn-block">Sign in</button>
-				  </div>
-				</form>
-				</div>
+			<%if(username.isPresent()){%>
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-unlock"></span> ${usuario.nameUser} <b class="caret"></b></a>
+			    <div class="dropdown-menu">
+            	    <form class="form-horizontal loginFrm">
+            		<a href="<%=request.getContextPath()%>/logout"> <button type="button" class="shopBtn btn-block">Cerrar sesión</button></a>
+            		</form>
+            		</div>
+			<%}else{%>
+                <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar</b></a>
+			<%}%>
 			</li>
 			</ul>
+
 		  </div>
 		</div>
 	  </div>
@@ -156,9 +154,9 @@ Body Section
               <tbody>
                 <tr>
                   <td></td>
-                  <td>18 productos</td>
-                  <td>5 Categorias</td>
-                  <td>3 Usuarios</td>
+                  <td><%=numProductos%> productos</td>
+                  <td><%=numCategorias%> categorias</td>
+                  <td><%=numUsuariosRegistrados%> usuarios</td>
                 </tr>
               </tbody>
             </table>

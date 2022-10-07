@@ -2,7 +2,10 @@ package org.tecsharp.apiservlet.webapp.headers.controllers.login;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
@@ -12,11 +15,10 @@ import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.impl.CarritoR
 import org.tecsharp.apiservlet.webapp.headers.services.carrito.CarritoService;
 import org.tecsharp.apiservlet.webapp.headers.services.carrito.impl.CarritoServiceImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.login.LoginService;
+import org.tecsharp.apiservlet.webapp.headers.services.login.impl.LoginServiceImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.login.impl.LoginServiceSessionImpl;
 import org.tecsharp.apiservlet.webapp.headers.services.producto.ProductoService;
 import org.tecsharp.apiservlet.webapp.headers.services.producto.impl.ProductoServiceJdbcImpl;
-import org.tecsharp.apiservlet.webapp.headers.services.usuario.UsuarioService;
-import org.tecsharp.apiservlet.webapp.headers.services.usuario.impl.UsuarioServiceImpl;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -24,17 +26,18 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet({"/inicio"})
-public class LoginServlet extends HttpServlet {
+@WebServlet("/registro")
+public class RegistroServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         //SE OBTIENE EL USUARIO
         LoginService auth = new LoginServiceSessionImpl();
         Optional<String> usernameOptional = auth.getUsername(req);
 
         //CONEXION BDD
-        Connection conn = (Connection) req.getAttribute("conn" );
+        Connection conn = (Connection) req.getAttribute("conn");
         ProductoService serviceTipoProducto = new ProductoServiceJdbcImpl(conn);
 
         //SERVICIO LISTA TIPO PRODUCTOS
@@ -56,54 +59,46 @@ public class LoginServlet extends HttpServlet {
         req.setAttribute("carruselDos", carruselDos); //SE ENVIA A LA VISTA
         req.setAttribute("username", usernameOptional);
 
-        try {
-            HttpSession session = req.getSession();
-            Usuario usuario = (Usuario)session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
-            Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
 
-            CarritoService carritoService = new CarritoServiceImpl();
-            DecimalFormat formatea = new DecimalFormat("###,###,###");
-            Carrito datos = carritoService.obtenerCarrito(userId);
-            Integer nums = datos.getPrecioTotal();
-            String precioTotal = formatea.format(nums);
-            req.setAttribute("precioTotal", precioTotal);
-
-            //SE ENVIA CANTIDAD DE ITEMS EN CARRITO
-            CarritoRepository serviceCarrito = new CarritoRepositoryImpl();
-            Integer productosEnCarrito = serviceCarrito.obtenerCantidadItemsCarrito(usuario.getIdUser());
-            req.setAttribute("productosEnCarrito", productosEnCarrito);
-
-            ////
-        } catch (Exception e){
-
-        }
-
-        if (usernameOptional.isPresent()) {
-            getServletContext().getRequestDispatcher("/index.html").forward(req, resp);
+        if (!usernameOptional.isPresent()) {
+            getServletContext().getRequestDispatcher("/registro.jsp").forward(req, resp);
+        } else if (usernameOptional.isPresent()) {
+            resp.sendRedirect(req.getContextPath() + "/index.html");
         } else {
-            getServletContext().getRequestDispatcher("/inicio.jsp").forward(req, resp);
+            getServletContext().getRequestDispatcher("/registro").forward(req, resp);
         }
+
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        //CONEXION BDD
+        Connection conn = (Connection) req.getAttribute("conn");
+
+        //IMPLEMENT SERVICE
+        ProductoService service = new ProductoServiceJdbcImpl(conn);
+        List<TipoProducto> categorias = service.listarTipoProducto();
+        req.setAttribute("categorias", categorias); //SE ENVIA A LA VISTA
+
+        String nombre = req.getParameter("nombre");
+        String apellido = req.getParameter("apellido");
+        String email = req.getParameter("email");
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-        //SERVICIO USUARIO
-        UsuarioService usuarioService = new UsuarioServiceImpl();
-        Usuario usuario = usuarioService.login(username, password);
+        LoginService loginService = new LoginServiceImpl();
 
-        if (usuario != null) {
-            HttpSession session = req.getSession();
-            session.setAttribute("username", username);
-            req.setAttribute("usuario", usuario); // add to request
+        LoginService auth = new LoginServiceSessionImpl();
+        Optional<String> usernameOptional = auth.getUsername(req);
 
-            req.getSession().setAttribute("usuario", usuario); // add to session
-            resp.sendRedirect(req.getContextPath() + "/inicio");
-
+        if (!usernameOptional.isPresent() && loginService.registrarUsuario(nombre, apellido, email, username, password)) {
+            getServletContext().getRequestDispatcher("/registro-exitoso.jsp").forward(req, resp);
+        } else if(usernameOptional.isPresent()) {
+            resp.sendRedirect(req.getContextPath() + "/index.html");
         } else {
-            resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Lo sentimos no esta autorizado para ingresar a esta página!");
+            getServletContext().getRequestDispatcher("/registro.jsp").forward(req, resp);
         }
+
     }
 }

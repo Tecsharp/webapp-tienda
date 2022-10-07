@@ -1,4 +1,4 @@
-package org.tecsharp.apiservlet.webapp.headers.controllers.admin;
+package org.tecsharp.apiservlet.webapp.headers.controllers.admin.actualizar;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -30,6 +30,8 @@ public class CrudActualizar extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+
         //CONEXION BDD
         Connection conn = (Connection) req.getAttribute("conn");
 
@@ -61,29 +63,29 @@ public class CrudActualizar extends HttpServlet {
         Optional<String> usernameOptional = auth.getUsername(req);
         req.setAttribute("username", usernameOptional);
 
+        //SE OBTIENE EL ADMIN
+        Optional<Integer> userAdminOptional = auth.getUserType(req);
+        req.setAttribute("userAdminOptional", userAdminOptional);
+
         //SE ENVIA LISTA DE CATEGORIAS
         List<TipoProducto> categorias = service.listarTipoProducto();
         req.setAttribute("categorias", categorias); //SE ENVIA A LA VISTA
 
         //req.setAttribute("categoriaId", categoria);
 
-        try {
-            CarritoService carritoService = new CarritoServiceImpl();
-            HttpSession session = req.getSession();
-            Usuario usuario = (Usuario) session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
-            Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
+        CarritoService carritoService = new CarritoServiceImpl();
+        HttpSession session = req.getSession();
+        Usuario usuario = (Usuario) session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
+        Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
 
 
-            DecimalFormat formatea = new DecimalFormat("###,###,###");
-            Carrito datos = carritoService.obtenerCarrito(userId);
-            Integer nums = datos.getPrecioTotal();
-            String precioTotal = formatea.format(nums);
-            req.setAttribute("precioTotal", precioTotal);
-            ////
-        } catch (Exception e) {
+        DecimalFormat formatea = new DecimalFormat("###,###,###");
+        Carrito datos = carritoService.obtenerCarrito(userId);
+        Integer nums = datos.getPrecioTotal();
+        String precioTotal = formatea.format(nums);
+        req.setAttribute("precioTotal", precioTotal);
 
-        }
-        if (usernameOptional.isPresent()) {
+        if (usernameOptional.isPresent() && usuario.getUserType() == 2) {
             getServletContext().getRequestDispatcher("/crud-actualizar.jsp").forward(req, resp);
         } else {
             resp.sendRedirect(req.getContextPath() + "/inicio");
@@ -93,10 +95,21 @@ public class CrudActualizar extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //SE OBTIENE EL USUARIO
+        LoginService auth = new LoginServiceSessionImpl();
+        Optional<String> usernameOptional = auth.getUsername(req);
+
+        //SE OBTIENE EL OBJETO USUARIO
+        HttpSession session = req.getSession();
+        Usuario usuario = (Usuario) session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
+
         Connection conn = (Connection) req.getAttribute("conn");
         categoria = Integer.valueOf(req.getParameter("categoria"));
 
-        resp.sendRedirect(req.getContextPath() + "/crud/actualizar");
-
+        if (usernameOptional.isPresent() && usuario.getUserType() == 2) {
+            resp.sendRedirect(req.getContextPath() + "/crud/actualizar");
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/inicio");
+        }
     }
 }
