@@ -48,10 +48,10 @@ List<Producto> productosPopulares = (List<Producto>) request.getAttribute("produ
 			<div class="alignR">
 			    <a href="<%=request.getContextPath()%>/index.html"> <span class="icon-home"></span> Inicio</a>
                 <%if(username.isPresent()){%>
-				<a href="<%=request.getContextPath()%>/mi-perfil"><span class="icon-user"></span> My Account</a>
+				<a href="<%=request.getContextPath()%>/mi-cuenta"><span class="icon-user"></span> Mi cuenta</a>
 				<a href="<%=request.getContextPath()%>/ver/carrito"><span class="icon-shopping-cart"></span> <%=productosEnCarrito%> Articulo(s) - <span class="badge badge-warning"> $<%=precioTotal%></span></a>
 				<%}else {%>
-				<a href="<%=request.getContextPath()%>/registrarse"><span class="icon-edit"></span> Registrate </a>
+				<a href="<%=request.getContextPath()%>/registro"><span class="icon-edit"></span> Registrate </a>
 				 <%}%>
 
 			</div>
@@ -101,13 +101,10 @@ Navigation Bar Section
 			  <li class=""></li>
 			  <li class=""></li>
 			  <%if(usuario != null){%>
-              <%if(usuario.getUserType() == 2){%>
-			    <li class=""><a href="<%=request.getContextPath()%>/crud">CRUD</a></li>
-			  <%}%>
 			  <%}%>
 			</ul>
-			<form action="#" class="navbar-search pull-left">
-			  <input type="text" placeholder="Search" class="search-query span2">
+			<form action="<%=request.getContextPath()%>/buscar/productos" class="navbar-search pull-left" method="post">
+			  <input type="text" placeholder="Buscar" name="buscar" id="buscar" class="search-query span2">
 			</form>
 
 			<ul class="nav pull-right">
@@ -238,7 +235,7 @@ New Products
 				<li class="span3">
 				  <div class="thumbnail">
 					<a class="zoomTool" href="<%=request.getContextPath()%>/ver/producto?id=<%=c.getId()%>&idTipo=<%=c.getTipo().getId()%>" title="Ver detalles"><span class="icon-search"></span> VER DETALLES</a>
-					<a  href="<%=request.getContextPath()%>/ver/producto?id=<%=c.getId()%>"><img src="<%=c.getImgLink()%>" alt=""></a>
+					<a  href="<%=request.getContextPath()%>/ver/producto?id=<%=c.getId()%>&idTipo=<%=c.getTipo().getId()%>"><img src="<%=c.getImgLink()%>" alt=""></a>
 				  </div>
 				</li>
                 <%}%>
@@ -400,7 +397,7 @@ Clients
 -->
 <section class="our_client">
 	<hr class="soften"/>
-	<h4 class="title cntr"><span class="text">MEJORES MARCAS</span></h4>
+	<h4 class="title cntr"><span class="text">Mejores marcas</span></h4>
 	<hr class="soften"/>
 	<div class="row">
 		<div class="span2">
@@ -427,41 +424,9 @@ Clients
 <!--
 Footer
 -->
-<footer class="footer">
-<div class="row-fluid">
-<div class="span2">
-<h5>Your Account</h5>
-<a href="#">YOUR ACCOUNT</a><br>
-<a href="#">PERSONAL INFORMATION</a><br>
-<a href="#">ADDRESSES</a><br>
-<a href="#">DISCOUNT</a><br>
-<a href="#">ORDER HISTORY</a><br>
- </div>
-<div class="span2">
-<h5>Iinformation</h5>
-<a href="contact.html">CONTACT</a><br>
-<a href="#">SITEMAP</a><br>
-<a href="#">LEGAL NOTICE</a><br>
-<a href="#">TERMS AND CONDITIONS</a><br>
-<a href="#">ABOUT US</a><br>
- </div>
-<div class="span2">
-<h5>Our Offer</h5>
-<a href="#">NEW PRODUCTS</a> <br>
-<a href="#">TOP SELLERS</a><br>
-<a href="#">SPECIALS</a><br>
-<a href="#">MANUFACTURERS</a><br>
-<a href="#">SUPPLIERS</a> <br/>
- </div>
- <div class="span6">
-<h5>The standard chunk of Lorem</h5>
-The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for
- those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et 
- Malorum" by Cicero are also reproduced in their exact original form, 
-accompanied by English versions from the 1914 translation by H. Rackham.
- </div>
- </div>
-</footer>
+
+<jsp:include page="footer.jsp" />
+
 </div><!-- /container -->
 
 <div class="copyright">

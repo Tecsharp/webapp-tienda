@@ -54,6 +54,7 @@ public class CrudAgregarValidacion extends HttpServlet {
         if (usernameOptional.isPresent() && usuario.getUserType() == 2) {
             getServletContext().getRequestDispatcher("/crud-agregado.jsp").forward(req, resp);
         }
+
     }
 
     @Override

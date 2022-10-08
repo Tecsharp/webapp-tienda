@@ -3,6 +3,7 @@ package org.tecsharp.apiservlet.webapp.headers.services.carrito.impl;
 import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
+import org.tecsharp.apiservlet.webapp.headers.models.Ventas;
 import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.CarritoRepository;
 import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.impl.CarritoRepositoryImpl;
 import org.tecsharp.apiservlet.webapp.headers.repositories.producto.ProductoRepository;
@@ -81,6 +82,22 @@ public class CarritoServiceImpl implements CarritoService {
     @Override
     public boolean eliminarPorductoDeCarrito(Integer idProducto, Integer idUser) {
         return service.eliminarPorductoDeCarrito(idProducto, idUser);
+    }
+
+    @Override
+    public boolean comprarCarrito(Integer idUser) {
+
+
+        CarritoRepository carritoRepository = new CarritoRepositoryImpl();
+        List<Producto> carrito = carritoRepository.getCarrito(idUser); //OBTENGO EL CARRITO DEL USUARIO
+
+        return carritoRepository.comprarCarrito(carrito, idUser);
+    }
+
+    @Override
+    public List<Ventas> getVentas(Integer userId) {
+
+        return service.getVentas(userId);
     }
 
 

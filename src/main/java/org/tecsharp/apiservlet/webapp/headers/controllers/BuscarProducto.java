@@ -1,4 +1,4 @@
-package org.tecsharp.apiservlet.webapp.headers.controllers.producto;
+package org.tecsharp.apiservlet.webapp.headers.controllers;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,34 +25,34 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet({"/productos"})
-public class CategoriaProductoServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Connection conn = (Connection) req.getAttribute("conn" );
+@WebServlet("/buscar/productos")
+public class BuscarProducto extends HttpServlet {
 
-        //SE OBTIENE EL ID DE LA CATEGORIA
-        Integer idCat = Integer.valueOf(req.getParameter("idCat"));
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        Connection conn = (Connection) req.getAttribute("conn");
+
+        //IMPLEMENT SERVICE
+        ProductoService service = new ProductoServiceJdbcImpl(conn);
 
         //SE RECUPERA LA ID DE LA CATEGORIA
-        //Integer idTipo = Integer.valueOf(req.getParameter("idTipo"));
+        Integer idTipo = null;
         TipoProducto tipo = new TipoProducto();
-        tipo.setId(idCat);
+        tipo.setId(idTipo);
 
-        //PRODUCTOS DE MOTOCICLETA
-        ProductoService serviceProducto = new ProductoServiceJdbcImpl(conn);
-        //Integer productoTipo = 1; //AGREGAR UN LINK QUE MANDE ESTE ITEM
-        List<Producto> tipoProductos = serviceProducto.listarByTipo(idCat, tipo);
-        req.setAttribute("productos", tipoProductos); //SE ENVIA A LA VISTA
+        //OBTIENE LISTA DE TODOS LOS PRODUCTOS
+        List<Producto> todosLosProductos = service.listar(tipo);
+        req.setAttribute("todosLosProductos", todosLosProductos); //SE ENVIA A LA VISTA
 
         //LISTA DE CATEGORIAS
-        List<TipoProducto> categorias = serviceProducto.listarTipoProducto();
+        List<TipoProducto> categorias = service.listarTipoProducto();
         req.setAttribute("categorias", categorias); //SE ENVIA A LA VISTA
 
-        //SE OBTIENE EL USUARIO
+        //USUARIO DISPONIBLE
         LoginService auth = new LoginServiceSessionImpl();
-        Optional<String> usernameOptional = auth.getUsername(req); //SE PREPARA
-        req.setAttribute("username", usernameOptional); //SE ENVIA A LA VISTA
+        Optional<String> usernameOptional = auth.getUsername(req);
+        req.setAttribute("username", usernameOptional);
 
         try {
             CarritoService carritoService = new CarritoServiceImpl();
@@ -76,8 +76,16 @@ public class CategoriaProductoServlet extends HttpServlet {
         } catch (Exception e){
 
         }
+        String busqueda = req.getParameter("buscar");
+        ProductoService productoService = new ProductoServiceJdbcImpl(conn);
 
-        getServletContext().getRequestDispatcher("/productos_categoria.jsp").forward(req, resp);
+        List<Producto> productosFiltrados = productoService.buscarProducto(busqueda);
+        req.setAttribute("productosFiltrados", productosFiltrados);
+
+
+        getServletContext().getRequestDispatcher("/busqueda.jsp").forward(req, resp);
+
+
 
     }
 }

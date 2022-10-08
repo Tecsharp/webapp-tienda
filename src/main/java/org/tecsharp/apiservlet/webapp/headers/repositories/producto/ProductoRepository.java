@@ -23,6 +23,7 @@ public interface ProductoRepository<T> {
     boolean eliminarProductoPorId(Integer idProducto);
     Integer obtenerNumeroDeProductos();
     List<Producto> listarProductosPopulares(Integer limite) throws SQLException;
+    List<Producto> buscarProductos(String busqueda);
 
 
 }

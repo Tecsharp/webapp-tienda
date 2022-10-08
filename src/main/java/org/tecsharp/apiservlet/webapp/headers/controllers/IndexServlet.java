@@ -47,7 +47,6 @@ public class IndexServlet extends HttpServlet {
             HttpSession session = req.getSession();
             Usuario usuario = (Usuario)session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
             Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
-
             req.setAttribute("usuario", usuario); //SE ENVIA AL REQUEST
 
             DecimalFormat formatea = new DecimalFormat("###,###,###");

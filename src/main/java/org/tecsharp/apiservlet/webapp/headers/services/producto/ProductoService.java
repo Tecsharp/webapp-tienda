@@ -20,4 +20,5 @@ public interface ProductoService {
     Integer obtenerNumeroDeProductos();
     List<Producto> listarProductosPopulares(Integer limite);
 
+    List<Producto> buscarProducto(String busqueda);
 }

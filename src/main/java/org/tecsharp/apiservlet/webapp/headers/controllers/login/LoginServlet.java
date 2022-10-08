@@ -83,6 +83,7 @@ public class LoginServlet extends HttpServlet {
         } else {
             getServletContext().getRequestDispatcher("/inicio.jsp").forward(req, resp);
         }
+
     }
 
     @Override

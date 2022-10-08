@@ -1,33 +1,29 @@
 <%@page contentType="text/html; charset=UTF-8" import="java.util.*, org.tecsharp.apiservlet.webapp.headers.models.*, java.text.DecimalFormat"%>
 <%
+Usuario usuario = (Usuario) request.getAttribute("usuario");
 Optional<String> username = (Optional<String>) request.getAttribute("username");
 String mensajeApp = (String) getServletContext().getAttribute("mensaje");
-String nombre = (String) request.getAttribute("nombre");
-Integer categoria = (Integer) request.getAttribute("categoria");
-Integer precio = (Integer) request.getAttribute("precio");
-Integer stock = (Integer) request.getAttribute("stock");
-String shortDescription = (String) request.getAttribute("shortDescription");
-String largeDescription = (String) request.getAttribute("largeDescription");
-Integer status = (Integer) request.getAttribute("status");
-String nombreCategoria = (String) request.getAttribute("nombreCategoria");
+Integer numUsuariosRegistrados = (Integer) request.getAttribute("numUsuariosRegistrados");
+Integer numCategorias = (Integer) request.getAttribute("numCategorias");
+Integer numProductos = (Integer) request.getAttribute("numProductos");
 %>
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Tecstore | Admin</title>
+    <title>Tecstore | Mi cuenta</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Bootstrap styles -->
-    <link href="<%=request.getContextPath()%>/assets/css/bootstrap.css" rel="stylesheet"/>
+    <link href="assets/css/bootstrap.css" rel="stylesheet"/>
     <!-- Customize styles -->
-    <link href="<%=request.getContextPath()%>/style.css" rel="stylesheet"/>
+    <link href="style.css" rel="stylesheet"/>
     <!-- font awesome styles -->
-	<link href="<%=request.getContextPath()%>/assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+	<link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet">
 		<!--[if IE 7]>
-			<link href="<%=request.getContextPath()%>/css/font-awesome-ie7.min.css" rel="stylesheet">
+			<link href="css/font-awesome-ie7.min.css" rel="stylesheet">
 		<![endif]-->
 
 		<!--[if lt IE 9]>
@@ -35,7 +31,7 @@ String nombreCategoria = (String) request.getAttribute("nombreCategoria");
 		<![endif]-->
 
 	<!-- Favicons -->
-    <link rel="shortcut icon" href="<%=request.getContextPath()%>/assets/ico/favicon.ico">
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
   </head>
 <body>
 <!-- 
@@ -62,7 +58,7 @@ Lower Header Section
 	<div class="span4">
 	<h1>
 	<a class="logo" href="<%=request.getContextPath()%>/index.html"><span>Tecstore</span>
-		<img src="<%=request.getContextPath()%>/assets/img/logo-bootstrap-shoping-cart.png" alt="bootstrap sexy shop">
+		<img src="assets/img/logo-bootstrap-shoping-cart.png" alt="bootstrap sexy shop">
 	</a>
 	</h1>
 	</div>
@@ -108,21 +104,20 @@ Navigation Bar Section
 			<form action="<%=request.getContextPath()%>/buscar/productos" class="navbar-search pull-left" method="post">
 			  <input type="text" placeholder="Buscar" name="buscar" id="buscar" class="search-query span2">
 			</form>
-
-            <ul class="nav pull-right">
-            <li class="dropdown">
-            <%if(username.isPresent()){%>
-                         <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-unlock"></span> ${usuario.nameUser} <b class="caret"></b></a>
-                <div class="dropdown-menu">
-                     	    <form class="form-horizontal loginFrm">
-                     		<a href="<%=request.getContextPath()%>/logout"> <button type="button" class="shopBtn btn-block">Cerrar sesión</button></a>
-                     		</form>
-                     		</div>
-            <%}else{%>
-                         <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar</b></a>
-            <%}%>
-            </li>
-            </ul>
+			<ul class="nav pull-right">
+			<li class="dropdown">
+			<%if(username.isPresent()){%>
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span class="icon-unlock"></span> ${usuario.nameUser} <b class="caret"></b></a>
+			    <div class="dropdown-menu">
+            	    <form class="form-horizontal loginFrm">
+            		<a href="<%=request.getContextPath()%>/logout"> <button type="button" class="shopBtn btn-block">Cerrar sesión</button></a>
+            		</form>
+            		</div>
+			<%}else{%>
+                <a href="<%=request.getContextPath()%>/inicio"><span class="icon-lock"></span> Iniciar</b></a>
+			<%}%>
+			</li>
+			</ul>
 
 		  </div>
 		</div>
@@ -135,42 +130,48 @@ Body Section
 		<div id="sidebar" class="span3">
 		<div class="well well-small">
 			<ul class="nav nav-list">
+				<li><a href="<%=request.getContextPath()%>/ver/carrito"><span class="icon-chevron-right"></span>Ver carrito</a></li>
+				<li><a href="<%=request.getContextPath()%>/ver/compras"><span class="icon-chevron-right"></span>Ver compras</a></li>
+                <br>
+
+				<%if(usuario.getUserType() == 2){%>
 				<li><span class=""></span><b>Herramientas admin</b></li>
-				<br>
-				<li><a href="<%=request.getContextPath()%>/crud/agregar"><span class="icon-chevron-right"></span>Agregar productos</a></li>
-				<li><a href="<%=request.getContextPath()%>/crud/actualizar"><span class="icon-chevron-right"></span>Actualizar productos</a></li>
-				<li><a href="<%=request.getContextPath()%>/crud/eliminar"><span class="icon-chevron-right"></span>Eliminar productos</a></li>
+				<li><a href="<%=request.getContextPath()%>/crud"><span class="icon-chevron-right"></span>CRUD</a></li>
+				<%}%>
+
+
+
+
+
+				<!-- <li><a href="<%=request.getContextPath()%>/crud/eliminar"><span class="icon-chevron-right"></span>Eliminar productos</a></li> -->
 				<li style="border:0"> &nbsp;</li>
 			</ul>
 		</div>
 	</div>
 	<div class="span9">
 <div class="well well-small">
-    <br>
+	<h2>Información del usuario</h2>
+	<table class="table table-condensed">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Nombre de usuario</th>
+                  <th>Nombre</th>
+                  <th>E-mail</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td>${usuario.username}</td>
+                  <td>${usuario.nameUser} ${usuario.lastNameUsr}</td>
+                  <td>${usuario.email}</td>
+                </tr>
+              </tbody>
+            </table>
 
-    <h2>Se agrego con éxito: <%=nombre%></h2>
-    <table class="table table-striped">
-	<tbody>
-	<tr class="techSpecRow"><td class="techSpecTD1">Nombre:</td><td class="techSpecTD2"><%=nombre%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Categoria:</td><td class="techSpecTD2"><%=nombreCategoria%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Precio:</td><td class="techSpecTD2"><%=precio%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Stock:</td><td class="techSpecTD2"><%=stock%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Status:</td><td class="techSpecTD2"><%=status%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Descripcion corta:</td><td class="techSpecTD2"><%=shortDescription%></td></tr>
-	<tr class="techSpecRow"><td class="techSpecTD1">Descripcion larga:</td><td class="techSpecTD2"><%=largeDescription%></td></tr>
-	</tbody>
-	</table>
-
-    <div>
-        <div>
-            <a href="<%=request.getContextPath()%>/crud/agregar">
-            <input class="shopBtn" type="button" value="Regresar" />
-            </a>
-        </div>
-    </div>
-
-    <br>
-	<br>
+		<br>
+		<br>
 
 
 	<hr/>
@@ -237,10 +238,10 @@ Footer
 </div>
 <a href="#" class="gotop"><i class="icon-double-angle-up"></i></a>
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="<%=request.getContextPath()%>/assets/js/jquery.js"></script>
-	<script src="<%=request.getContextPath()%>/assets/js/bootstrap.min.js"></script>
-	<script src="<%=request.getContextPath()%>/assets/js/jquery.easing-1.3.min.js"></script>
-    <script src="<%=request.getContextPath()%>/assets/js/jquery.scrollTo-1.4.3.1-min.js"></script>
-    <script src="<%=request.getContextPath()%>/assets/js/shop.js"></script>
+    <script src="assets/js/jquery.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/jquery.easing-1.3.min.js"></script>
+    <script src="assets/js/jquery.scrollTo-1.4.3.1-min.js"></script>
+    <script src="assets/js/shop.js"></script>
   </body>
 </html>

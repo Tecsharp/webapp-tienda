@@ -1,11 +1,9 @@
 package org.tecsharp.apiservlet.webapp.headers.controllers.admin.agregar;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
 import org.tecsharp.apiservlet.webapp.headers.services.crud.CrudService;
@@ -21,6 +19,11 @@ import java.util.Optional;
 
 
 @WebServlet("/crud/agregar")
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+        maxFileSize = 1024 * 1024 * 10,      // 10 MB
+        maxRequestSize = 1024 * 1024 * 100   // 100 MB
+)
 public class CrudAgregarServlet extends HttpServlet {
 
 
@@ -42,7 +45,9 @@ public class CrudAgregarServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/inicio");
         }
 
+
     }
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -61,13 +66,28 @@ public class CrudAgregarServlet extends HttpServlet {
         Usuario usuario = (Usuario) session.getAttribute("usuario"); //SE RECUPERA EL USUARIO
         Integer userId = usuario.getIdUser(); //SE OBTIENE EL USER ID
         Integer userType = usuario.getUserType();
-
         CrudService crudService = new CrudServiceImpl();
 
+        //RECIBE LA IMAGEN
 
-        if (usuario.getUserType() == 2 && crudService.registrarNuevoProducto(userId, userType, categoria, nombre, precio, stock, shortDescription, largeDescription, status)) {
+        String contextPath = "/Users/tecsharp/tomcat/webapps";
+        String serverPath = "/webapp-tienda/assets/img/products/nuevos/";
+        final String FILE_DIRECTORY = contextPath + serverPath;
+
+        Part filePart = req.getPart("file");
+        String fileName = filePart.getSubmittedFileName();
+        for (Part part : req.getParts()) {
+            part.write( FILE_DIRECTORY + fileName);
+        }
+
+        //ENVIA EL PATH DE LA IMAGEN A BASE DE DATOS SEGUN EL PRODUCTO
+        String ubicacionImg = serverPath + fileName;
+
+        /////
+
+        if (usuario.getUserType() == 2 && crudService.registrarNuevoProducto(userId, userType, categoria, nombre, precio, stock, shortDescription, largeDescription, status, ubicacionImg)) {
             getServletContext().getRequestDispatcher("/crud/agregar/valid.html").forward(req, resp);
-            //resp.sendRedirect(req.getContextPath() + "/crud/agregar/valid.html");
+
         } else {
             resp.sendRedirect(req.getContextPath() + "/crud/agregar");
         }

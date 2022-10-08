@@ -67,7 +67,6 @@ public class RegistroServlet extends HttpServlet {
         } else {
             getServletContext().getRequestDispatcher("/registro").forward(req, resp);
         }
-
     }
 
     @Override

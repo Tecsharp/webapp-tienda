@@ -28,5 +28,6 @@ public class EliminarProductoCarritoServlet extends HttpServlet {
 
         resp.sendRedirect(req.getContextPath() + "/ver/carrito");
 
+
     }
 }

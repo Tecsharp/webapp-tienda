@@ -44,10 +44,10 @@ String precioTotal = (String) request.getAttribute("precioTotal");
 			<div class="alignR">
 			    <a href="<%=request.getContextPath()%>/index.html"> <span class="icon-home"></span> Inicio</a>
                 <%if(username.isPresent()){%>
-				<a href="<%=request.getContextPath()%>/mi-cuenta"><span class="icon-user"></span> Mi cuenta</a>
+				<a href="<%=request.getContextPath()%>/mi-perfil"><span class="icon-user"></span> My Account</a>
 				<a href="<%=request.getContextPath()%>/ver/carrito"><span class="icon-shopping-cart"></span> <%=numeroProductosEnCarrito%> Articulo(s) - <span class="badge badge-warning"> $<%=precioTotal%></span></a>
 				<%}else {%>
-				<a href="<%=request.getContextPath()%>/registro"><span class="icon-edit"></span> Registrate </a>
+				<a href="<%=request.getContextPath()%>/registrarse"><span class="icon-edit"></span> Registrate </a>
 				 <%}%>
 
 			</div>
@@ -72,9 +72,6 @@ Lower Header Section
 
     <div class="span8 alignR">
 	<p><br> <strong> Soporte (24/7) :  0800 1234 678 </strong><br><br></p>
-	<%if(username.isPresent()){%>
-	<a href="<%=request.getContextPath()%>/ver/carrito"><span class="btn btn-mini"><%=numeroProductosEnCarrito%> <span class="icon-shopping-cart"></span></span></a>
-    <%}%>
 	</div>
 </div>
 </header>
@@ -123,19 +120,21 @@ Body Section
 	<div class="span12">
     <ul class="breadcrumb">
 		<li><a href="<%=request.getContextPath()%>/">Inicio</a> <span class="divider">/</span></li>
-		<li class="active">Carrito</li>
+		<li><a href="#">Carrito</a><span class="divider">/</span></li>
+		<li class="active">Compra</li>
     </ul>
 	<div class="well well-small">
-		<h1>Carrito <small class="pull-right"> <%=numeroProductosEnCarrito%> artículo(s) en el carrito </small></h1>
+		<h1>GRACIAS POR TU COMPRA</h1>
+		<h5>Resumen de compra</h5>
 	<hr class="soften"/>	
 
 	<table class="table table-bordered table-condensed">
               <thead>
                 <tr>
+
                   <th>Producto</th>
-                  <th>Descripcion</th>
-				  <th>	Ref. </th>
-                  <th>Disponible</th>
+
+
                   <th>Precio</th>
                   <th>Cantidad</th>
                   <th>Total</th>
@@ -154,16 +153,13 @@ Body Section
 
 
                 <tr>
-                  <td><img width="100" src="<%=pr.getImgLink()%>" alt=""></td>
-                  <td><a href="<%=request.getContextPath()%>/ver/producto?id=<%=pr.getId()%>&idTipo=<%=pr.getTipo().getId()%>"><%=pr.getNombre()%></a><br>Disponibles: <%=pr.getStock()%><br><br><%=pr.getDescripcionCorta()%></td>
-                  <td> - </td>
-                  <td><span class="shopBtn"><span class="icon-ok"></span></span> </td>
+
+                  <td><a href="<%=request.getContextPath()%>/ver/producto?id=<%=pr.getId()%>&idTipo=<%=pr.getTipo().getId()%>"><%=pr.getNombre()%></a><br></td>
+
+
                   <td>$ <%=pr.getPrecioFormateado()%></td>
                   <td>
                   <%=pr.getNumItems()%>
-				  <div class="input-append">
-				  <a href="<%=request.getContextPath()%>/eliminar/producto?idProducto=<%=pr.getId()%>&userId=${usuario.idUser}"><button class="btn btn-mini btn-danger" type="button"><span class="icon-remove"></span></button></a>
-				  </div>
 				</td>
                   <td>$ <%=precioFinal%></td>
                 </tr>
@@ -172,38 +168,14 @@ Body Section
 
 
 				 <tr>
-                  <td colspan="6" class="alignR">Total a pagar</td>
-                  <td class="label label-primary"> $ <%=precioTotal%></td>
+                  <td colspan="6" class="alignR">Total pagado</td>
+                  <td> $ <%=precioTotal%></td>
                 </tr>
 				</tbody>
             </table><br/>
-		
-		
-            <table class="table table-bordered">
-			<tbody>
-				 <tr>
-                  <td> 
-				<form class="form-inline">
-				  <label style="min-width:159px"> VOUCHERS Code: </label> 
-				<input type="text" class="input-medium" placeholder="CODE">
-				<button type="submit" class="shopBtn"> ADD</button>
-				</form>
-				</td>
-                </tr>
-				
-			</tbody>
-				</table>
-			<table class="table table-bordered">
 
-            </table>
-    <form action="<%=request.getContextPath()%>/comprar/carrito" method="post">
+
 	<a href="<%=request.getContextPath()%>/inicio" class="shopBtn btn-large"><span class="icon-arrow-left"></span> Continuar comprando </a>
-
-
-      <input type="submit" class="shopBtn btn-large pull-right" value="Comprar">
-      <input type="hidden" name="iduser" value="${usuario.idUser}">
-
-    </form>
     <!--
 	<a href="<%=request.getContextPath()%>/comprar/carrito?userId=${usuario.idUser}" method="POST" class="shopBtn btn-large pull-right">Comprar carrito <span class="icon-arrow-right"></span></a>
     -->
@@ -213,36 +185,12 @@ Body Section
 <!-- 
 Clients 
 -->
-<section class="our_client">
-	<hr class="soften"/>
-	<h4 class="title cntr"><span class="text">Mejores marcas</span></h4>
-	<hr class="soften"/>
-	<div class="row">
-		<div class="span2">
-			<a href="#"><img alt="" src="<%=request.getContextPath()%>/assets/img/1.png"></a>
-		</div>
-		<div class="span2">
-			<a href="#"><img alt="" src="<%=request.getContextPath()%>/assets/img/2.png"></a>
-		</div>
-		<div class="span2">
-			<a href="#"><img alt="" src="<%=request.getContextPath()%>/assets/img/3.png"></a>
-		</div>
-		<div class="span2">
-			<a href="#"><img alt="" src="<%=request.getContextPath()%>/assets/img/4.png"></a>
-		</div>
-		<div class="span2">
-			<a href="#"><img alt="" src="<%=request.getContextPath()%>/assets/img/5.png"></a>
-		</div>
-		<div class="span2">
-			<a href="#"><img alt="" src="<%=request.getContextPath()%>/assets/img/6.png"></a>
-		</div>
-	</div>
-</section>
 
 <!--
 Footer
 -->
 <jsp:include page="footer.jsp" />
+
 </div><!-- /container -->
 
 <div class="copyright">

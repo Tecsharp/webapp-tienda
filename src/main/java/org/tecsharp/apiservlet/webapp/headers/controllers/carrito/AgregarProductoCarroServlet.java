@@ -29,6 +29,7 @@ public class AgregarProductoCarroServlet extends HttpServlet {
         service.agregarProductoAlCarrito(productoID, idUser, numItems);
 
         resp.sendRedirect(req.getContextPath() + "/ver/carrito");
+
     }
 
 }

@@ -64,6 +64,7 @@ public class CrudActualizarProducto extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/crud/actualizar");
         }
 
+
     }
 
     @Override

@@ -10,9 +10,9 @@ import org.tecsharp.apiservlet.webapp.headers.services.crud.CrudService;
 
 public class CrudServiceImpl implements CrudService {
     @Override
-    public boolean registrarNuevoProducto(Integer idUser, Integer userType, Integer categoria, String nombre, Integer precio, Integer stock, String shortDescription, String largeDescription, Integer status) {
+    public boolean registrarNuevoProducto(Integer idUser, Integer userType, Integer categoria, String nombre, Integer precio, Integer stock, String shortDescription, String largeDescription, Integer status, String ubicacionImg) {
         CrudRepository crudRepository = new CrudRepositoryImpl();
-        return crudRepository.registrarNuevoProducto(idUser, userType, categoria, nombre,precio,stock,shortDescription,largeDescription,status);
+        return crudRepository.registrarNuevoProducto(idUser, userType, categoria, nombre,precio,stock,shortDescription,largeDescription,status, ubicacionImg);
     }
 
     @Override
@@ -38,4 +38,11 @@ public class CrudServiceImpl implements CrudService {
         UsuarioRepository usuarioRepository = new UsuarioRepositoryImpl();
         return usuarioRepository.obtenerNumeroDeUsuariosRegistrados();
     }
+
+    @Override
+    public boolean enviaUbicacionImagen(String ubicacion, String nombreDeProducto) {
+        CrudRepository crudRepository = new CrudRepositoryImpl();
+        return crudRepository.enviaUbicacionImagen(ubicacion, nombreDeProducto);
+    }
+
 }

@@ -12,7 +12,7 @@ Integer productosEnCarrito = (Integer) request.getAttribute("productosEnCarrito"
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Twitter Bootstrap shopping cart</title>
+    <title>Tecstore | Detalles </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -43,10 +43,10 @@ Integer productosEnCarrito = (Integer) request.getAttribute("productosEnCarrito"
 			<div class="alignR">
 			    <a href="<%=request.getContextPath()%>/index.html"> <span class="icon-home"></span> Inicio</a>
                 <%if(username.isPresent()){%>
-				<a href="<%=request.getContextPath()%>/mi-perfil"><span class="icon-user"></span> My Account</a>
+				<a href="<%=request.getContextPath()%>/mi-cuenta"><span class="icon-user"></span> Mi cuenta</a>
 				<a href="<%=request.getContextPath()%>/ver/carrito"><span class="icon-shopping-cart"></span> <%=productosEnCarrito%> Articulo(s) - <span class="badge badge-warning"> $<%=precioTotal%></span></a>
 				<%}else {%>
-				<a href="<%=request.getContextPath()%>/registrarse"><span class="icon-edit"></span> Registrate </a>
+				<a href="<%=request.getContextPath()%>/registro"><span class="icon-edit"></span> Registrate </a>
 				 <%}%>
 
 			</div>
@@ -94,8 +94,8 @@ Navigation Bar Section
 			  <li class="active"><a href="<%=request.getContextPath()%>/index.html">Inicio</a></li>
 			  <li class=""><a href="<%=request.getContextPath()%>/productos/todos">Productos</a></li>
 			</ul>
-			<form action="#" class="navbar-search pull-left">
-			  <input type="text" placeholder="Search" class="search-query span2">
+			<form action="<%=request.getContextPath()%>/buscar/productos" class="navbar-search pull-left" method="post">
+			  <input type="text" placeholder="Buscar" name="buscar" id="buscar" class="search-query span2">
 			</form>
 			<ul class="nav pull-right">
 			<li class="dropdown">
@@ -133,14 +133,17 @@ Body Section
 </div>
 
 			  <div class="well well-small alert alert-warning cntr">
-				  <h2>50% Discount</h2>
+				  <h2>50% DESCUENTO!</h2>
 				  <p> 
-					 only valid for online order. <br><br><a class="defaultBtn" href="#">Click here </a>
+					 Valido para compras en linea <br><br><a class="defaultBtn" href="#">CLIC AQUI</a>
 				  </p>
 			  </div>
 			  <div class="well well-small" ><a href="#"><img src="<%=request.getContextPath()%>/assets/img/paypal.jpg" alt="payment method paypal"></a></div>
-			
+
+			<!--
 			<a class="shopBtn btn-block" href="#">Upcoming products <br><small>Click to view</small></a>
+
+
 			<br>
 			<br>
 			<ul class="nav nav-list promowrapper">
@@ -175,6 +178,7 @@ Body Section
 			</li>
 		  </ul>
 
+            -->
 	</div>
 
 	<!-- INICIO JAVA SCRIPTLET -->
@@ -235,7 +239,9 @@ Body Section
 
 
             <ul id="productDetail" class="nav nav-tabs">
-              <li class="active"><a href="#home" data-toggle="tab">Product Details</a></li>
+              <li class="active"><a href="#home" data-toggle="tab">Detalles del producto</a></li>
+
+              <!--
               <li class=""><a href="#profile" data-toggle="tab">Related Products </a></li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Acceseries <b class="caret"></b></a>
@@ -244,9 +250,13 @@ Body Section
                   <li><a href="#cat2" data-toggle="tab">Category two</a></li>
                 </ul>
               </li>
+              -->
+
             </ul>
             <div id="myTabContent" class="tab-content tabWrapper">
             <div class="tab-pane fade active in" id="home">
+
+            <!--
 			  <h4>Informacion de producto</h4>
                 <table class="table table-striped">
 				<tbody>
@@ -258,8 +268,8 @@ Body Section
 				<tr class="techSpecRow"><td class="techSpecTD1">Brand:</td><td class="techSpecTD2">Shock Absorber</td></tr>
 				</tbody>
 				</table>
+            -->
 				<p><%=producto.getDescripcion()%></p>
-
 
 			</div>
 
@@ -573,7 +583,7 @@ Clients
 -->
 <section class="our_client">
 	<hr class="soften"/>
-	<h4 class="title cntr"><span class="text">Manufactures</span></h4>
+	<h4 class="title cntr"><span class="text">Mejores marcas</span></h4>
 	<hr class="soften"/>
 	<div class="row">
 		<div class="span2">
@@ -600,45 +610,7 @@ Clients
 <!--
 Footer
 -->
-<footer class="footer">
-<div class="row-fluid">
-<div class="span2">
-<h5>Your Account</h5>
-<a href="#">YOUR ACCOUNT</a><br>
-<a href="#">PERSONAL INFORMATION</a><br>
-<a href="#">ADDRESSES</a><br>
-<a href="#">DISCOUNT</a><br>
-<a href="#">ORDER HISTORY</a><br>
- </div>
-<div class="span2">
-<h5>Iinformation</h5>
-<a href="contact.html">CONTACT</a><br>
-<a href="#">SITEMAP</a><br>
-<a href="#">LEGAL NOTICE</a><br>
-<a href="#">TERMS AND CONDITIONS</a><br>
-<a href="#">ABOUT US</a><br>
- </div>
-<div class="span2">
-<h5>Our Offer</h5>
-<a href="#">NEW PRODUCTS</a> <br>
-<a href="#">TOP SELLERS</a><br>
-<a href="#">SPECIALS</a><br>
-<a href="#">MANUFACTURERS</a><br>
-<a href="#">SUPPLIERS</a> <br/>
- </div>
- <div class="span6">
-<h5>LO LEGAL</h5>
-Lo legal
-Es que te hubieras quedado conmigo
-No me recuerdes que no había motivos
-No digas cosas que me hagan llorar
-¡No digas cosas que me hagan pedazos!
-Quiero pedirte perdón, si aún te amo
-Morir por ti nunca estuvo planeado
-Te necesito, para respirar
- </div>
- </div>
-</footer>
+<jsp:include page="footer.jsp" />
 </div><!-- /container -->
 
 <div class="copyright">

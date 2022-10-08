@@ -177,6 +177,32 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
         return productosPopulares;
     }
 
+    @Override
+    public List<Producto> buscarProductos(String busqueda) {
+        List<Producto> productosFiltrados = new ArrayList<>();
+        String query = "SELECT *, t.name as categoria FROM products as p " +
+                "INNER JOIN product_type as t ON (p.product_type = t.id_product_type) " +
+                "WHERE short_description LIKE \"%" + busqueda + "%\"";
+
+        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            //statement.setString(1, busqueda);
+
+            ResultSet rs = statement.executeQuery();
+            TipoProducto tipo = null;
+            while (rs.next()) {
+                Producto p = getProducto(rs, tipo);
+
+                productosFiltrados.add(p);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return productosFiltrados;
+    }
+
 
     @Override
     public List<Producto> obtenerTodosLosProductosPorCategoria(Integer categoria) {
@@ -269,7 +295,7 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
                 producto.setDescripcionCorta(result.getString("short_description"));
 //                producto.setDateCreate(result.getDate("date_Create"));
 //                producto.setDateUpdate(result.getDate("date_update"));
-                producto.setNumItems(result.getInt("num_items"));
+                //producto.setNumItems(result.getInt("num_items"));
 //                producto.setStatus(result.getInt("id_status"));
                 todosProductos.add(producto);
 
@@ -378,7 +404,6 @@ public class ProductoRepositoryJdbcImpl implements ProductoRepository<Producto> 
         Integer tipoId = rs.getInt("product_type");
         tipo2.setId(tipoId);
         tipo2.setNombre(rs.getString("categoria"));
-
         p.setTipo(tipo2);
         //p.setTipo(rs.getInt("product_type"));
         p.setDescripcion(rs.getString("description"));

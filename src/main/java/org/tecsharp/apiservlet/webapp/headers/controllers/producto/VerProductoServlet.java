@@ -84,6 +84,7 @@ public class VerProductoServlet extends HttpServlet {
 
         getServletContext().getRequestDispatcher("/producto_detalles.jsp").forward(req, resp);
 
+
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.tecsharp.apiservlet.webapp.headers.services.producto.ProductoService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,6 @@ public class ProductoServiceJdbcImpl implements ProductoService {
             throw new ServiceJdbcException(throwables.getMessage(), throwables.getCause());
         }
     }
-
 
 
     @Override
@@ -107,7 +107,7 @@ public class ProductoServiceJdbcImpl implements ProductoService {
 
     @Override //NO SE USA XD
     public boolean validaProductoEnCarrito(boolean enCarrito) {
-        if(!enCarrito){
+        if (!enCarrito) {
             return false;
         } else {
             return true;
@@ -119,5 +119,11 @@ public class ProductoServiceJdbcImpl implements ProductoService {
         return repositoryJdbc.obtenerNumeroDeProductos();
     }
 
+    @Override
+    public List<Producto> buscarProducto(String busqueda) {
+
+        return repositoryJdbc.buscarProductos(busqueda);
+
+    }
 
 }

@@ -2,9 +2,9 @@ package org.tecsharp.apiservlet.webapp.headers.repositories.carrito.impl;
 
 import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
+import org.tecsharp.apiservlet.webapp.headers.models.TipoProducto;
+import org.tecsharp.apiservlet.webapp.headers.models.Ventas;
 import org.tecsharp.apiservlet.webapp.headers.repositories.carrito.CarritoRepository;
-import org.tecsharp.apiservlet.webapp.headers.services.carrito.CarritoService;
-import org.tecsharp.apiservlet.webapp.headers.services.carrito.impl.CarritoServiceImpl;
 import org.tecsharp.apiservlet.webapp.headers.utils.Constantes;
 import org.tecsharp.apiservlet.webapp.headers.utils.Utilidades;
 
@@ -12,11 +12,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CarritoRepositoryImpl implements CarritoRepository {
@@ -73,7 +71,7 @@ public class CarritoRepositoryImpl implements CarritoRepository {
     @Override
     public List<Producto> getCarrito(Integer userId) {
         List<Producto> carrito = new ArrayList<>();
-        String query = "SELECT * FROM products INNER JOIN cart ON  cart.id_product = products.id_product WHERE id_user = ?";
+        String query = "SELECT *, t.name as categoria FROM products as p INNER JOIN cart as c ON  (c.id_product = p.id_product) INNER JOIN product_type as t ON (p.product_type = t.id_product_type) WHERE id_user = ?";
 
         try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -83,14 +81,19 @@ public class CarritoRepositoryImpl implements CarritoRepository {
 
             while (result.next()) {
                 Producto producto = new Producto();
+                TipoProducto tipo2 = new TipoProducto();
+
+                Integer tipoId = result.getInt("product_type");
+                tipo2.setId(tipoId);
+                tipo2.setNombre(result.getString("categoria"));
+                producto.setTipo(tipo2);
+
                 producto.setId(result.getInt("id_product"));
                 producto.setNombre(result.getString("name"));
                 producto.setStock(result.getInt("stock"));
                 producto.setPrecio(result.getInt("price"));
                 producto.setDescripcion(result.getString("description"));
                 producto.setDescripcionCorta(result.getString("short_description"));
-//              producto.setDateCreate(result.getDate("date_Create"));
-//              producto.setDateUpdate(result.getDate("date_update"));
                 producto.setNumItems(result.getInt("num_items"));
                 producto.setImgLink(result.getString("link"));
                 producto.setStatus(result.getInt("id_status"));
@@ -107,7 +110,7 @@ public class CarritoRepositoryImpl implements CarritoRepository {
     }
 
     @Override
-    public boolean agregarProductoAlCarrito(Integer productoID, Integer idUser,Integer numItems, boolean productoDuplicado) {
+    public boolean agregarProductoAlCarrito(Integer productoID, Integer idUser, Integer numItems, boolean productoDuplicado) {
 
         if (productoDuplicado) {
             actualizarCarritoPorProductoDuplicado(productoID, idUser, numItems);
@@ -129,15 +132,12 @@ public class CarritoRepositoryImpl implements CarritoRepository {
                 statement.setInt(4, idUser);
                 statement.setInt(5, productoID);
                 statement.executeUpdate();
-            }
-
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
 
             //AGREGA LOS DATOS A productosoncarrito
-
 
 
             return true;
@@ -211,6 +211,242 @@ public class CarritoRepositoryImpl implements CarritoRepository {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean comprarCarrito(List<Producto> productos, Integer idUser) {
+
+        boolean ventaHecha = false;
+        Integer productoStock = 0;
+        for (Producto producto : productos) {
+            productoStock = producto.getStock();
+            if (productoStock == 0) {
+                return false;
+            }
+        }
+
+        Integer idSale = null;
+        String query1 = "SELECT MAX(id_sale) FROM sales";
+
+        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+             PreparedStatement statement = connection.prepareStatement(query1)) {
+
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+
+                idSale = result.getInt("MAX(id_sale)");
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        idSale = idSale + 1;
+
+        for (Producto producto : productos) {
+
+            agregarVentasAProductos(producto.getId(), idUser, producto.getNumItems());
+
+            LocalDateTime fecha = LocalDateTime.now();
+            DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String fechaFormateada = fecha.format(myFormatObj);
+
+            String query = "INSERT INTO sales VALUES (?,'Productos vendido',?,?,?,?,?,?,?,1);";
+            boolean enCarrito = false;
+            try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+                 PreparedStatement statement = connection.prepareStatement(query)) {
+
+                statement.setInt(1, idSale); // Correcto
+                statement.setInt(2, idUser); // Correcto
+                statement.setInt(3, producto.getId());
+                statement.setInt(4, producto.getNumItems());
+                statement.setInt(5, idUser);
+                statement.setInt(6, idUser);
+                statement.setString(7, fechaFormateada);
+                statement.setString(8, fechaFormateada);
+                statement.executeUpdate();
+
+                ventaHecha = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+
+        limpiarCarrito(idUser);
+        reducirStockPorCompra(productos);
+
+        return ventaHecha;
+    }
+
+    @Override
+    public boolean limpiarCarrito(Integer idUser) {
+
+
+        String query = "DELETE FROM cart WHERE id_user = ?;";
+
+        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, idUser); // Correcto
+
+            statement.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean reducirStockPorCompra(List<Producto> productos) {
+
+        String productName = null;
+        Integer productID = null;
+        Integer stockRestante = null;
+
+        for (Producto producto : productos) {
+
+            productName = producto.getNombre();
+            productID = producto.getId();
+
+            // OBTIENE EL STOCK DEL PRODUCTO
+            String query = "SELECT stock FROM products WHERE id_product = ?";
+            try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+                 PreparedStatement statement = connection.prepareStatement(query)) {
+
+                statement.setInt(1, productID); // Correcto
+
+                ResultSet result = statement.executeQuery();
+
+                while (result.next()) {
+
+                    stockRestante = result.getInt("stock");
+
+                    // System.out.println(producto);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            Integer items = producto.getNumItems();
+            // ACTUALIZA EL STOCK
+            String query2 = "UPDATE products SET stock = ? WHERE id_product = ?";
+            try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+                 PreparedStatement statement = connection.prepareStatement(query2)) {
+
+                statement.setInt(1, stockRestante - items);
+                statement.setInt(2, productID); // Correcto
+                statement.executeUpdate();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+
+        return true;
+    }
+
+    @Override
+    public List<Ventas> getVentas(Integer userId) {
+
+        List<Ventas> ventas = new ArrayList<>();
+
+        String query = "SELECT * FROM sales INNER JOIN products ON products.id_product = sales.id_product WHERE id_user = ? ORDER BY id_sale DESC";
+
+        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                Ventas venta = new Ventas();
+                Producto producto = new Producto();
+                TipoProducto tipoProducto = new TipoProducto();
+
+                venta.setIdSale(result.getInt("id_sale"));
+
+                String nombreProducto = result.getString("name");
+                producto.setNombre(nombreProducto);
+                venta.setNameProduct(producto);
+
+                Integer idProducto = result.getInt("id_product");
+                producto.setId(idProducto);
+                venta.setIdProduct(producto);
+
+                Integer precio = result.getInt("price");
+                producto.setPrecio(precio);
+                venta.setPrice(producto);
+
+                Integer tipo = result.getInt("product_type");
+                tipoProducto.setId(tipo);
+                venta.setProductType(tipoProducto);
+
+                venta.setNumItems(result.getInt("num_items"));
+                venta.setDateCreate(result.getDate("date_create"));
+                ventas.add(venta);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ventas;
+    }
+
+    @Override
+    public boolean agregarVentasAProductos(Integer productoID, Integer idUser, Integer numItems) {
+        Integer nuevoNumVentas = null;
+        Integer ventasDeProducto = null;
+        String query = "SELECT ventas FROM products WHERE id_product = ?";
+
+        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, productoID);
+            //statement.setInt(2, idUser);
+
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+
+                ventasDeProducto = result.getInt("ventas");
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+        nuevoNumVentas = ventasDeProducto + numItems;
+
+        String query2 = "UPDATE products SET ventas = ? WHERE id_product = ?";
+
+        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+             PreparedStatement statement = connection.prepareStatement(query2)) {
+
+            // ResultSet result = statement.executeQuery();
+
+            statement.setInt(1, nuevoNumVentas);
+            statement.setInt(2, productoID);
+            //statement.setInt(3, idUser);
+            statement.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
         }
         return true;
     }

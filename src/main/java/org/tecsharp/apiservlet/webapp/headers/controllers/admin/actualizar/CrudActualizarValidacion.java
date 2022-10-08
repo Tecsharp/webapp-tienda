@@ -54,6 +54,7 @@ public class CrudActualizarValidacion extends HttpServlet {
         if (usernameOptional.isPresent() && usuario.getUserType() == 2) {
             getServletContext().getRequestDispatcher("/crud-actualizado.jsp").forward(req, resp);
         }
+
     }
 
     @Override

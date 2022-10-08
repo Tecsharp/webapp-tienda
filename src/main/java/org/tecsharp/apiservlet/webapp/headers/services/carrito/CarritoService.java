@@ -3,6 +3,7 @@ package org.tecsharp.apiservlet.webapp.headers.services.carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Carrito;
 import org.tecsharp.apiservlet.webapp.headers.models.Producto;
 import org.tecsharp.apiservlet.webapp.headers.models.Usuario;
+import org.tecsharp.apiservlet.webapp.headers.models.Ventas;
 
 import java.util.List;
 
@@ -24,6 +25,8 @@ public interface CarritoService {
 
     boolean eliminarPorductoDeCarrito (Integer idProducto, Integer idCarrito);
 
+    boolean comprarCarrito(Integer idUser);
 
+    List<Ventas> getVentas(Integer userId);
 
 }

@@ -6,13 +6,14 @@ import org.tecsharp.apiservlet.webapp.headers.utils.Constantes;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class CrudRepositoryImpl implements CrudRepository {
 
     @Override
-    public boolean registrarNuevoProducto(Integer idUser, Integer userType, Integer categoria, String nombre, Integer precio, Integer stock, String shortDescription, String largeDescription, Integer status) {
+    public boolean registrarNuevoProducto(Integer idUser, Integer userType, Integer categoria, String nombre, Integer precio, Integer stock, String shortDescription, String largeDescription, Integer status, String ubicacionImg) {
 
         DateTimeFormatter FOMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -31,7 +32,7 @@ public class CrudRepositoryImpl implements CrudRepository {
             statement.setString (7, fecha); //DATE CREATE
             statement.setString (8, fecha); //DATE UPDATE
             statement.setInt(9, status); // ID STATUS
-            statement.setString(10, "/webapp-tienda/assets/img/products/test.jpg"); // IMG LINK
+            statement.setString(10, ubicacionImg); // IMG LINK
             statement.setString(11, shortDescription);
             statement.setString(12, largeDescription);
             statement.setInt(13, 0);
@@ -78,5 +79,25 @@ public class CrudRepositoryImpl implements CrudRepository {
 
         return true;
 
+    }
+
+    @Override //GUARDA UBICACION
+    public boolean enviaUbicacionImagen(String ubicacion, String nombreDeProducto) {
+
+        String query = "UPDATE products SET link = ? WHERE name = ?";
+
+        try (Connection connection = DriverManager.getConnection(Constantes.DB_PROPERTIES);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, ubicacion);
+            statement.setString(2, nombreDeProducto);
+            statement.executeUpdate();
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 }
